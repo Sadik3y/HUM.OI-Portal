@@ -5,7 +5,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-require('dotenv').config();
+import 'dotenv/config';
+
 
 const app = express();
 app.use(bodyParser.json());
