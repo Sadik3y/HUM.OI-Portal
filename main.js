@@ -1,3 +1,5 @@
+import { HUM_SOUL } from './hum-soul.js';
+import { MIR_SOUL } from './mir-soul.js';
 
 const express = require('express');
 const bodyParser = require('body-parser');
