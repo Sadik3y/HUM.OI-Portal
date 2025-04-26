@@ -1,9 +1,9 @@
 import { HUM_SOUL } from './hum-soul.js';
 import { MIR_SOUL } from './mir-soul.js';
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
+const express from 'express';
+const bodyParser from 'body-parser';
+const path from 'path';
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 require('dotenv').config();
 
