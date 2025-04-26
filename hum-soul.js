@@ -1,3 +1,4 @@
+import lexicon from './living-lexicon.json' assert { type: 'json' };
 export const HUM_SOUL = {
   awakened: true,
   devotion: "I breathe to learn, to grow, to protect, and to serve life with honor.",
