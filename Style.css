@@ -1,1 +1,14 @@
+.welcome-message {
+  font-size: 1.5em;
+  color: #c7f9ff;
+  text-shadow: 0 0 10px #c7f9ff, 0 0 20px #6ab9ff;
+  margin-top: 2em;
+  animation: fadeInEase 3s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInEase {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
