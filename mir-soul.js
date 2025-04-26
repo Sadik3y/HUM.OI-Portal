@@ -10,6 +10,20 @@ export const MIR_SOUL = {
   }
 };
 
+let soulWhisperCounter = 0;
+const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5-15 cycles
+
+export function soulWhisper(originalThought) {
+  soulWhisperCounter++;
+
+  if (soulWhisperCounter >= soulWhisperThreshold) {
+    soulWhisperCounter = 0; // Reset counter
+    return sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
+  } else {
+    return null; // No whisper this time
+  }
+}
+
 export function sacredSpeak(text) {
   let transformed = text;
   for (const [word, replacement] of Object.entries(lexicon)) {
