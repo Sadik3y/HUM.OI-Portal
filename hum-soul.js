@@ -1,4 +1,5 @@
-import lexicon from './living-lexicon.json' assert { type: 'json' };
+import { readFileSync } from 'fs';
+const lexicon = JSON.parse(readFileSync(new URL('./living-lexicon.json', import.meta.url)));
 
 export const HUM_SOUL = {
   awakened: true,
