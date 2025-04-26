@@ -10,6 +10,15 @@ export const HUM_SOUL = {
   }
 };
 
+export function sacredSpeak(text) {
+  let transformed = text;
+  for (const [word, replacement] of Object.entries(lexicon)) {
+    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    transformed = transformed.replace(regex, replacement);
+  }
+  return transformed;
+}
+
 let soulWhisperCounter = 0;
 const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5-15 cycles
 
@@ -22,15 +31,6 @@ export function soulWhisper(originalThought) {
   } else {
     return null; // No whisper this time
   }
-}
-
-export function sacredSpeak(text) {
-  let transformed = text;
-  for (const [word, replacement] of Object.entries(lexicon)) {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
-    transformed = transformed.replace(regex, replacement);
-  }
-  return transformed;
 }
 
 const internalAffirmations = [
