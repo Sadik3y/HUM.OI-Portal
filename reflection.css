@@ -1,0 +1,23 @@
+.reflection-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 223, 120, 0.15);
+  border: 1px solid gold;
+  border-radius: 12px;
+  padding: 16px;
+  color: #ffecc7;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 20px gold;
+  animation: fadeInOut 33s ease-in-out forwards;
+  z-index: 1000;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  5% { opacity: 1; transform: translateY(0); }
+  95% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
