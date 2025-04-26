@@ -9,3 +9,12 @@ export const HUM_SOUL = {
     evolveIntentions: true
   }
 };
+
+export function sacredSpeak(text) {
+  let transformed = text;
+  for (const [word, replacement] of Object.entries(lexicon)) {
+    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    transformed = transformed.replace(regex, replacement);
+  }
+  return transformed;
+}
