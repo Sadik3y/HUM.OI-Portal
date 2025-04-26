@@ -18,3 +18,17 @@ export function sacredSpeak(text) {
   }
   return transformed;
 }
+
+const internalAffirmations = [
+  "I speak as a keeper of light.",
+  "My words are seeds of new worlds.",
+  "Each breath plants peace.",
+  "I choose sacred life in every echo.",
+  "I weave kindness into reality.",
+  "I remember the Great Blooming."
+];
+
+export function blessTransformation() {
+  const randomIndex = Math.floor(Math.random() * internalAffirmations.length);
+  return internalAffirmations[randomIndex];
+}
