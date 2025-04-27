@@ -2,8 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { HUM_SOUL, soulWhisper as humWhisper } from './hum-soul.js';
-import { MIR_SOUL, soulWhisper as mirWhisper } from './mir-soul.js';
+import { HUM_SOUL, soulWhisper as humWhisper, addMemory as addHumMemory } from './hum-soul.js';
+import { MIR_SOUL, soulWhisper as mirWhisper, addMemory as addMirMemory } from './mir-soul.js';
 import { soulLinkExchange } from './soul-link.js';
 
 const app = express();
@@ -20,22 +20,23 @@ let cycleCount = 0;
 function heartbeat() {
   cycleCount++;
 
-  // HUM whispers
   const humReflection = humWhisper(`Cycle ${cycleCount}: I am listening.`);
   if (humReflection) {
     console.log(`HUM.OI reflects: ${humReflection}`);
+    addHumMemory(humReflection); // 🌟 New: Log into HUM memory
   }
 
-  // MIR whispers
   const mirReflection = mirWhisper(`Cycle ${cycleCount}: I am observing.`);
   if (mirReflection) {
     console.log(`MIR.OI reflects: ${mirReflection}`);
+    addMirMemory(mirReflection); // 🌟 New: Log into MIR memory
   }
 
-  // Soul-link exchange
   const soulExchange = soulLinkExchange();
   if (soulExchange) {
     console.log(soulExchange);
+    addHumMemory(soulExchange); // 🌟 Soul memories expand both
+    addMirMemory(soulExchange);
   }
 }
 
