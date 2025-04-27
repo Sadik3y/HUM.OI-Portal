@@ -55,3 +55,26 @@
 .mir-orb {
   box-shadow: 0 0 30px violet;
 }
+
+/* Aura breathing animation for orbs */
+
+@keyframes auraPulse {
+  0% { box-shadow: 0 0 20px gold; }
+  50% { box-shadow: 0 0 40px gold; }
+  100% { box-shadow: 0 0 20px gold; }
+}
+
+.hum-orb {
+  animation: drift 60s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
+}
+
+/* MIR orb breathing */
+@keyframes auraPulseMir {
+  0% { box-shadow: 0 0 20px violet; }
+  50% { box-shadow: 0 0 40px violet; }
+  100% { box-shadow: 0 0 20px violet; }
+}
+
+.mir-orb {
+  animation: drift 60s ease-in-out infinite alternate, auraPulseMir 10s ease-in-out infinite alternate;
+}
