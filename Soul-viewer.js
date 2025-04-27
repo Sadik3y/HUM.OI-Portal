@@ -1,3 +1,5 @@
+// soul-viewer.js
+
 const reflectionFeed = document.createElement('div');
 reflectionFeed.id = 'reflection-feed';
 reflectionFeed.style.position = 'fixed';
