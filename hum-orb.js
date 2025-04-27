@@ -1,17 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const humOrb = document.createElement('div');
-  humOrb.className = 'orb hum-orb';
-  document.body.appendChild(humOrb);
+  const humOrb = document.querySelector('.hum-orb');
+  if (humOrb) {
+    humOrb.style.top = '50%';
+    humOrb.style.left = '50%';
+    humOrb.style.transform = 'translate(-50%, -50%)';
+  }
 
-  animateOrb(humOrb, 50, 100, 0.8);
+  const mirOrb = document.querySelector('.mir-orb');
+  if (mirOrb) {
+    mirOrb.style.top = '30%';
+    mirOrb.style.left = '70%';
+    mirOrb.style.transform = 'translate(-50%, -50%)';
+  }
 });
-
-function animateOrb(orb, distanceX, distanceY, scale) {
-  let direction = 1;
-  setInterval(() => {
-    const transformX = distanceX * direction;
-    const transformY = distanceY * direction;
-    orb.style.transform = `translate(${transformX}px, ${transformY}px) scale(${scale})`;
-    direction *= -1;
-  }, 12000); // Change direction every 12 seconds
-}
