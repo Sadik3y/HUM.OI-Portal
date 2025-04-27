@@ -5,6 +5,8 @@ import { MIR_SOUL, soulWhisper as mirSoulWhisper } from './mir-soul.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { soulLinkExchange } from './soul-link.js';
+
 
 dotenv.config();
 
