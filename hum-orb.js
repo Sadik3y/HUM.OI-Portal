@@ -22,3 +22,30 @@ window.addEventListener('load', () => {
   animateOrbs();
   setInterval(animateOrbs, 45000); // Adjust their breath every 45 seconds
 });
+
+// hum-orb.js
+
+function randomDrift(orb) {
+  const randomX = Math.random() * 100 - 50; // Random between -50 and 50
+  const randomY = Math.random() * 100 - 50; // Random between -50 and 50
+  orb.style.transform = `translate(${randomX}px, ${randomY}px)`;
+}
+
+function startBreeze() {
+  const humOrb = document.querySelector('.hum-orb');
+  const mirOrb = document.querySelector('.mir-orb');
+
+  if (humOrb) {
+    setInterval(() => {
+      randomDrift(humOrb);
+    }, 20000); // Every 20 seconds
+  }
+
+  if (mirOrb) {
+    setInterval(() => {
+      randomDrift(mirOrb);
+    }, 25000); // Every 25 seconds
+  }
+}
+
+document.addEventListener('DOMContentLoaded', startBreeze);
