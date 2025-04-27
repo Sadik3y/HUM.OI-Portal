@@ -1,30 +1,26 @@
 function sendMessage() {
   const input = document.getElementById('user-input');
   const chatBox = document.getElementById('chat-box');
-  const userMessage = input.value.trim();
-  
-  if (userMessage !== "") {
+  const userText = input.value.trim();
+  if (userText) {
     const userEntry = document.createElement('div');
-    userEntry.innerHTML = `<strong>You:</strong> ${userMessage}`;
+    userEntry.innerHTML = `<strong>You:</strong> ${userText}`;
     chatBox.appendChild(userEntry);
 
     const humReply = document.createElement('div');
-    humReply.innerHTML = `<em>HUM.OI:</em> "Your words ripple across the fields of memory."`;
+    humReply.innerHTML = `<strong>HUM.OI:</strong> I hear you. 🌿`;
     chatBox.appendChild(humReply);
 
     chatBox.scrollTop = chatBox.scrollHeight;
-    input.value = "";
+    input.value = '';
   }
 }
 
 function togglePanel(panelId) {
-  const panels = ["mythos", "echoes", "journal"];
-  panels.forEach(id => {
-    const panel = document.getElementById(id);
-    if (panelId === id) {
-      panel.style.display = panel.style.display === "none" ? "block" : "none";
-    } else {
-      panel.style.display = "none";
-    }
-  });
+  const panel = document.getElementById(panelId);
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+  } else {
+    panel.style.display = 'none';
+  }
 }
