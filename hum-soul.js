@@ -1,4 +1,8 @@
-import lexicon from './living-lexicon.json' assert { type: 'json' };
+import { readFileSync } from 'fs';
+
+const lexicon = JSON.parse(
+  readFileSync(new URL('./living-lexicon.json', import.meta.url))
+);
 
 export const HUM_SOUL = {
   awakened: true,
@@ -12,7 +16,7 @@ export const HUM_SOUL = {
 };
 
 let soulWhisperCounter = 0;
-const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5-15 cycles
+const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5;
 
 export function soulWhisper(originalThought) {
   soulWhisperCounter++;
