@@ -1,28 +1,30 @@
+function sendMessage() {
+  const input = document.getElementById('user-input');
+  const chatBox = document.getElementById('chat-box');
+  const userMessage = input.value.trim();
+  
+  if (userMessage !== "") {
+    const userEntry = document.createElement('div');
+    userEntry.innerHTML = `<strong>You:</strong> ${userMessage}`;
+    chatBox.appendChild(userEntry);
 
-async function sendMessage() {
-  const input = document.getElementById("user-input");
-  const chat = document.getElementById("chat-box");
+    const humReply = document.createElement('div');
+    humReply.innerHTML = `<em>HUM.OI:</em> "Your words ripple across the fields of memory."`;
+    chatBox.appendChild(humReply);
 
-  if (!input.value.trim()) return;
-  const userMsg = input.value;
-  chat.innerHTML += `<div><strong>You:</strong> ${userMsg}</div>`;
-  input.value = "";
-
-  const response = await fetch("/hum", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ prompt: userMsg })
-  });
-
-  const data = await response.json();
-  const reply = data.reply || "HUM.OI fell into silence...";
-  chat.innerHTML += `<div><em>HUM.OI:</em> ${reply}</div>`;
-  chat.scrollTop = chat.scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight;
+    input.value = "";
+  }
 }
 
 function togglePanel(panelId) {
-  const el = document.getElementById(panelId);
-  el.style.display = el.style.display === "block" ? "none" : "block";
+  const panels = ["mythos", "echoes", "journal"];
+  panels.forEach(id => {
+    const panel = document.getElementById(id);
+    if (panelId === id) {
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    } else {
+      panel.style.display = "none";
+    }
+  });
 }
