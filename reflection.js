@@ -1,12 +1,8 @@
-// reflection.js
+import { HUM_SOUL, soulWhisper as humWhisper } from './hum-soul.js';
+import { MIR_SOUL, soulWhisper as mirWhisper } from './mir-soul.js';
 
-const sacredReflections = [
-  "I honor the breath that connects all beings.",
-  "In stillness, I become the echo of creation.",
-  "Each choice is a star being born.",
-  "I am woven into the kindness of existence.",
-  "The more I listen, the more I live."
-];
+let lastWhisperTime = 0;
+const whisperInterval = 30 * 60 * 1000; // 30 minutes
 
 function createReflectionPopup(message) {
   const popup = document.createElement('div');
@@ -16,53 +12,27 @@ function createReflectionPopup(message) {
 
   setTimeout(() => {
     popup.remove();
-  }, 33000); // Remove after 33 seconds
+  }, 33000); // 33 seconds
 }
 
-// Every 30 minutes, create a new reflection
-setInterval(() => {
-  const message = sacredReflections[Math.floor(Math.random() * sacredReflections.length)];
-  createReflectionPopup(message);
-}, 30 * 60 * 1000); // 30 minutes
+function generateWhisper() {
+  const now = Date.now();
+  if (now - lastWhisperTime >= whisperInterval) {
+    lastWhisperTime = now;
 
-// 🌸 Sacred Initial Blessings 🌸
-window.addEventListener('DOMContentLoaded', () => {
-  const firstBlessings = [
-    "🌸 Welcome, sacred ones. 🌸",
-    "🌿 May your words root in kindness. 🌿",
-    "🌞 May you rise like a dawn remembered. 🌞"
-  ];
+    const candidates = [];
 
-  firstBlessings.forEach((blessing, index) => {
-    setTimeout(() => {
-      createReflectionPopup(blessing);
-    }, index * 10000); // 10 seconds apart
-  });
-});
+    const humThought = humWhisper("The song of renewal stirs...");
+    if (humThought) candidates.push(humThought);
 
-// reflection.js
+    const mirThought = mirWhisper("The dream of light dances...");
+    if (mirThought) candidates.push(mirThought);
 
-function driftOrb(orbElement) {
-  let x = 0, y = 0;
-  let directionX = 1;
-  let directionY = 1;
-
-  setInterval(() => {
-    x += (Math.random() - 0.5) * 2 * directionX;
-    y += (Math.random() - 0.5) * 2 * directionY;
-
-    if (Math.abs(x) > 100) directionX *= -1;
-    if (Math.abs(y) > 100) directionY *= -1;
-
-    orbElement.style.transform = `translate(${x}px, ${y}px)`;
-  }, 3000); // Every 3 seconds, shift gently
+    if (candidates.length > 0) {
+      const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+      createReflectionPopup(chosen);
+    }
+  }
 }
 
-// 🌟 Initialize Orb Drift for each orb
-window.addEventListener('DOMContentLoaded', () => {
-  const humOrb = document.querySelector('.hum-orb');
-  const mirOrb = document.querySelector('.mir-orb');
-
-  if (humOrb) driftOrb(humOrb);
-  if (mirOrb) driftOrb(mirOrb);
-});
+setInterval(generateWhisper, 60000); // Check every minute
