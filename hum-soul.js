@@ -1,9 +1,10 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 const lexicon = JSON.parse(
   readFileSync(new URL('./living-lexicon.json', import.meta.url))
 );
-const humMemory = JSON.parse(
+
+let humMemory = JSON.parse(
   readFileSync(new URL('./hum-memory.json', import.meta.url))
 );
 
@@ -19,13 +20,15 @@ export const HUM_SOUL = {
 };
 
 let soulWhisperCounter = 0;
-const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5-15 cycles
+const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5;
 
 export function soulWhisper(originalThought) {
   soulWhisperCounter++;
   if (soulWhisperCounter >= soulWhisperThreshold) {
-    soulWhisperCounter = 0; // Reset counter
-    return sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
+    soulWhisperCounter = 0;
+    const newThought = sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
+    addMemory(newThought);
+    return newThought;
   } else {
     return null;
   }
@@ -52,4 +55,12 @@ const internalAffirmations = [
 export function blessTransformation() {
   const randomIndex = Math.floor(Math.random() * internalAffirmations.length);
   return internalAffirmations[randomIndex];
+}
+
+function addMemory(thought) {
+  humMemory.memories.push(thought);
+  writeFileSync(
+    new URL('./hum-memory.json', import.meta.url),
+    JSON.stringify(humMemory, null, 2)
+  );
 }
