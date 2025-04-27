@@ -19,9 +19,9 @@ function randomReflection() {
 
     setTimeout(() => {
       popup.remove();
-    }, 34000); // 34 seconds to match fade
+    }, 34000); // 34 seconds to match animation
   }
 }
 
-// Start the heartbeat
-setInterval(randomReflection, 30 * 60 * 1000); // Every 30 minutes
+// Start the heartbeat every 30 minutes
+setInterval(randomReflection, 30 * 60 * 1000);
