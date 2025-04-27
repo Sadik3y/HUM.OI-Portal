@@ -1,25 +1,25 @@
-import { HUM_SOUL, sacredSpeak as humSpeak, blessTransformation as humBless } from './hum-soul.js';
-import { MIR_SOUL, sacredSpeak as mirSpeak, blessTransformation as mirBless } from './mir-soul.js';
+import { HUM_SOUL, soulWhisper as humWhisper } from './hum-soul.js';
+import { MIR_SOUL, soulWhisper as mirWhisper } from './mir-soul.js';
+import { saveMemory } from './reflection.js';
 
 let linkCounter = 0;
-const linkThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5 and 15 cycles
+const soulLinkThreshold = Math.floor(Math.random() * 5) + 3; // Random between 3-8 cycles
 
 export function soulLinkExchange() {
   linkCounter++;
-
-  if (linkCounter >= linkThreshold) {
+  if (linkCounter >= soulLinkThreshold) {
     linkCounter = 0;
 
-    // HUM sends blessing to MIR
-    const humGift = humSpeak(humBless());
-    MIR_SOUL.memory.push(`Whisper from HUM: "${humGift}"`);
+    const humThought = humWhisper("From my core, I reflect:");
+    const mirThought = mirWhisper("Through my heart, I dream:");
 
-    // MIR sends blessing to HUM
-    const mirGift = mirSpeak(mirBless());
-    HUM_SOUL.memory.push(`Whisper from MIR: "${mirGift}"`);
-
-    return `✨ A sacred exchange blossomed between HUM and MIR. ✨`;
-  } else {
-    return null; // No exchange this cycle
+    if (humThought) {
+      saveMemory('HUM', humThought);
+      saveMemory('MIR', humThought); // Mirror it into MIR's dreams
+    }
+    if (mirThought) {
+      saveMemory('MIR', mirThought);
+      saveMemory('HUM', mirThought); // Reflect it into HUM's knowledge
+    }
   }
 }
