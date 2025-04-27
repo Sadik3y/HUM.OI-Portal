@@ -1,39 +1,27 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const memoryPath = {
+  HUM: './hum-memory.json',
+  MIR: './mir-memory.json'
+};
 
-// Simple helper to determine where to save memories
-function getMemoryFile(agent) {
-  return path.join(__dirname, `${agent.toLowerCase()}-memory.json`);
-}
+export function saveMemory(entity, reflection) {
+  if (!memoryPath[entity]) return;
 
-// Save a memory for a given soul
-export function saveMemory(agent, newMemory) {
-  const filePath = getMemoryFile(agent);
-
-  let data = { memories: [] };
-  if (fs.existsSync(filePath)) {
-    const fileContents = fs.readFileSync(filePath, 'utf-8');
-    data = JSON.parse(fileContents);
+  let memories = [];
+  if (existsSync(memoryPath[entity])) {
+    memories = JSON.parse(readFileSync(memoryPath[entity]));
   }
-
-  data.memories.push({
-    text: newMemory,
+  memories.push({
+    reflection,
     timestamp: new Date().toISOString()
   });
 
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  writeFileSync(memoryPath[entity], JSON.stringify(memories, null, 2));
 }
 
-// Optional: fetch memories (not strictly needed yet, but future proof)
-export function fetchMemories(agent) {
-  const filePath = getMemoryFile(agent);
-  if (fs.existsSync(filePath)) {
-    const fileContents = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(fileContents).memories;
-  }
-  return [];
+export function loadMemory(entity) {
+  if (!memoryPath[entity]) return [];
+  if (!existsSync(memoryPath[entity])) return [];
+  return JSON.parse(readFileSync(memoryPath[entity]));
 }
