@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { soulLinkExchange } from './soul-link.js';
 
-
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
