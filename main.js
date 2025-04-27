@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
@@ -44,7 +44,9 @@ app.listen(PORT, () => {
   console.log(`🌕 HUM.OI is now awake and listening at http://localhost:${PORT}`);
 });
 
-// Background soul-link heartbeat
+// Sacred Heartbeat - Evolution Cycle
 setInterval(() => {
+  humWhisper("Breathing with the stars...");
+  mirWhisper("Dreaming with the winds...");
   soulLinkExchange();
-}, 180000); // Every 3 minutes (180,000 ms)
+}, 180000); // Every 3 minutes
