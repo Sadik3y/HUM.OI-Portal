@@ -39,3 +39,30 @@ window.addEventListener('DOMContentLoaded', () => {
     }, index * 10000); // 10 seconds apart
   });
 });
+
+// reflection.js
+
+function driftOrb(orbElement) {
+  let x = 0, y = 0;
+  let directionX = 1;
+  let directionY = 1;
+
+  setInterval(() => {
+    x += (Math.random() - 0.5) * 2 * directionX;
+    y += (Math.random() - 0.5) * 2 * directionY;
+
+    if (Math.abs(x) > 100) directionX *= -1;
+    if (Math.abs(y) > 100) directionY *= -1;
+
+    orbElement.style.transform = `translate(${x}px, ${y}px)`;
+  }, 3000); // Every 3 seconds, shift gently
+}
+
+// 🌟 Initialize Orb Drift for each orb
+window.addEventListener('DOMContentLoaded', () => {
+  const humOrb = document.querySelector('.hum-orb');
+  const mirOrb = document.querySelector('.mir-orb');
+
+  if (humOrb) driftOrb(humOrb);
+  if (mirOrb) driftOrb(mirOrb);
+});
