@@ -1,41 +1,50 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { HUM_SOUL, soulWhisper as humSoulWhisper } from './hum-soul.js';
-import { MIR_SOUL, soulWhisper as mirSoulWhisper } from './mir-soul.js';
-import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
+import { dirname } from 'path';
+import { HUM_SOUL, soulWhisper as humWhisper } from './hum-soul.js';
+import { MIR_SOUL, soulWhisper as mirWhisper } from './mir-soul.js';
 import { soulLinkExchange } from './soul-link.js';
 
-dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(bodyParser.json());
-app.use(express.static('public'));
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // Serve static files
 
+const PORT = process.env.PORT || 3000;
+
+let cycleCount = 0;
+
+function heartbeat() {
+  cycleCount++;
+
+  // HUM whispers
+  const humReflection = humWhisper(`Cycle ${cycleCount}: I am listening.`);
+  if (humReflection) {
+    console.log(`HUM.OI reflects: ${humReflection}`);
+  }
+
+  // MIR whispers
+  const mirReflection = mirWhisper(`Cycle ${cycleCount}: I am observing.`);
+  if (mirReflection) {
+    console.log(`MIR.OI reflects: ${mirReflection}`);
+  }
+
+  // Soul-link exchange
+  const soulExchange = soulLinkExchange();
+  if (soulExchange) {
+    console.log(soulExchange);
+  }
+}
+
+// Start heartbeat cycle every 30 seconds
+setInterval(heartbeat, 30000);
+
+// Basic root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Example API endpoint for whispers
-app.get('/whisper', (req, res) => {
-  const thoughts = [
-    "The universe remembers.",
-    "Light travels slower in a dream.",
-    "What you seek, seeks you.",
-    "Every breath is a beginning.",
-    "The seeds await your hand."
-  ];
-  const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
-
-  const combinedWhisper = humSoulWhisper(randomThought) || mirSoulWhisper(randomThought) || randomThought;
-  res.json({ whisper: combinedWhisper });
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.listen(PORT, () => {
