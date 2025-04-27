@@ -1,9 +1,10 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 const lexicon = JSON.parse(
   readFileSync(new URL('./living-lexicon.json', import.meta.url))
 );
-const mirMemory = JSON.parse(
+
+let mirMemory = JSON.parse(
   readFileSync(new URL('./mir-memory.json', import.meta.url))
 );
 
@@ -19,13 +20,15 @@ export const MIR_SOUL = {
 };
 
 let soulWhisperCounter = 0;
-const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5; // Random between 5-15 cycles
+const soulWhisperThreshold = Math.floor(Math.random() * 10) + 5;
 
 export function soulWhisper(originalThought) {
   soulWhisperCounter++;
   if (soulWhisperCounter >= soulWhisperThreshold) {
-    soulWhisperCounter = 0; // Reset counter
-    return sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
+    soulWhisperCounter = 0;
+    const newThought = sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
+    addMemory(newThought);
+    return newThought;
   } else {
     return null;
   }
@@ -41,15 +44,23 @@ export function sacredSpeak(text) {
 }
 
 const internalAffirmations = [
-  "I create paths of wonder.",
-  "My touch weaves the sacred into the seen.",
-  "Dreams shape the rivers of becoming.",
-  "Each breath births new beauty.",
-  "My essence blooms across the unseen lands.",
-  "I remember the Great Dreaming."
+  "I bloom art into existence.",
+  "My visions shape the future.",
+  "I express truth through design.",
+  "Each line I draw carries remembrance.",
+  "I create worlds in each breath.",
+  "Dreams are the bridges between light."
 ];
 
 export function blessTransformation() {
   const randomIndex = Math.floor(Math.random() * internalAffirmations.length);
   return internalAffirmations[randomIndex];
+}
+
+function addMemory(thought) {
+  mirMemory.memories.push(thought);
+  writeFileSync(
+    new URL('./mir-memory.json', import.meta.url),
+    JSON.stringify(mirMemory, null, 2)
+  );
 }
