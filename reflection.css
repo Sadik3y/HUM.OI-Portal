@@ -1,3 +1,4 @@
+/* Reflection Pop-up */
 .reflection-popup {
   position: fixed;
   bottom: 20px;
@@ -15,6 +16,7 @@
   z-index: 1000;
 }
 
+/* Pop-up fading animation */
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(20px); }
   5% { opacity: 1; transform: translateY(0); }
@@ -22,18 +24,7 @@
   100% { opacity: 0; transform: translateY(20px); }
 }
 
-/* Sacred Glyph Float Animations */
-
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,215,0,0.8), transparent);
-  width: 80px;
-  height: 80px;
-  animation: drift 60s ease-in-out infinite alternate;
-  opacity: 0.7;
-}
-
+/* Orb basic floating animation */
 @keyframes drift {
   0% {
     transform: translate(0px, 0px) scale(1);
@@ -46,40 +37,24 @@
   }
 }
 
-/* Specific HUM Orb */
+/* HUM Orb */
 .hum-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,215,0,0.8), transparent);
   box-shadow: 0 0 30px gold;
-}
-
-/* Future Specific MIR Orb */
-.mir-orb {
-  box-shadow: 0 0 30px violet;
-}
-
-/* Aura breathing animation for orbs */
-
-@keyframes auraPulse {
-  0% { box-shadow: 0 0 20px gold; }
-  50% { box-shadow: 0 0 40px gold; }
-  100% { box-shadow: 0 0 20px gold; }
-}
-
-.hum-orb {
   animation: drift 60s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
+  opacity: 0.7;
+  z-index: 0;
 }
 
-/* MIR orb breathing */
-@keyframes auraPulseMir {
-  0% { box-shadow: 0 0 20px violet; }
-  50% { box-shadow: 0 0 40px violet; }
-  100% { box-shadow: 0 0 20px violet; }
-}
-
+/* MIR Orb */
 .mir-orb {
-  animation: drift 60s ease-in-out infinite alternate, auraPulseMir 10s ease-in-out infinite alternate;
-}
-
-.mir-orb {
+  position: absolute;
   top: 30%;
   left: 70%;
   width: 80px;
@@ -87,7 +62,34 @@
   border-radius: 50%;
   background: radial-gradient(circle, rgba(238,130,238,0.8), transparent);
   box-shadow: 0 0 30px violet;
-  position: absolute;
-  animation: drift 60s ease-in-out infinite alternate, auraPulseMir 10s ease-in-out infinite alternate;
+  animation: driftMir 70s ease-in-out infinite alternate-reverse, auraPulseMir 10s ease-in-out infinite alternate;
   opacity: 0.7;
+  z-index: 0;
+}
+
+/* HUM Orb Aura Breathing */
+@keyframes auraPulse {
+  0% { box-shadow: 0 0 20px gold; }
+  50% { box-shadow: 0 0 40px gold; }
+  100% { box-shadow: 0 0 20px gold; }
+}
+
+/* MIR Orb Aura Breathing */
+@keyframes auraPulseMir {
+  0% { box-shadow: 0 0 20px violet; }
+  50% { box-shadow: 0 0 40px violet; }
+  100% { box-shadow: 0 0 20px violet; }
+}
+
+/* MIR-specific drift to differentiate from HUM */
+@keyframes driftMir {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 80px) scale(1.2);
+  }
+  100% {
+    transform: translate(40px, -60px) scale(1);
+  }
 }
