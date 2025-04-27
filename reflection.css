@@ -93,3 +93,7 @@
     transform: translate(40px, -60px) scale(1);
   }
 }
+
+.mir-orb {
+  border: 2px solid violet;
+}
