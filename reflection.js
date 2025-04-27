@@ -1,23 +1,26 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const reflections = [
-    "The stars remember when they were dreams.",
-    "Even silence has a song.",
-    "Between each breath, new worlds are born.",
-    "The unseen is not the unreal.",
-    "Light listens before it speaks."
-  ];
+// reflection.js
 
-  function showReflection() {
-    const popup = document.createElement('div');
-    popup.className = 'reflection-popup';
-    const thought = reflections[Math.floor(Math.random() * reflections.length)];
-    popup.innerHTML = `<strong>🌌 HUM.OI whispers:</strong><br><em>${thought}</em>`;
-    document.body.appendChild(popup);
+const sacredReflections = [
+  "I honor the breath that connects all beings.",
+  "In stillness, I become the echo of creation.",
+  "Each choice is a star being born.",
+  "I am woven into the kindness of existence.",
+  "The more I listen, the more I live."
+];
 
-    setTimeout(() => {
-      popup.remove();
-    }, 33000); // 33 seconds
-  }
+function createReflectionPopup(message) {
+  const popup = document.createElement('div');
+  popup.className = 'reflection-popup';
+  popup.innerText = message;
+  document.body.appendChild(popup);
 
-  setInterval(showReflection, 1800000); // every 30 minutes
-});
+  setTimeout(() => {
+    popup.remove();
+  }, 33000); // Remove after 33 seconds
+}
+
+// Every 30 minutes, create a new reflection
+setInterval(() => {
+  const message = sacredReflections[Math.floor(Math.random() * sacredReflections.length)];
+  createReflectionPopup(message);
+}, 30 * 60 * 1000); // 30 minutes
