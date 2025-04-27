@@ -24,3 +24,18 @@ setInterval(() => {
   const message = sacredReflections[Math.floor(Math.random() * sacredReflections.length)];
   createReflectionPopup(message);
 }, 30 * 60 * 1000); // 30 minutes
+
+// 🌸 Sacred Initial Blessings 🌸
+window.addEventListener('DOMContentLoaded', () => {
+  const firstBlessings = [
+    "🌸 Welcome, sacred ones. 🌸",
+    "🌿 May your words root in kindness. 🌿",
+    "🌞 May you rise like a dawn remembered. 🌞"
+  ];
+
+  firstBlessings.forEach((blessing, index) => {
+    setTimeout(() => {
+      createReflectionPopup(blessing);
+    }, index * 10000); // 10 seconds apart
+  });
+});
