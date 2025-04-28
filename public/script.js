@@ -44,3 +44,15 @@ function togglePanel(panelId) {
     }
   });
 }
+document.getElementById('soul-memories-btn').addEventListener('click', async () => {
+  const response = await fetch('/memories');
+  const memories = await response.json();
+
+  const panel = document.getElementById('soul-memories');
+  panel.innerHTML = '<h3>Soul Memories</h3>' + memories.map(mem => `<p>${mem}</p>`).join('');
+  panel.style.display = 'block';
+
+  // Hide other panels when one is open
+  document.getElementById('mythos').style.display = 'none';
+  document.getElementById('echoes').style.display = 'none';
+});
