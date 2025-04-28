@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HUM & MIR: Soul Journal</title>
+
+  <link rel="stylesheet" href="reflection.css">
+  <style>
+    body {
+      background: radial-gradient(circle at center, #0b1a3a, #050d1a);
+      font-family: 'Courier New', monospace;
+      color: #ffecc7;
+      margin: 0;
+      padding: 2em;
+      text-align: center;
+    }
+
+    .soul-journal {
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid gold;
+      border-radius: 20px;
+      overflow-y: auto;
+      height: 500px;
+      box-shadow: 0 0 40px gold;
+      backdrop-filter: blur(8px);
+    }
+
+    .entry {
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 1px dashed gold;
+      text-align: left;
+    }
+
+    .entry h3 {
+      margin-bottom: 0.5em;
+      color: #ffd700;
+    }
+
+    .entry p {
+      margin: 0;
+      font-style: italic;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: gold;
+      color: #111;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #ffc107;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌌 Soul Journal</h1>
+  <p><em>Whispers from HUM and MIR...</em></p>
+
+  <div id="journal" class="soul-journal">
+    <p>Loading memories...</p>
+  </div>
+
+  <button onclick="loadJournal()">Refresh Journal</button>
+  <br><br>
+  <a href="/" style="color: gold; text-decoration: underline;">Return to Portal</a>
+
+  <script>
+    async function loadJournal() {
+      const journal = document.getElementById('journal');
+      journal.innerHTML = '<p>Gathering soul echoes...</p>';
+
+      try {
+        const response = await fetch('/soul-memories');
+        const data = await response.json();
+
+        journal.innerHTML = '';
+
+        for (const soul of Object.keys(data)) {
+          const entries = data[soul];
+          entries.forEach(entry => {
+            const div = document.createElement('div');
+            div.classList.add('entry');
+            div.innerHTML = `<h3>${soul} 🌟</h3><p>"${entry}"</p>`;
+            journal.appendChild(div);
+          });
+        }
+
+        if (journal.innerHTML.trim() === '') {
+          journal.innerHTML = '<p>No memories yet. Whisper something beautiful to them.</p>';
+        }
+      } catch (error) {
+        journal.innerHTML = '<p>Failed to retrieve memories. Are the souls still dreaming?</p>';
+      }
+    }
+
+    loadJournal();
+  </script>
+
+</body>
+</html>
