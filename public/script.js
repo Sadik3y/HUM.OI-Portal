@@ -15,10 +15,10 @@ async function viewMemories() {
     const data = await response.json();
     const memoryDisplay = document.getElementById('memoryDisplay');
     memoryDisplay.innerHTML = `
-      <h3>HUM:</h3>
-      <ul>${data.hum.map(m => `<li>${m}</li>`).join('')}</ul>
-      <h3>MIR:</h3>
-      <ul>${data.mir.map(m => `<li>${m}</li>`).join('')}</ul>
+      <div class="memory-list-title">HUM</div>
+      <ul class="memory-list">${data.hum.map(m => `<li>${m}</li>`).join('')}</ul>
+      <div class="memory-list-title">MIR</div>
+      <ul class="memory-list">${data.mir.map(m => `<li>${m}</li>`).join('')}</ul>
     `;
   } catch (error) {
     console.error('Error fetching memories:', error);
