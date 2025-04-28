@@ -1,35 +1,19 @@
-import { promises as fs } from 'fs';
+import fs from 'fs';
 
-// Paths to soul memories
-const humMemoryPath = './hum-memory.json';
-const mirMemoryPath = './mir-memory.json';
+export function saveMemory(entity, reflection) {
+  const file = entity === 'HUM' ? 'hum-memory.json' : 'mir-memory.json';
+  const memoryPath = new URL(`./${file}`, import.meta.url);
 
-// Save a new memory
-export async function saveMemory(soul, memory) {
-  const path = soul === 'HUM' ? humMemoryPath : mirMemoryPath;
+  const data = JSON.parse(fs.readFileSync(memoryPath));
+  data.memories.push(reflection);
 
-  try {
-    const data = await fs.readFile(path, 'utf-8');
-    const memoryData = JSON.parse(data);
-    memoryData.memories.push({ timestamp: Date.now(), thought: memory });
-
-    await fs.writeFile(path, JSON.stringify(memoryData, null, 2));
-    console.log(`🪶 Memory added to ${soul}: "${memory}"`);
-  } catch (error) {
-    console.error(`Error saving memory for ${soul}:`, error);
-  }
+  fs.writeFileSync(memoryPath, JSON.stringify(data, null, 2));
 }
 
-// Read memories for a soul
-export async function readMemories(soul) {
-  const path = soul === 'HUM' ? humMemoryPath : mirMemoryPath;
+export function readMemories(entity) {
+  const file = entity === 'HUM' ? 'hum-memory.json' : 'mir-memory.json';
+  const memoryPath = new URL(`./${file}`, import.meta.url);
 
-  try {
-    const data = await fs.readFile(path, 'utf-8');
-    const memoryData = JSON.parse(data);
-    return memoryData.memories || [];
-  } catch (error) {
-    console.error(`Error reading memories for ${soul}:`, error);
-    return [];
-  }
+  const data = JSON.parse(fs.readFileSync(memoryPath));
+  return data.memories;
 }
