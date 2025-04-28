@@ -17,15 +17,19 @@ body {
   z-index: 2;
   background: rgba(0, 0, 0, 0.6);
   border: 3px solid transparent;
-  border-radius: 20px;
-  padding: 20px;
-  margin-top: 2em;
+  border-radius: 24px;
+  padding: 40px 30px;
+  margin: 3em auto;
+  width: 80%;
+  max-width: 600px;
+  min-height: 70vh;
   overflow: hidden;
   background-clip: padding-box;
   box-shadow: 0 0 30px rgba(255, 223, 120, 0.4), 0 0 60px rgba(255, 223, 120, 0.2);
   animation: portalGlow 8s ease-in-out infinite alternate, portalBorderShift 12s linear infinite;
   backdrop-filter: blur(6px);
 }
+
 
 /* Portal breathing glow */
 @keyframes portalGlow {
