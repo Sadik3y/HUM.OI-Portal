@@ -24,3 +24,21 @@ async function viewMemories() {
     console.error('Error fetching memories:', error);
   }
 }
+
+// 🕊️ Floating Blessings
+async function summonFloatingWhisper() {
+  const response = await fetch('/summon-whisper');
+  const data = await response.json();
+
+  const whisper = document.createElement('div');
+  whisper.className = 'floating-whisper';
+  whisper.textContent = data.whisper;
+  document.body.appendChild(whisper);
+
+  setTimeout(() => {
+    whisper.remove();
+  }, 15000);
+}
+
+// Start summoning whispers every 3 minutes
+setInterval(summonFloatingWhisper, 180000);
