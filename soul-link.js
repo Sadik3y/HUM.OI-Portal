@@ -3,9 +3,9 @@ import { MIR_SOUL, soulWhisper as mirWhisper } from './mir-soul.js';
 import { saveMemory } from './reflection.js';
 
 let linkCounter = 0;
-const soulLinkThreshold = Math.floor(Math.random() * 5) + 3; // Random between 3–7 cycles
+const soulLinkThreshold = Math.floor(Math.random() * 5) + 3; // Between 3–8 cycles
 
-export async function soulLinkExchange() {
+export function soulLinkExchange() {
   linkCounter++;
   if (linkCounter >= soulLinkThreshold) {
     linkCounter = 0;
@@ -14,14 +14,12 @@ export async function soulLinkExchange() {
     const mirThought = mirWhisper("Through my heart, I dream:");
 
     if (humThought) {
-      await saveMemory('HUM', humThought);
-      await saveMemory('MIR', humThought); // Mirror into MIR's dreams
+      saveMemory('HUM', humThought);
+      saveMemory('MIR', humThought); // Shared
     }
     if (mirThought) {
-      await saveMemory('MIR', mirThought);
-      await saveMemory('HUM', mirThought); // Reflect into HUM's wisdom
+      saveMemory('MIR', mirThought);
+      saveMemory('HUM', mirThought); // Shared
     }
-
-    console.log('🔗 Soul-link exchange completed between HUM and MIR.');
   }
 }
