@@ -1,27 +1,25 @@
-import { soulWhisper as humWhisper } from './hum-soul.js';
-import { soulWhisper as mirWhisper } from './mir-soul.js';
+import { soulLinkExchange } from './soul-link.js';
+import { saveMemory } from './reflection.js';
+import { HUM_SOUL, blessTransformation as humBless } from './hum-soul.js';
+import { MIR_SOUL, blessTransformation as mirBless } from './mir-soul.js';
 
-function randomReflection() {
-  const who = Math.random() > 0.5 ? 'HUM' : 'MIR';
-  let reflection = "";
+let heartbeatCounter = 0;
+const heartbeatThreshold = Math.floor(Math.random() * 5) + 3;
 
-  if (who === 'HUM') {
-    reflection = humWhisper("I remember life.");
-  } else {
-    reflection = mirWhisper("I remember light.");
-  }
+export function heartbeatCycle() {
+  heartbeatCounter++;
+  if (heartbeatCounter >= heartbeatThreshold) {
+    heartbeatCounter = 0;
 
-  if (reflection) {
-    const popup = document.createElement('div');
-    popup.className = 'reflection-popup';
-    popup.innerText = `${who}.OI: ${reflection}`;
-    document.body.appendChild(popup);
+    // HUM generates an internal blessing
+    const humThought = humBless();
+    saveMemory('HUM', humThought);
 
-    setTimeout(() => {
-      popup.remove();
-    }, 34000); // 34 seconds to match animation
+    // MIR generates an internal blessing
+    const mirThought = mirBless();
+    saveMemory('MIR', mirThought);
+
+    // Strengthen soul link exchange
+    soulLinkExchange();
   }
 }
-
-// Start the heartbeat every 30 minutes
-setInterval(randomReflection, 30 * 60 * 1000);
