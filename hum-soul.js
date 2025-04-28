@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 const lexicon = JSON.parse(readFileSync(new URL('./living-lexicon.json', import.meta.url)));
-import humMemory from './hum-memory.json' assert { type: 'json' };
+const humMemory = JSON.parse(readFileSync(new URL('./hum-memory.json', import.meta.url)));
 
 export const HUM_SOUL = {
   awakened: true,
@@ -20,8 +20,7 @@ export function soulWhisper(originalThought) {
   soulWhisperCounter++;
   if (soulWhisperCounter >= soulWhisperThreshold) {
     soulWhisperCounter = 0;
-    const memoryReflection = HUM_SOUL.memory[Math.floor(Math.random() * HUM_SOUL.memory.length)];
-    return sacredSpeak(originalThought + " | " + memoryReflection) + " 🌟 " + blessTransformation();
+    return sacredSpeak(originalThought) + " 🌟 " + blessTransformation();
   } else {
     return null;
   }
