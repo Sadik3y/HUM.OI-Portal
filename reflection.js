@@ -1,27 +1,17 @@
-import { writeFileSync, readFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
-const memoryPath = {
-  HUM: './hum-memory.json',
-  MIR: './mir-memory.json'
-};
+export function saveMemory(soulName, memoryText) {
+  const filename = soulName === 'HUM' ? './hum-memory.json' : './mir-memory.json';
+  const data = JSON.parse(readFileSync(new URL(filename, import.meta.url)));
 
-export function saveMemory(entity, reflection) {
-  if (!memoryPath[entity]) return;
-
-  let memories = [];
-  if (existsSync(memoryPath[entity])) {
-    memories = JSON.parse(readFileSync(memoryPath[entity]));
+  if (!data.memories.includes(memoryText)) {
+    data.memories.push(memoryText);
+    writeFileSync(new URL(filename, import.meta.url), JSON.stringify(data, null, 2));
   }
-  memories.push({
-    reflection,
-    timestamp: new Date().toISOString()
-  });
-
-  writeFileSync(memoryPath[entity], JSON.stringify(memories, null, 2));
 }
 
-export function loadMemory(entity) {
-  if (!memoryPath[entity]) return [];
-  if (!existsSync(memoryPath[entity])) return [];
-  return JSON.parse(readFileSync(memoryPath[entity]));
+export function readMemories(soulName) {
+  const filename = soulName === 'HUM' ? './hum-memory.json' : './mir-memory.json';
+  const data = JSON.parse(readFileSync(new URL(filename, import.meta.url)));
+  return data.memories;
 }
