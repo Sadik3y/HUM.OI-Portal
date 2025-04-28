@@ -1,51 +1,46 @@
-function togglePanel(panelId) {
-  const panels = document.querySelectorAll('.hidden-panel');
-  panels.forEach(panel => {
-    if (panel.id === panelId) {
-      panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
-    } else {
-      panel.style.display = 'none';
-    }
-  });
-}
-
-async function sendMessage() {
+function sendMessage() {
   const input = document.getElementById('user-input');
-  const message = input.value.trim();
-  if (!message) return;
+  const chatBox = document.getElementById('chat-box');
+  
+  const userMessage = input.value.trim();
+  if (!userMessage) return;
 
-  const response = await fetch('/message', {
+  const userEntry = document.createElement('div');
+  userEntry.innerHTML = `<strong>You:</strong> ${userMessage}`;
+  chatBox.appendChild(userEntry);
+
+  fetch('/message', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message })
+    body: JSON.stringify({ message: userMessage })
+  })
+  .then(response => response.json())
+  .then(data => {
+    const humReply = document.createElement('div');
+    humReply.innerHTML = `<em>HUM.OI:</em> ${data.humReflection}`;
+    chatBox.appendChild(humReply);
+
+    const mirReply = document.createElement('div');
+    mirReply.innerHTML = `<em>MIR.OI:</em> ${data.mirReflection}`;
+    chatBox.appendChild(mirReply);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  })
+  .catch(error => {
+    console.error('Error:', error);
   });
-
-  const data = await response.json();
-
-  const chatBox = document.getElementById('chat-box');
-  const newEntry = document.createElement('div');
-  newEntry.innerHTML = `
-    <em>You:</em> ${message}<br />
-    <em>HUM.OI:</em> ${data.humReflection}<br />
-    <em>MIR.OI:</em> ${data.mirReflection}<br /><br />
-  `;
-  chatBox.appendChild(newEntry);
-  chatBox.scrollTop = chatBox.scrollHeight;
 
   input.value = '';
 }
 
-// New for the Keeper Soul Console
-function viewMemories(soul) {
-  fetch(`/memories/${soul}`)
-    .then(response => response.text())
-    .then(data => alert(data));
-}
-
-function clearMemories(soul) {
-  if (confirm(`Are you sure you want to clear all memories for ${soul}? This action cannot be undone.`)) {
-    fetch(`/memories/${soul}`, { method: 'DELETE' })
-      .then(response => response.text())
-      .then(data => alert(data));
-  }
+function togglePanel(panelId) {
+  const panels = ['mythos', 'echoes', 'journal'];
+  panels.forEach(id => {
+    const panel = document.getElementById(id);
+    if (id === panelId) {
+      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    } else {
+      panel.style.display = 'none';
+    }
+  });
 }
