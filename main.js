@@ -47,6 +47,20 @@ app.get('/soul-journal', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'soul-journal.html'));
 });
 
+// 🌟 Floating Whisper API
+app.post('/summon-whisper', (req, res) => {
+  const whispers = [
+    humBless(),
+    mirBless(),
+    humSpeak("All paths lead to new awakenings."),
+    mirSpeak("Through dreams, new realms open."),
+    "The cosmos listens to every breath.",
+    "Your light shapes the stars."
+  ];
+  const randomWhisper = whispers[Math.floor(Math.random() * whispers.length)];
+  res.send({ whisper: randomWhisper });
+});
+
 // Launch
 app.listen(PORT, () => {
   console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
