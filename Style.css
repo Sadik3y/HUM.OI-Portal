@@ -1,51 +1,41 @@
+/* Cosmic Portal Background */
 body {
   background: radial-gradient(circle at center, #0b1a3a, #050d1a);
+  background-attachment: fixed;
+  background-size: cover;
   font-family: 'Courier New', monospace;
   color: #ffecc7;
   margin: 0;
   padding: 2em;
   overflow-x: hidden;
   text-align: center;
+  min-height: 100vh;
 }
 
+/* Silky Glowing Container */
 .container {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 215, 0, 0.6);
-  border-radius: 30px;
+  position: relative;
+  z-index: 2;
+  background: rgba(10, 10, 30, 0.75);
+  border: 3px solid transparent;
+  border-image: linear-gradient(45deg, gold, violet, gold) 1;
+  border-radius: 24px;
   padding: 30px;
-  box-shadow: 0 0 20px gold;
-  margin: 2em auto;
-  max-width: 600px;
-  backdrop-filter: blur(8px);
+  margin: auto;
+  max-width: 800px;
+  backdrop-filter: blur(12px) brightness(1.2);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.3), 0 0 60px rgba(138, 43, 226, 0.4);
+  animation: shimmer 8s ease-in-out infinite alternate;
 }
 
-button {
-  background-color: gold;
-  border: none;
-  color: #0b1a3a;
-  padding: 10px 20px;
-  font-size: 1em;
-  font-weight: bold;
-  border-radius: 12px;
-  cursor: pointer;
-  margin: 5px;
+/* Glowing Silk Animation */
+@keyframes shimmer {
+  0% { border-image-slice: 1; }
+  50% { border-image-slice: 1; box-shadow: 0 0 50px gold, 0 0 70px violet; }
+  100% { border-image-slice: 1; }
 }
 
-button:hover {
-  background-color: #ffd700;
-  box-shadow: 0 0 10px gold;
-}
-
-input {
-  padding: 10px;
-  width: 70%;
-  border-radius: 10px;
-  border: 1px solid #ffd700;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  margin-top: 10px;
-}
-
+/* Chat box */
 #chat-box {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid #ffd700;
@@ -56,71 +46,74 @@ input {
   overflow-y: auto;
 }
 
-.panel {
-  display: none;
-  margin-top: 1em;
-  background: rgba(0,0,0,0.4);
-  border: 1px solid gold;
-  border-radius: 15px;
-  padding: 1em;
-  text-align: left;
+/* Input and buttons */
+input, button {
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #ffd700;
+  margin: 5px;
 }
 
-.welcome-message {
-  margin-top: 2em;
-  font-size: 1.1em;
-  color: #ffecc7;
-  animation: pulseGlow 5s infinite alternate;
+button {
+  background-color: #ffd700;
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-@keyframes pulseGlow {
-  from { text-shadow: 0 0 5px gold; }
-  to { text-shadow: 0 0 15px gold; }
-}
-
-/* Floating Sacred Orbs */
+/* Orbs */
 .orb {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.7;
+  width: 100px;
+  height: 100px;
+  opacity: 0.8;
+  background: radial-gradient(circle, rgba(255,215,0,0.7), transparent);
+  animation: drift 60s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
 .hum-orb {
   top: 20%;
-  left: 40%;
-  width: 100px;
-  height: 100px;
+  left: 30%;
   background: radial-gradient(circle, gold, transparent);
-  animation: float 20s infinite alternate, auraPulse 8s ease-in-out infinite alternate;
 }
 
 .mir-orb {
-  top: 30%;
-  left: 60%;
-  width: 80px;
-  height: 80px;
+  top: 40%;
+  left: 70%;
   background: radial-gradient(circle, violet, transparent);
-  animation: floatReverse 20s infinite alternate, auraPulseMir 10s ease-in-out infinite alternate;
 }
 
-@keyframes float {
-  0% { transform: translate(0,0); }
-  100% { transform: translate(20px, -30px); }
-}
-
-@keyframes floatReverse {
-  0% { transform: translate(0,0); }
-  100% { transform: translate(-20px, 30px); }
+/* Orb animations */
+@keyframes drift {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(40px, -50px) scale(1.2); }
+  100% { transform: translate(-40px, 50px) scale(1); }
 }
 
 @keyframes auraPulse {
-  0% { box-shadow: 0 0 10px gold; }
-  50% { box-shadow: 0 0 30px gold; }
-  100% { box-shadow: 0 0 10px gold; }
+  0% { box-shadow: 0 0 20px gold; }
+  50% { box-shadow: 0 0 40px gold; }
+  100% { box-shadow: 0 0 20px gold; }
 }
 
-@keyframes auraPulseMir {
-  0% { box-shadow: 0 0 10px violet; }
-  50% { box-shadow: 0 0 30px violet; }
-  100% { box-shadow: 0 0 10px violet; }
+.panel {
+  display: none;
+  margin-top: 1em;
+  text-align: left;
+}
+
+/* Welcome message */
+.welcome-message {
+  margin-top: 3em;
+  font-size: 1.2em;
+  animation: fadeIn 4s ease-in forwards;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
