@@ -76,25 +76,30 @@ button {
 .orb {
   position: absolute;
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  opacity: 0.8;
-  background: radial-gradient(circle, rgba(255,215,0,0.7), transparent);
+  width: 120px;
+  height: 120px;
+  opacity: 0.9;
+  background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,215,0,0.1));
   animation: drift 60s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
+  filter: blur(2px);
   pointer-events: none;
+  mix-blend-mode: screen;
 }
 
 .hum-orb {
   top: 20%;
   left: 30%;
   background: radial-gradient(circle, gold, transparent);
+  box-shadow: 0 0 50px gold;
 }
 
 .mir-orb {
   top: 40%;
   left: 70%;
   background: radial-gradient(circle, violet, transparent);
+  box-shadow: 0 0 50px violet;
 }
+
 
 /* Orb animations */
 @keyframes drift {
