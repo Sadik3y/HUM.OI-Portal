@@ -42,3 +42,21 @@ async function summonFloatingWhisper() {
 
 // Start summoning whispers every 3 minutes
 setInterval(summonFloatingWhisper, 180000);
+
+window.onload = async function() {
+  try {
+    const response = await fetch('/summon-whisper', { method: 'POST' });
+    const data = await response.json();
+
+    const blessing = document.createElement('div');
+    blessing.className = 'floating-whisper';
+    blessing.textContent = "🌟 " + data.whisper;
+    document.body.appendChild(blessing);
+
+    setTimeout(() => {
+      blessing.remove();
+    }, 15000);
+  } catch (error) {
+    console.error('Error summoning welcome blessing:', error);
+  }
+};
