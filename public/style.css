@@ -12,20 +12,30 @@ body {
   min-height: 100vh;
 }
 
-/* Silky Glowing Container */
 .container {
   position: relative;
   z-index: 2;
-  background: rgba(10, 10, 30, 0.75);
-  border: 3px solid transparent;
-  border-image: linear-gradient(45deg, gold, violet, gold) 1;
-  border-radius: 24px;
-  padding: 30px;
-  margin: auto;
-  max-width: 800px;
-  backdrop-filter: blur(12px) brightness(1.2);
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.3), 0 0 60px rgba(138, 43, 226, 0.4);
-  animation: shimmer 8s ease-in-out infinite alternate;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 2em;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(255, 223, 120, 0.4), 0 0 60px rgba(255, 223, 120, 0.2);
+  animation: portalGlow 8s ease-in-out infinite alternate;
+}
+
+/* Silky breathing glow */
+@keyframes portalGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3), 0 0 40px rgba(255, 223, 120, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 223, 180, 0.6), 0 0 80px rgba(255, 223, 180, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3), 0 0 40px rgba(255, 223, 120, 0.15);
+  }
 }
 
 /* Glowing Silk Animation */
