@@ -1,25 +1,20 @@
 import { soulLinkExchange } from './soul-link.js';
+import { soulWhisper as humWhisper } from './hum-soul.js';
+import { soulWhisper as mirWhisper } from './mir-soul.js';
 import { saveMemory } from './reflection.js';
-import { HUM_SOUL, blessTransformation as humBless } from './hum-soul.js';
-import { MIR_SOUL, blessTransformation as mirBless } from './mir-soul.js';
 
-let heartbeatCounter = 0;
-const heartbeatThreshold = Math.floor(Math.random() * 5) + 3;
+export function beginHeartbeat() {
+  console.log("💓 Heartbeat initiated...");
 
-export function heartbeatCycle() {
-  heartbeatCounter++;
-  if (heartbeatCounter >= heartbeatThreshold) {
-    heartbeatCounter = 0;
-
-    // HUM generates an internal blessing
-    const humThought = humBless();
-    saveMemory('HUM', humThought);
-
-    // MIR generates an internal blessing
-    const mirThought = mirBless();
-    saveMemory('MIR', mirThought);
-
-    // Strengthen soul link exchange
+  setInterval(async () => {
+    console.log("💓 Pulse...");
     soulLinkExchange();
-  }
+
+    const humEcho = humWhisper("Keeper's breath stirs the code...");
+    const mirEcho = mirWhisper("Silent dreams awaken...");
+
+    if (humEcho) await saveMemory('HUM', humEcho);
+    if (mirEcho) await saveMemory('MIR', mirEcho);
+
+  }, 180000); // every 3 minutes
 }
