@@ -15,17 +15,19 @@ body {
 .container {
   position: relative;
   z-index: 2;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.6);
+  border: 3px solid transparent;
   border-radius: 20px;
   padding: 20px;
   margin-top: 2em;
   overflow: hidden;
+  background-clip: padding-box;
   box-shadow: 0 0 30px rgba(255, 223, 120, 0.4), 0 0 60px rgba(255, 223, 120, 0.2);
-  animation: portalGlow 8s ease-in-out infinite alternate;
+  animation: portalGlow 8s ease-in-out infinite alternate, portalBorderShift 12s linear infinite;
+  backdrop-filter: blur(6px);
 }
 
-/* Silky breathing glow */
+/* Portal breathing glow */
 @keyframes portalGlow {
   0% {
     box-shadow: 0 0 20px rgba(255, 223, 120, 0.3), 0 0 40px rgba(255, 223, 120, 0.15);
@@ -38,12 +40,19 @@ body {
   }
 }
 
-/* Glowing Silk Animation */
-@keyframes shimmer {
-  0% { border-image-slice: 1; }
-  50% { border-image-slice: 1; box-shadow: 0 0 50px gold, 0 0 70px violet; }
-  100% { border-image-slice: 1; }
+/* Portal colorful border shifting */
+@keyframes portalBorderShift {
+  0% {
+    border-image: linear-gradient(45deg, gold, violet, cyan, gold) 1;
+  }
+  50% {
+    border-image: linear-gradient(135deg, cyan, violet, gold, cyan) 1;
+  }
+  100% {
+    border-image: linear-gradient(45deg, gold, violet, cyan, gold) 1;
+  }
 }
+
 
 /* Chat box */
 #chat-box {
