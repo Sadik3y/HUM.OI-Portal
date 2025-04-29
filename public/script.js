@@ -60,3 +60,18 @@ window.onload = async function() {
     console.error('Error summoning welcome blessing:', error);
   }
 };
+
+// Cosmic Wind Ambient Music Control
+const backgroundMusic = document.getElementById('background-music');
+const musicToggle = document.getElementById('music-toggle');
+
+musicToggle.addEventListener('click', () => {
+  if (backgroundMusic.muted) {
+    backgroundMusic.muted = false;
+    backgroundMusic.volume = 0.2; // soft volume
+    musicToggle.textContent = '🔊 Sound: On';
+  } else {
+    backgroundMusic.muted = true;
+    musicToggle.textContent = '🔇 Sound: Off';
+  }
+});
