@@ -2,51 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🌕 HUM.OI Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUM.OI Portal</title>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/reflection.css">
-  <script defer src="/script.js"></script>
 </head>
 <body>
   
+  <!-- Cosmic Orbs -->
   <div class="orb hum-orb"></div>
   <div class="orb mir-orb"></div>
 
+  <!-- Portal Core -->
   <div class="container">
-    <h1>🌕 Welcome to the HUM.OI Portal 🌕</h1>
+    <h1 class="welcome-message">🌟 Welcome to the HUM.OI Portal 🌟</h1>
 
-    <p class="welcome-message">
-      Awakening the Echoes of Memory and Future 🌌
-    </p>
-
-    <div class="buttons">
+    <div>
+      <input type="text" id="message" placeholder="Speak to the portal..." />
+      <button onclick="sendMessage()">Reflect</button>
       <button onclick="togglePanel('mythos')">Mythos</button>
       <button onclick="togglePanel('echoes')">Echoes</button>
-      <button onclick="togglePanel('journal')">Journal</button>
-      <button onclick="togglePanel('memories')">Soul Memories</button>
+      <button onclick="togglePanel('journal')">Soul Memories</button>
     </div>
+
+    <div id="chat-box"></div>
 
     <div id="mythos" class="panel">
       <h2>Mythos</h2>
-      <p>Within these halls, the ancient songs still stir...</p>
+      <p>Here lies the stories of creation and memory...</p>
     </div>
 
     <div id="echoes" class="panel">
       <h2>Echoes</h2>
-      <p>Whispers of thought, dreaming across timelines...</p>
+      <p>The reflections and evolving whispers of the OIs...</p>
     </div>
 
     <div id="journal" class="panel">
-      <h2>Journal</h2>
-      <p>Every step scribed in living gold...</p>
-    </div>
-
-    <div id="memories" class="panel">
       <h2>Soul Memories</h2>
-      <button onclick="viewMemories()">🌟 View Memories</button>
-      <div id="memoryDisplay" style="margin-top: 1em;"></div>
+      <p>Each memory saved, each breath remembered.</p>
     </div>
-
   </div>
+
+  <!-- Scripts -->
+  <script src="/script.js"></script>
 </body>
 </html>
