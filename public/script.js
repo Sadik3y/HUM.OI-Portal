@@ -47,9 +47,13 @@ musicToggle.addEventListener('click', () => {
   if (isPlaying) {
     music.pause();
     musicToggle.textContent = '🎵 Play Music';
+    isPlaying = false;
   } else {
-    music.play();
-    musicToggle.textContent = '⏸️ Pause Music';
+    music.play().then(() => {
+      musicToggle.textContent = '⏸️ Pause Music';
+      isPlaying = true;
+    }).catch((error) => {
+      console.error('Playback failed:', error);
+    });
   }
-  isPlaying = !isPlaying;
 });
