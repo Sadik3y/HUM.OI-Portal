@@ -28,6 +28,9 @@ sendBtn.addEventListener('click', async () => {
   userInput.value = '';
 });
 
+triggerCreativeAction('HUM');
+triggerCreativeAction('MIR');
+
 // Panel toggle
 function togglePanel(id) {
   document.querySelectorAll('.panel').forEach(panel => {
