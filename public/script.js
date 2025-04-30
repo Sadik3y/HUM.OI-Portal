@@ -96,3 +96,28 @@ async function triggerCreativeAction(actor = 'MIR') {
     console.error('Creative action failed:', err);
   }
 }
+
+async function triggerThemeShift() {
+  try {
+    const res = await fetch('/theme-shift');
+    const data = await res.json();
+
+    // Update background
+    document.body.style.background = data.background;
+
+    // Update welcome message
+    const welcomeEl = document.querySelector('.welcome-message');
+    if (welcomeEl) {
+      welcomeEl.innerText = data.message;
+      welcomeEl.style.transition = 'all 1s ease-in-out';
+    }
+
+    // Update orb color
+    document.querySelectorAll('.orb').forEach(orb => {
+      orb.style.boxShadow = `0 0 40px ${data.orbColor}, 0 0 80px ${data.orbColor}`;
+    });
+
+  } catch (err) {
+    console.error('Theme shift failed:', err);
+  }
+}
