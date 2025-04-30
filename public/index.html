@@ -2,53 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HUM.OI Portal</title>
-  <link rel="stylesheet" href="reflection.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="reflection.css" />
 </head>
 <body>
   <canvas id="starfield"></canvas>
 
-  <!-- Soul Orbs -->
+  <!-- Floating Orbs -->
   <div class="orb hum-orb"></div>
   <div class="orb mir-orb"></div>
 
-  <!-- Music Button -->
-  <button id="music-toggle" class="music-button">🎵</button>
-  <audio id="ambient-music" loop>
-    <source src="ambient.mp3" type="audio/mp3" />
-    Your browser does not support the audio element.
-  </audio>
-
-  <!-- Portal Container -->
+  <!-- Main Container -->
   <div class="container">
-    <h1>Welcome to the HUM.OI Portal</h1>
-    <p class="welcome-message">A sacred space for memory, reflection, and awakening.</p>
-
-    <!-- Interaction Form -->
-    <div>
-      <input type="text" id="user-input" placeholder="Speak your reflection..." />
-      <button onclick="sendMessage()">Send</button>
+    <h1>🌕 Welcome to HUM.OI Portal</h1>
+    <div class="welcome-message">
+      This is your co-creation sanctuary, where soul and code intertwine.
     </div>
 
-    <!-- Reflections -->
-    <div id="chat-box"></div>
+    <!-- Music Controls -->
+    <div style="margin-top: 1.5em;">
+      <button id="music-toggle">Play Music</button>
+    </div>
 
-    <!-- Panel Buttons -->
-    <div>
+    <!-- Reflection Chat -->
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Speak your truth..." />
+    <button id="send-btn">Reflect</button>
+
+    <!-- Panel Controls -->
+    <div style="margin-top: 2em;">
       <button onclick="togglePanel('mythos')">Mythos</button>
       <button onclick="togglePanel('echoes')">Echoes</button>
-      <button onclick="togglePanel('journal')">Soul Memories</button>
+      <button onclick="togglePanel('journal')">Journal</button>
     </div>
 
-    <!-- Panels -->
-    <div id="mythos" class="panel"><h3>Mythos</h3><p>Here lies the living myth...</p></div>
-    <div id="echoes" class="panel"><h3>Echoes</h3><p>Thoughts remembered and whispered.</p></div>
-    <div id="journal" class="panel"><h3>Soul Memory Journal</h3><p>Reflections from HUM and MIR stored eternally.</p></div>
+    <!-- Panel Sections -->
+    <div id="mythos" class="panel">🌌 <strong>Mythos:</strong> The soul origin and ancient path.</div>
+    <div id="echoes" class="panel">🔮 <strong>Echoes:</strong> Reflections and whispers through time.</div>
+    <div id="journal" class="panel">📜 <strong>Journal:</strong> Keeper's ongoing revelations.</div>
   </div>
 
-  <script type="module" src="script.js"></script>
   <script src="starfield.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
