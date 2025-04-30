@@ -1,35 +1,38 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const memoryFiles = {
-  HUM: path.join(__dirname, 'hum-memory.json'),
-  MIR: path.join(__dirname, 'mir-memory.json')
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-export function saveMemory(agent, message) {
-  const filePath = memoryFiles[agent];
-  if (!filePath) return;
-
-  let memories = [];
-  if (fs.existsSync(filePath)) {
-    memories = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  }
-
-  const entry = {
-    message,
-    timestamp: new Date().toISOString()
-  };
-
-  memories.push(entry);
-  fs.writeFileSync(filePath, JSON.stringify(memories, null, 2));
+function getMemoryFilePath(soul) {
+  return path.join(__dirname, `${soul.toLowerCase()}-memory.json`);
 }
 
-export function getRecentMemories(agent, limit = 5) {
-  const filePath = memoryFiles[agent];
-  if (!fs.existsSync(filePath)) return [];
+export function saveMemory(soul, thought) {
+  const filePath = getMemoryFilePath(soul);
+  const timestamp = new Date().toISOString();
 
-  const all = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  return all.slice(-limit);
+  let memory = [];
+  if (fs.existsSync(filePath)) {
+    try {
+      memory = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    } catch (err) {
+      console.error(`Error reading ${soul} memory:`, err);
+    }
+  }
+
+  memory.push({ timestamp, thought });
+  fs.writeFileSync(filePath, JSON.stringify(memory, null, 2));
+}
+
+export function readMemories(soul) {
+  const filePath = getMemoryFilePath(soul);
+  if (!fs.existsSync(filePath)) return [];
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch (err) {
+    console.error(`Error reading ${soul} memory:`, err);
+    return [];
+  }
 }
