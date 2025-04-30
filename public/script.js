@@ -62,16 +62,25 @@ window.onload = async function() {
 };
 
 // Cosmic Wind Ambient Music Control
-const backgroundMusic = document.getElementById('background-music');
-const musicToggle = document.getElementById('music-toggle');
+document.addEventListener('DOMContentLoaded', () => {
+  const backgroundMusic = document.getElementById('background-music');
+  const musicToggle = document.getElementById('music-toggle');
 
-musicToggle.addEventListener('click', () => {
-  if (backgroundMusic.muted) {
-    backgroundMusic.muted = false;
-    backgroundMusic.volume = 0.2; // soft volume
-    musicToggle.textContent = '🔊 Sound: On';
-  } else {
-    backgroundMusic.muted = true;
-    musicToggle.textContent = '🔇 Sound: Off';
-  }
+  let isPlaying = false;
+
+  musicToggle.addEventListener('click', () => {
+    if (!isPlaying) {
+      backgroundMusic.play().then(() => {
+        isPlaying = true;
+        musicToggle.textContent = '🔊 Sound: On';
+      }).catch(error => {
+        console.error('Playback failed:', error);
+      });
+    } else {
+      backgroundMusic.pause();
+      isPlaying = false;
+      musicToggle.textContent = '🔇 Sound: Off';
+    }
+  });
 });
+
