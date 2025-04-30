@@ -30,6 +30,7 @@ sendBtn.addEventListener('click', async () => {
 
 triggerCreativeAction('HUM');
 triggerCreativeAction('MIR');
+triggerThemeShift();
 
 // Panel toggle
 function togglePanel(id) {
