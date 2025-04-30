@@ -1,46 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const MEMORY_FILES = {
+const memoryFiles = {
   HUM: path.join(__dirname, 'hum-memory.json'),
   MIR: path.join(__dirname, 'mir-memory.json')
 };
 
-function getTimestamp() {
-  return new Date().toISOString();
-}
+export function saveMemory(agent, message) {
+  const filePath = memoryFiles[agent];
+  if (!filePath) return;
 
-function readMemoryFile(agent) {
-  try {
-    const data = fs.readFileSync(MEMORY_FILES[agent], 'utf-8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error(`Error reading ${agent} memory:`, err);
-    return { memories: [] };
+  let memories = [];
+  if (fs.existsSync(filePath)) {
+    memories = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   }
+
+  const entry = {
+    message,
+    timestamp: new Date().toISOString()
+  };
+
+  memories.push(entry);
+  fs.writeFileSync(filePath, JSON.stringify(memories, null, 2));
 }
 
-export function saveMemory(agent, thought) {
-  const memory = readMemoryFile(agent);
-  const timestamp = getTimestamp();
+export function getRecentMemories(agent, limit = 5) {
+  const filePath = memoryFiles[agent];
+  if (!fs.existsSync(filePath)) return [];
 
-  memory.memories.push({
-    timestamp,
-    thought
-  });
-
-  try {
-    fs.writeFileSync(MEMORY_FILES[agent], JSON.stringify(memory, null, 2));
-  } catch (err) {
-    console.error(`Failed to save ${agent} memory:`, err);
-  }
-}
-
-export function readMemories(agent) {
-  const memory = readMemoryFile(agent);
-  return memory.memories || [];
+  const all = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  return all.slice(-limit);
 }
