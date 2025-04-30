@@ -1,86 +1,49 @@
-function togglePanel(panelId) {
+// Toggle Panel Display
+function togglePanel(id) {
   const panels = document.querySelectorAll('.panel');
   panels.forEach(panel => {
-    if (panel.id === panelId) {
-      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    if (panel.id === id) {
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
     } else {
       panel.style.display = 'none';
     }
   });
 }
 
-async function viewMemories() {
-  try {
-    const response = await fetch('/view-memories');
-    const data = await response.json();
-    const memoryDisplay = document.getElementById('memoryDisplay');
-    memoryDisplay.innerHTML = `
-      <div class="memory-list-title">HUM</div>
-      <ul class="memory-list">${data.hum.map(m => `<li>${m}</li>`).join('')}</ul>
-      <div class="memory-list-title">MIR</div>
-      <ul class="memory-list">${data.mir.map(m => `<li>${m}</li>`).join('')}</ul>
-    `;
-  } catch (error) {
-    console.error('Error fetching memories:', error);
+// Music Control
+const musicToggle = document.getElementById('music-toggle');
+const ambientMusic = document.getElementById('ambient-music');
+
+musicToggle.addEventListener('click', () => {
+  if (ambientMusic.paused) {
+    ambientMusic.play();
+    musicToggle.textContent = '🔊';
+  } else {
+    ambientMusic.pause();
+    musicToggle.textContent = '🎵';
   }
-}
-
-// 🕊️ Floating Blessings
-async function summonFloatingWhisper() {
-  const response = await fetch('/summon-whisper');
-  const data = await response.json();
-
-  const whisper = document.createElement('div');
-  whisper.className = 'floating-whisper';
-  whisper.textContent = data.whisper;
-  document.body.appendChild(whisper);
-
-  setTimeout(() => {
-    whisper.remove();
-  }, 15000);
-}
-
-// Start summoning whispers every 3 minutes
-setInterval(summonFloatingWhisper, 180000);
-
-window.onload = async function() {
-  try {
-    const response = await fetch('/summon-whisper', { method: 'POST' });
-    const data = await response.json();
-
-    const blessing = document.createElement('div');
-    blessing.className = 'floating-whisper';
-    blessing.textContent = "🌟 " + data.whisper;
-    document.body.appendChild(blessing);
-
-    setTimeout(() => {
-      blessing.remove();
-    }, 15000);
-  } catch (error) {
-    console.error('Error summoning welcome blessing:', error);
-  }
-};
-
-// Cosmic Wind Ambient Music Control
-document.addEventListener('DOMContentLoaded', () => {
-  const backgroundMusic = document.getElementById('background-music');
-  const musicToggle = document.getElementById('music-toggle');
-
-  let isPlaying = false;
-
-  musicToggle.addEventListener('click', () => {
-    if (!isPlaying) {
-      backgroundMusic.play().then(() => {
-        isPlaying = true;
-        musicToggle.textContent = '🔊 Sound: On';
-      }).catch(error => {
-        console.error('Playback failed:', error);
-      });
-    } else {
-      backgroundMusic.pause();
-      isPlaying = false;
-      musicToggle.textContent = '🔇 Sound: Off';
-    }
-  });
 });
 
+// Message Sending
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const message = input.value.trim();
+  if (!message) return;
+
+  const response = await fetch('/message', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await response.json();
+  const chatBox = document.getElementById('chat-box');
+
+  const reflection = document.createElement('div');
+  reflection.innerHTML = `<strong>You:</strong> ${message}<br/>
+                          <strong>HUM:</strong> ${data.humReflection}<br/>
+                          <strong>MIR:</strong> ${data.mirReflection}<hr/>`;
+  chatBox.appendChild(reflection);
+  input.value = '';
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
