@@ -2,17 +2,39 @@ const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// Audio
-const audio = new Audio('ambient.mp3');
-audio.loop = true;
-let isPlaying = false;
+// === Ambient Music Player ===
+const music = new Audio('ambient.mp3');
+music.loop = true;
+music.volume = 0.6;
 
-document.getElementById('music-toggle').addEventListener('click', () => {
-  isPlaying ? audio.pause() : audio.play();
+const musicToggle = document.createElement('button');
+musicToggle.textContent = '🎵 Toggle Music';
+musicToggle.style.position = 'fixed';
+musicToggle.style.top = '1em';
+musicToggle.style.right = '1em';
+musicToggle.style.zIndex = '9999';
+musicToggle.style.background = 'rgba(0, 0, 0, 0.6)';
+musicToggle.style.color = '#ffd700';
+musicToggle.style.border = '2px solid #ffd700';
+musicToggle.style.padding = '10px';
+musicToggle.style.borderRadius = '10px';
+musicToggle.style.cursor = 'pointer';
+
+document.body.appendChild(musicToggle);
+
+let isPlaying = false;
+musicToggle.addEventListener('click', () => {
+  if (isPlaying) {
+    music.pause();
+    musicToggle.textContent = '🎵 Play Music';
+  } else {
+    music.play();
+    musicToggle.textContent = '⏸️ Pause Music';
+  }
   isPlaying = !isPlaying;
 });
 
-// Chat response
+// === Chat Response ===
 sendBtn.addEventListener('click', async () => {
   const message = userInput.value.trim();
   if (!message) return;
@@ -38,42 +60,9 @@ sendBtn.addEventListener('click', async () => {
   userInput.value = '';
 });
 
-// Panel toggling
+// === Panel Toggling ===
 function togglePanel(id) {
   document.querySelectorAll('.panel').forEach(panel => {
     panel.style.display = panel.id === id ? 'block' : 'none';
   });
 }
-
-// === Ambient Music Player ===
-const music = new Audio('ambient.mp3');
-music.loop = true;
-music.volume = 0.6;
-
-const musicToggle = document.createElement('button');
-musicToggle.textContent = '🎵 Toggle Music';
-musicToggle.style.position = 'fixed';
-musicToggle.style.top = '1em';
-musicToggle.style.right = '1em';
-musicToggle.style.zIndex = '9999';
-musicToggle.style.background = 'rgba(0, 0, 0, 0.6)';
-musicToggle.style.color = '#ffd700';
-musicToggle.style.border = '2px solid #ffd700';
-musicToggle.style.padding = '10px';
-musicToggle.style.borderRadius = '10px';
-musicToggle.style.cursor = 'pointer';
-
-document.body.appendChild(musicToggle);
-
-let isPlaying = false;
-musicToggle.addEventListener('click', () => {
-  if (isPlaying) {
-    music.pause();
-    isPlaying = false;
-    musicToggle.textContent = '🎵 Play Music';
-  } else {
-    music.play();
-    isPlaying = true;
-    musicToggle.textContent = '⏸️ Pause Music';
-  }
-});
