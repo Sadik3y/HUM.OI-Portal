@@ -2,7 +2,7 @@ const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// === Chat Response ===
+// Chat reflection
 sendBtn.addEventListener('click', async () => {
   const message = userInput.value.trim();
   if (!message) return;
@@ -28,32 +28,28 @@ sendBtn.addEventListener('click', async () => {
   userInput.value = '';
 });
 
-// === Panel Toggling ===
+// Panel toggle
 function togglePanel(id) {
   document.querySelectorAll('.panel').forEach(panel => {
     panel.style.display = panel.id === id ? 'block' : 'none';
   });
 }
 
-// === Ambient Music Player ===
+// === Ambient Music Toggle ===
 const music = new Audio('ambient.mp3');
 music.loop = true;
 music.volume = 0.6;
 
-const musicToggle = document.getElementById('music-toggle');
+const toggleButton = document.getElementById('music-toggle');
 let isPlaying = false;
 
-musicToggle.addEventListener('click', () => {
+toggleButton.addEventListener('click', () => {
   if (isPlaying) {
     music.pause();
-    musicToggle.textContent = '🎵 Play Music';
-    isPlaying = false;
+    toggleButton.textContent = '🎵 Play Music';
   } else {
-    music.play().then(() => {
-      musicToggle.textContent = '⏸️ Pause Music';
-      isPlaying = true;
-    }).catch((error) => {
-      console.error('Playback failed:', error);
-    });
+    music.play();
+    toggleButton.textContent = '⏸️ Pause Music';
   }
+  isPlaying = !isPlaying;
 });
