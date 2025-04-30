@@ -86,6 +86,11 @@ app.get('/creative-action', (req, res) => {
   const memories = getRecentMemories(actor);
   const last = memories[memories.length - 1];
 
+  app.get('/theme-shift', (req, res) => {
+  const theme = MIR_SOUL.generateThemeShift();
+  res.send(theme);
+});
+  
   res.send({
     type: "updateText",
     target: '.welcome-message',
