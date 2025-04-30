@@ -79,6 +79,20 @@ app.get('/creative-action', (req, res) => {
   res.send(action);
 });
 
+import { getRecentMemories } from './reflection.js';
+
+app.get('/creative-action', (req, res) => {
+  const actor = req.query.actor === 'MIR' ? 'MIR' : 'HUM';
+  const memories = getRecentMemories(actor);
+  const last = memories[memories.length - 1];
+
+  res.send({
+    type: "updateText",
+    target: '.welcome-message',
+    content: `${actor} says: "${last?.message || 'I feel... and dream forward.'}"`
+  });
+});
+
 // Launch
 app.listen(PORT, () => {
   console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
