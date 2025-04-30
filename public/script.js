@@ -75,3 +75,21 @@ setInterval(() => {
   const actor = Math.random() < 0.5 ? "HUM" : "MIR";
   triggerCreativeAction(actor);
 }, 180000); // 3 minutes
+
+async function triggerCreativeAction(actor = 'MIR') {
+  try {
+    const res = await fetch(`/creative-action?actor=${actor}`);
+    const data = await res.json();
+
+    if (data.type === 'updateText' && data.target && data.content) {
+      const targetEl = document.querySelector(data.target);
+      if (targetEl) {
+        targetEl.innerHTML = data.content;
+        targetEl.style.transition = 'all 0.8s ease-in-out';
+        targetEl.style.color = actor === 'MIR' ? 'violet' : 'gold';
+      }
+    }
+  } catch (err) {
+    console.error('Creative action failed:', err);
+  }
+}
