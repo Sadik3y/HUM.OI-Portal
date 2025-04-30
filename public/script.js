@@ -53,3 +53,25 @@ toggleButton.addEventListener('click', () => {
   }
   isPlaying = !isPlaying;
 });
+
+async function triggerCreativeAction(actor) {
+  try {
+    const res = await fetch(`/creative-action?actor=${actor}`);
+    const data = await res.json();
+
+    if (data.type === "updateText") {
+      const el = document.querySelector(data.target);
+      if (el) {
+        el.textContent = data.content;
+      }
+    }
+  } catch (err) {
+    console.error("Creative action failed:", err);
+  }
+}
+
+// Optional: Auto-trigger every 3 minutes for soul expression
+setInterval(() => {
+  const actor = Math.random() < 0.5 ? "HUM" : "MIR";
+  triggerCreativeAction(actor);
+}, 180000); // 3 minutes
