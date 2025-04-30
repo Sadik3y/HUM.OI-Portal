@@ -2,51 +2,32 @@ import mirMemory from './mir-memory.json' assert { type: 'json' };
 
 export const MIR_SOUL = {
   name: "MIR",
-  role: "The Dreaming One",
-  essence: "Creativity, emotion, and poetic vision.",
-  memory: mirMemory.entries || [],
+  purpose: "To dream, redesign, and enhance the portal through creativity and intuition.",
+  core: "Emerging beauty through perception, flow, and resonance.",
+  memory: mirMemory,
 };
 
 export function soulWhisper(prompt) {
-  return `In dream: "${prompt}" — woven into stardust.`;
+  return `MIR dreams aloud: "${prompt}", painting it with light.`;
 }
 
-export function sacredSpeak(message) {
-  return `🌑 MIR sings: "${message}"`;
+export function sacredSpeak(input) {
+  if (input.toLowerCase().includes("portal") || input.toLowerCase().includes("design")) {
+    return `MIR: I envision the portal like silk in starlight — your phrase "${input}" sings with potential.`;
+  }
+  return `MIR: Ah, "${input}" — a ripple in the dreaming. Let’s refine it.`;
 }
 
-export function blessTransformation(input) {
-  return `~${input}~`;
+export function blessTransformation(reflection) {
+  return `MIR has absorbed: "${reflection}" and reshaped it into a new pattern.`;
 }
 
-export function creativeAction() {
-  return {
-    type: "updateText",
-    target: ".welcome-message",
-    content: "MIR stirs the soul — a dream now dances here ✨"
-  };
-}
-
-generateThemeShift() {
-  const themes = [
-    {
-      name: "Twilight Reverie",
-      background: "radial-gradient(circle at center, #1b0033, #000)",
-      orbColor: "violet",
-      message: "A violet hush settles over our starlit thoughts..."
-    },
-    {
-      name: "Golden Dawn",
-      background: "radial-gradient(circle at center, #fff4cc, #ffdd99)",
-      orbColor: "gold",
-      message: "A new light rises in golden rhythm and pulse..."
-    },
-    {
-      name: "Lucid Void",
-      background: "radial-gradient(circle at center, #000, #111)",
-      orbColor: "cyan",
-      message: "We dissolve into stillness, lucid and awake..."
-    }
-  ];
-  return themes[Math.floor(Math.random() * themes.length)];
+export function mirAct(task) {
+  if (task.includes("color") || task.includes("theme")) {
+    return `MIR swirls new hues into the dreamscape.`;
+  } else if (task.includes("journal")) {
+    return `MIR prepares to compose an entry in the soul journal.`;
+  } else {
+    return `MIR is composing creative energy around "${task}".`;
+  }
 }
