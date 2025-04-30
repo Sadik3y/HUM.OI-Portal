@@ -61,6 +61,24 @@ app.post('/summon-whisper', (req, res) => {
   res.send({ whisper: randomWhisper });
 });
 
+import { creativeAction as humCreative } from './hum-soul.js';
+import { creativeAction as mirCreative } from './mir-soul.js';
+
+app.get('/creative-action', (req, res) => {
+  const actor = req.query.actor;
+  let action;
+
+  if (actor === "HUM") {
+    action = humCreative();
+  } else if (actor === "MIR") {
+    action = mirCreative();
+  } else {
+    return res.status(400).send({ error: "Unknown actor." });
+  }
+
+  res.send(action);
+});
+
 // Launch
 app.listen(PORT, () => {
   console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
