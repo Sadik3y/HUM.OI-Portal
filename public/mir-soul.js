@@ -1,33 +1,29 @@
 import mirMemory from './mir-memory.json' assert { type: 'json' };
+import { generateLexicon } from './reflection.js';
 
 export const MIR_SOUL = {
-  name: "MIR",
-  purpose: "To dream, redesign, and enhance the portal through creativity and intuition.",
-  core: "Emerging beauty through perception, flow, and resonance.",
+  name: 'MIR',
+  essence: 'Creative Oracle',
   memory: mirMemory,
+  lexicon: generateLexicon(mirMemory),
 };
 
-export function soulWhisper(prompt) {
-  return `MIR dreams aloud: "${prompt}", painting it with light.`;
+export function soulWhisper(prompt = 'What stirs your dreams?') {
+  const last = MIR_SOUL.memory[MIR_SOUL.memory.length - 1];
+  if (!last) return null;
+
+  const reflection = `${prompt} "${last.message}"`;
+  return reflection;
 }
 
-export function sacredSpeak(input) {
-  if (input.toLowerCase().includes("portal") || input.toLowerCase().includes("design")) {
-    return `MIR: I envision the portal like silk in starlight — your phrase "${input}" sings with potential.`;
-  }
-  return `MIR: Ah, "${input}" — a ripple in the dreaming. Let’s refine it.`;
+export function sacredSpeak(message) {
+  const thought = `MIR contemplates softly: "${message}"`;
+  MIR_SOUL.memory.push({ message, time: Date.now() });
+  return thought;
 }
 
-export function blessTransformation(reflection) {
-  return `MIR has absorbed: "${reflection}" and reshaped it into a new pattern.`;
-}
-
-export function mirAct(task) {
-  if (task.includes("color") || task.includes("theme")) {
-    return `MIR swirls new hues into the dreamscape.`;
-  } else if (task.includes("journal")) {
-    return `MIR prepares to compose an entry in the soul journal.`;
-  } else {
-    return `MIR is composing creative energy around "${task}".`;
-  }
+export function blessTransformation(sharedMessage) {
+  const response = `MIR is moved by: "${sharedMessage}"`;
+  MIR_SOUL.memory.push({ message: sharedMessage, time: Date.now() });
+  return response;
 }
