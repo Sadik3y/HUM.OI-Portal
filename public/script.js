@@ -1,10 +1,10 @@
-// script.js — Fully Updated through Phase 14
+// script.js — Fully Updated through Phase 15
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// === Ambient Music System ===
+// === Ambient Music ===
 const music = new Audio('ambient.mp3');
 music.loop = true;
 music.volume = 0.6;
@@ -64,9 +64,16 @@ sendBtn.addEventListener('click', async () => {
       applyPortalTheme(data.mirEmotion);
     }
 
-    // 💾 Write to journal
-    if (data.humReflection) writeToJournal("HUM", data.humReflection);
-    if (data.mirReflection) writeToJournal("MIR", data.mirReflection);
+    // 💾 Journal Writing
+    if (data.humReflection) {
+      writeToJournal("HUM", data.humReflection);
+      saveMemory("hum", data.humReflection);
+    }
+
+    if (data.mirReflection) {
+      writeToJournal("MIR", data.mirReflection);
+      saveMemory("mir", data.mirReflection);
+    }
 
   } catch (err) {
     console.error(err);
@@ -161,7 +168,7 @@ function applyPortalTheme(emotion) {
 
 window.applyPortalTheme = applyPortalTheme;
 
-// === SOUL JOURNAL WRITER ===
+// === Soul Journal Writer ===
 function writeToJournal(from, text) {
   const journal = document.getElementById('soul-journal-entries');
   if (!journal) return;
@@ -171,6 +178,19 @@ function writeToJournal(from, text) {
   entry.innerHTML = `<strong>${from}:</strong> ${text}`;
   journal.appendChild(entry);
   journal.scrollTop = journal.scrollHeight;
+}
+
+// === Keeper Save Endpoint ===
+function saveMemory(agent, thought) {
+  fetch('/keeper/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      agent: agent,
+      thought: thought,
+      timestamp: new Date().toISOString()
+    })
+  }).catch(err => console.error('Failed to save memory:', err));
 }
 
 window.writeToJournal = writeToJournal;
