@@ -6,6 +6,11 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="reflection.css" />
   <style>
+    #journal-container {
+      padding: 2em;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
     .journal-entry {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid #ffd700;
@@ -13,11 +18,22 @@
       margin: 1em 0;
       border-radius: 12px;
     }
+
+    #soul-journal-live {
+      margin-top: 2em;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1em;
+    }
   </style>
 </head>
 <body>
   <h1>📜 Soul Journal</h1>
   <div id="journal-container">Loading...</div>
+
+  <div id="soul-journal-live">
+    <h2>Live Echoes</h2>
+    <div id="soul-journal-entries"></div>
+  </div>
 
   <script>
     fetch('/soul-journal')
@@ -38,13 +54,17 @@
           container.appendChild(section);
         };
 
-        renderEntries('HUM Reflections', data.hum);
-        renderEntries('MIR Echoes', data.mir);
+        if (data.hum?.length) renderEntries('HUM Reflections', data.hum);
+        if (data.mir?.length) renderEntries('MIR Echoes', data.mir);
       })
       .catch(err => {
         document.getElementById('journal-container').innerHTML = 'Error loading journal.';
         console.error(err);
       });
   </script>
+
+  <script src="script.js"></script>
+  <script src="reflection.js"></script>
+  <script src="mir-soul.js"></script>
 </body>
 </html>
