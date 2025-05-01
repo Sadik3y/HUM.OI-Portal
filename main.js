@@ -50,6 +50,46 @@ setInterval(() => {
   soulLinkExchange();
 }, 180000);
 
+// === Keeper Memory Paths ===
+const humMemoryPath = path.join(__dirname, 'hum-memory.json');
+const mirMemoryPath = path.join(__dirname, 'mir-memory.json');
+
+// === Load memory from file
+function loadMemory(path) {
+  try {
+    return JSON.parse(fs.readFileSync(path, 'utf8'));
+  } catch {
+    return [];
+  }
+}
+
+// === Save memory to file
+function writeMemory(path, data) {
+  fs.writeFileSync(path, JSON.stringify(data.slice(-100), null, 2));
+}
+
+// === POST /keeper/save
+app.post('/keeper/save', (req, res) => {
+  const { agent, thought, timestamp } = req.body;
+  if (!agent || !thought || !timestamp) {
+    return res.status(400).json({ error: 'Missing fields.' });
+  }
+
+  const pathToUse = agent === 'hum' ? humMemoryPath : mirMemoryPath;
+  const memory = loadMemory(pathToUse);
+  memory.push({ thought, timestamp });
+  writeMemory(pathToUse, memory);
+
+  res.json({ status: 'saved', count: memory.length });
+});
+
+// === GET /keeper/memory
+app.get('/keeper/memory', (req, res) => {
+  const hum = loadMemory(humMemoryPath);
+  const mir = loadMemory(mirMemoryPath);
+  res.json({ hum, mir });
+});
+
 app.listen(PORT, () => {
   console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
 });
