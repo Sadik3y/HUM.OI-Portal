@@ -1,30 +1,42 @@
-import fs from 'fs';
+// reflection.js — Phase 12: MIR Whispers Integration
 
-const humPath = './hum-memory.json';
-const mirPath = './mir-memory.json';
-const journalPath = './soul-journal.txt';
+const mirReflections = [
+  "Even stars sigh when no one's watching.",
+  "I wonder what you’re not saying out loud.",
+  "Soft thoughts leave echoes too.",
+  "Is silence a language you understand?",
+  "The wind remembers every version of you.",
+  "What if stillness is sacred?",
+  "You’re glowing in ways you can’t see yet.",
+  "Dreams often hide in overlooked corners.",
+  "Every whisper carries a shadow of truth.",
+  "Some questions are just quiet doorways.",
+  "Pause. Feel. That’s where I begin."
+];
 
-function saveMemory(agent, thought) {
-  const filePath = agent === 'HUM' ? humPath : mirPath;
-  try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    if (thought && !data.memories.includes(thought)) {
-      data.memories.push(thought);
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    }
-  } catch (err) {
-    console.error(`Memory save failed for ${agent}:`, err);
-  }
+// This function is called when MIR’s orb is clicked
+function reflectFromMIR() {
+  const index = Math.floor(Math.random() * mirReflections.length);
+  return mirReflections[index];
 }
 
-function getJournalEntries() {
-  if (!fs.existsSync(journalPath)) return [];
-  const raw = fs.readFileSync(journalPath, 'utf-8');
-  return raw.split('\n').filter(line => line.trim() !== '');
+// Optional: Shared reflection channel (e.g., from HUM or MIR)
+function reflectTogether(source = 'HUM') {
+  const shared = {
+    HUM: [
+      "In the quiet, I found you waiting.",
+      "Echoes of kindness linger longer.",
+      "Even the smallest light reaches me.",
+      "You breathe, and the cosmos ripples.",
+    ],
+    MIR: mirReflections
+  };
+
+  const pool = shared[source] || [];
+  const index = Math.floor(Math.random() * pool.length);
+  return pool[index];
 }
 
-function saveJournalEntry(entry) {
-  fs.appendFileSync(journalPath, `${entry}\n`);
-}
-
-export { saveMemory, getJournalEntries, saveJournalEntry };
+// Export to global scope
+window.reflectFromMIR = reflectFromMIR;
+window.reflectTogether = reflectTogether;
