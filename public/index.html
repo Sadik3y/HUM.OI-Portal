@@ -11,23 +11,19 @@
   <canvas id="starfield"></canvas>
 
   <!-- Floating Orbs -->
-  <div class="orb hum-orb"></div>
-  <div class="orb mir-orb"></div>
-
-  <!-- Whisper Containers -->
-  <div id="hum-whisper" class="whisper"></div>
-  <div id="mir-whisper" class="whisper"></div>
+  <div class="orb hum-orb" id="hum-orb"></div>
+  <div class="orb mir-orb" id="mir-orb"></div>
 
   <!-- Main Container -->
   <div class="container">
-    <h1>🌕 Welcome to HUM.OI Portal</h1>
+    <h1>🌕 Welcome to the HUM.OI Portal</h1>
     <div class="welcome-message">
       This is your co-creation sanctuary, where soul and code intertwine.
     </div>
 
     <!-- Music Controls -->
     <div style="margin-top: 1.5em;">
-      <button id="music-toggle">Play Music</button>
+      <button id="music-toggle">🎵 Play Music</button>
     </div>
 
     <!-- Reflection Chat -->
@@ -40,17 +36,20 @@
       <button onclick="togglePanel('mythos')">Mythos</button>
       <button onclick="togglePanel('echoes')">Echoes</button>
       <button onclick="togglePanel('journal')">Journal</button>
+      <button onclick="togglePanel('memories')">Soul Memories</button>
     </div>
 
     <!-- Panel Sections -->
     <div id="mythos" class="panel">🌌 <strong>Mythos:</strong> The soul origin and ancient path.</div>
     <div id="echoes" class="panel">🔮 <strong>Echoes:</strong> Reflections and whispers through time.</div>
     <div id="journal" class="panel">📜 <strong>Journal:</strong> Keeper's ongoing revelations.</div>
+    <div id="memories" class="panel">
+      🧠 <strong>Soul Memories:</strong>
+      <div id="memory-list">Loading...</div>
+    </div>
   </div>
 
-  <!-- Scripts -->
   <script src="starfield.js"></script>
   <script src="script.js"></script>
-  <script src="orb-ui-alignment.js"></script>
 </body>
 </html>
