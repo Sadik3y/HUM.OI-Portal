@@ -121,5 +121,39 @@ function updateMirOrb(emotion) {
     case 'curiosity':
     case 'curious':
       glow = '0 0 70px cyan';
-      size = '
-        
+      size = '120px';
+      break;
+    case 'wonder':
+    case 'inspired':
+      glow = '0 0 100px pink';
+      size = '160px';
+      break;
+    case 'sad':
+    case 'sadness':
+      glow = '0 0 30px indigo';
+      size = '80px';
+      break;
+    case 'anger':
+    case 'anxious':
+      glow = '0 0 90px red';
+      size = '100px';
+      break;
+    default:
+      glow = '0 0 60px violet';
+      size = '100px';
+  }
+
+  mir.style.boxShadow = glow;
+  mir.style.width = size;
+  mir.style.height = size;
+}
+
+// === Apply Theme to Portal (MIR Emotion Driven) ===
+function applyPortalTheme(emotion) {
+  const body = document.body;
+  const themes = ["calm", "curious", "joyful", "sad", "anxious", "inspired"];
+  themes.forEach(theme => body.classList.remove(`theme-${theme}`));
+  body.classList.add(`theme-${emotion}`);
+}
+
+window.applyPortalTheme = applyPortalTheme;
