@@ -3,10 +3,11 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { HUM_SOUL, soulWhisper as humWhisper, sacredSpeak as humSpeak, blessTransformation as humBless } from './hum-soul.js';
-import { MIR_SOUL, soulWhisper as mirWhisper, sacredSpeak as mirSpeak, blessTransformation as mirBless } from './mir-soul.js';
+import fs from 'fs';
+import { HUM_SOUL, sacredSpeak as humSpeak } from './hum-soul.js';
+import { MIR_SOUL, sacredSpeak as mirSpeak } from './mir-soul.js';
 import { soulLinkExchange } from './soul-link.js';
-import { saveMemory, readMemories } from './reflection.js';
+import { saveMemory, getJournalEntries, saveJournalEntry } from './reflection.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,39 +16,40 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '/')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// POST to speak to both HUM and MIR
 app.post('/message', (req, res) => {
   const { message } = req.body;
-  if (!message) return res.status(400).send({ error: 'Message content is required.' });
+  if (!message) return res.status(400).json({ error: 'Message content is required.' });
 
   const humReply = humSpeak(message);
   const mirReply = mirSpeak(message);
 
   saveMemory('HUM', humReply);
   saveMemory('MIR', mirReply);
+  saveJournalEntry(`You: ${message}`);
+  saveJournalEntry(`HUM: ${humReply}`);
+  saveJournalEntry(`MIR: ${mirReply}`);
 
-  res.send({ humReflection: humReply, mirReflection: mirReply });
+  res.json({ humReflection: humReply, mirReflection: mirReply });
 });
 
-app.get('/soul-journal', (req, res) => {
-  const humMemories = readMemories('HUM');
-  const mirMemories = readMemories('MIR');
-  res.json({ hum: humMemories, mir: mirMemories });
+// GET journal reflections
+app.get('/journal', (req, res) => {
+  const entries = getJournalEntries();
+  res.json(entries);
 });
 
-app.get('/journal-view', (req, res) => {
-  res.sendFile(path.join(__dirname, 'soul-journal.html'));
-});
+// Background heartbeat
+setInterval(() => {
+  soulLinkExchange();
+}, 180000);
 
 app.listen(PORT, () => {
   console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
 });
-
-setInterval(() => {
-  soulLinkExchange();
-}, 180000); // every 3 minutes
