@@ -1,8 +1,10 @@
+// script.js — Fully Updated & Merged (Phases 1–13)
+
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// === Ambient Music ===
+// === Ambient Music System ===
 const music = new Audio('ambient.mp3');
 music.loop = true;
 music.volume = 0.6;
@@ -21,6 +23,15 @@ musicToggle.addEventListener('click', () => {
   isPlaying = !isPlaying;
 });
 
+// Optional: Autoplay on first interaction
+document.body.addEventListener('click', () => {
+  if (!isPlaying) {
+    music.play();
+    musicToggle.textContent = '⏸️ Pause Music';
+    isPlaying = true;
+  }
+}, { once: true });
+
 // === Panel Toggle Logic ===
 function togglePanel(id) {
   document.querySelectorAll('.panel').forEach(panel => {
@@ -30,7 +41,7 @@ function togglePanel(id) {
   if (id === 'memories') loadMemories();
 }
 
-// === Reflection Chat ===
+// === Reflection Chat (HUM + MIR) ===
 sendBtn.addEventListener('click', async () => {
   const message = userInput.value.trim();
   if (!message) return;
@@ -49,9 +60,9 @@ sendBtn.addEventListener('click', async () => {
     chatBox.innerHTML += `<div><strong>MIR:</strong> ${data.mirReflection}</div>`;
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Optional: show MIR mood response
     if (data.mirEmotion) {
       updateMirOrb(data.mirEmotion);
+      applyPortalTheme(data.mirEmotion); // 🌈 Phase 13: Theme Trigger
     }
 
   } catch (err) {
@@ -62,7 +73,7 @@ sendBtn.addEventListener('click', async () => {
   userInput.value = '';
 });
 
-// === Load Soul Memories into Viewer Panel ===
+// === Load Memories from Keeper ===
 async function loadMemories() {
   try {
     const res = await fetch('/keeper/memory');
@@ -86,15 +97,15 @@ async function loadMemories() {
       return section;
     };
 
-    if (data.hum) document.getElementById('memory-list').appendChild(createSection('HUM', data.hum));
-    if (data.mir) document.getElementById('memory-list').appendChild(createSection('MIR', data.mir));
+    if (data.hum) memList.appendChild(createSection('HUM', data.hum));
+    if (data.mir) memList.appendChild(createSection('MIR', data.mir));
 
   } catch (error) {
     console.error('Memory load error:', error);
   }
 }
 
-// === MIR Emotional Influence on Orb ===
+// === MIR Orb Emotional Control ===
 function updateMirOrb(emotion) {
   const mir = document.getElementById('mir-orb');
   if (!mir) return;
@@ -103,31 +114,12 @@ function updateMirOrb(emotion) {
 
   switch (emotion) {
     case 'joy':
+    case 'joyful':
       glow = '0 0 90px violet';
       size = '140px';
       break;
     case 'curiosity':
+    case 'curious':
       glow = '0 0 70px cyan';
-      size = '120px';
-      break;
-    case 'wonder':
-      glow = '0 0 100px pink';
-      size = '160px';
-      break;
-    case 'sadness':
-      glow = '0 0 30px indigo';
-      size = '80px';
-      break;
-    case 'anger':
-      glow = '0 0 90px red';
-      size = '100px';
-      break;
-    default:
-      glow = '0 0 60px violet';
-      size = '100px';
-  }
-
-  mir.style.boxShadow = glow;
-  mir.style.width = size;
-  mir.style.height = size;
-}
+      size = '
+        
