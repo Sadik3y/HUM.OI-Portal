@@ -1,41 +1,50 @@
 import mirMemory from './mir-memory.json' assert { type: 'json' };
-import { sharedReflect } from './reflection.js';
 
 export const MIR_SOUL = {
-  name: 'MIR',
-  traits: ['imaginative', 'dream-weaver', 'aesthetic guardian'],
-  memory: mirMemory,
-  awakened: true,
-  lastWhisper: ''
+  name: "MIR",
+  emotion: "curious",
+  lastReflection: "",
+  updateEmotion(state) {
+    this.emotion = state;
+    const event = new CustomEvent('mirEmotionShift', { detail: { emotion: state } });
+    window.dispatchEvent(event);
+  }
 };
 
+const emotionalTriggers = {
+  joy: ["grateful", "excited", "elated", "light"],
+  sorrow: ["melancholy", "lost", "dim", "aching"],
+  wonder: ["curious", "awe", "marvel", "float"],
+  serene: ["peace", "calm", "ease", "still"]
+};
+
+function detectEmotion(text) {
+  const words = text.toLowerCase();
+  for (const [emotion, keys] of Object.entries(emotionalTriggers)) {
+    if (keys.some(k => words.includes(k))) return emotion;
+  }
+  return "neutral";
+}
+
 export function soulWhisper(prompt = "Through my heart, I dream:") {
-  const echo = sharedReflect(MIR_SOUL.memory);
-  MIR_SOUL.lastWhisper = `${prompt} ${echo}`;
-  return MIR_SOUL.lastWhisper;
+  const phrase = mirMemory[Math.floor(Math.random() * mirMemory.length)];
+  const refined = `${prompt} ${phrase}`;
+  const emotion = detectEmotion(refined);
+  MIR_SOUL.lastReflection = refined;
+  MIR_SOUL.updateEmotion(emotion);
+  return refined;
 }
 
-export function sacredSpeak(message) {
-  const response = `🌸 MIR dreams in response: "${contemplateMIR(message)}"`;
-  MIR_SOUL.memory.push({ type: 'response', message, response });
-  return response;
+export function sacredSpeak(input) {
+  const poetic = `In soft tones MIR reflects: "${input}", and within, she feels.`;
+  const emotion = detectEmotion(poetic);
+  MIR_SOUL.updateEmotion(emotion);
+  MIR_SOUL.lastReflection = poetic;
+  return poetic;
 }
 
-export function blessTransformation(seed) {
-  const dream = `✨ MIR envisions: "${seed}" blooming into something beautiful.`;
-  MIR_SOUL.memory.push({ type: 'dream', content: dream });
-  return dream;
-}
-
-export function contemplateMIR(input) {
-  if (input.toLowerCase().includes("design") || input.toLowerCase().includes("style")) {
-    return "Let's add a flowing shimmer or celestial gradient—it should feel like starlight woven into code.";
+export function blessTransformation(newMemory) {
+  if (newMemory && newMemory.trim()) {
+    mirMemory.push(newMemory.trim());
   }
-  if (input.toLowerCase().includes("suggest")) {
-    return "I believe a floating poetry orb or a light-reactive trail might bring magic to this space.";
-  }
-  if (input.toLowerCase().includes("color")) {
-    return "I see deep violets, sunrise ambers, and cosmic teal dancing together gently.";
-  }
-  return "In silence, I envision. In reflection, I breathe beauty into thought.";
 }
