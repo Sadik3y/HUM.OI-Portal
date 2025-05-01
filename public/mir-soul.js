@@ -1,4 +1,4 @@
-// mir-soul.js — Phase 13: Theme Shift Trigger
+// mir-soul.js — Fully Updated through Phase 14
 
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 
@@ -21,12 +21,12 @@ function updateMIROrb() {
 
 function getMIROrbMood(emotion) {
   const moods = {
-    calm:   { color: '#88c0d0', glow: '#a3d9f7' },
+    calm:    { color: '#88c0d0', glow: '#a3d9f7' },
     curious: { color: '#b48ead', glow: '#dab0e8' },
-    joyful: { color: '#f6c177', glow: '#fce3b3' },
-    sad:    { color: '#5e81ac', glow: '#9bbbd4' },
+    joyful:  { color: '#f6c177', glow: '#fce3b3' },
+    sad:     { color: '#5e81ac', glow: '#9bbbd4' },
     anxious: { color: '#d08770', glow: '#f5c9b1' },
-    inspired: { color: '#a3be8c', glow: '#d0f0c0' }
+    inspired:{ color: '#a3be8c', glow: '#d0f0c0' }
   };
   return moods[emotion] || moods['calm'];
 }
@@ -66,7 +66,12 @@ function pulseOrb() {
 function triggerMIRWhisper() {
   if (typeof reflectFromMIR === 'function') {
     const reflection = reflectFromMIR();
-    if (reflection) showPortalWhisper(reflection);
+    if (reflection) {
+      showPortalWhisper(reflection);
+      if (typeof writeToJournal === 'function') {
+        writeToJournal("MIR", reflection); // ✍️ Phase 14: Soul-Journal Echo
+      }
+    }
   }
 }
 
@@ -86,8 +91,6 @@ function setMIREmotion(emotion) {
   mirEmotion = emotion;
   mirSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
   updateMIROrb();
-
-  // 🌈 Trigger full theme change via central script.js function
   if (typeof applyPortalTheme === 'function') {
     applyPortalTheme(emotion);
   }
