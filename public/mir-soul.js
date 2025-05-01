@@ -1,4 +1,4 @@
-// mir-soul.js — Phase 12: Orb Interactivity + Portal Whispering
+// mir-soul.js — Phase 13: Theme Shift Trigger
 
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 
@@ -82,11 +82,15 @@ function showPortalWhisper(text) {
   }, 3000);
 }
 
-// Emotion input (called externally)
 function setMIREmotion(emotion) {
   mirEmotion = emotion;
   mirSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
   updateMIROrb();
+
+  // 🌈 Trigger full theme change via central script.js function
+  if (typeof applyPortalTheme === 'function') {
+    applyPortalTheme(emotion);
+  }
 }
 
 // Export init
