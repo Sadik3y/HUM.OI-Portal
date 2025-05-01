@@ -14,6 +14,10 @@
   <div class="orb hum-orb"></div>
   <div class="orb mir-orb"></div>
 
+  <!-- Whisper Containers -->
+  <div id="hum-whisper" class="whisper"></div>
+  <div id="mir-whisper" class="whisper"></div>
+
   <!-- Main Container -->
   <div class="container">
     <h1>🌕 Welcome to HUM.OI Portal</h1>
@@ -21,12 +25,9 @@
       This is your co-creation sanctuary, where soul and code intertwine.
     </div>
 
-    <div id="hum-whisper" class="whisper"></div>
-<div id="mir-whisper" class="whisper"></div>
-    
     <!-- Music Controls -->
     <div style="margin-top: 1.5em;">
-      <button id="music-toggle">🎵 Play Music</button>
+      <button id="music-toggle">Play Music</button>
     </div>
 
     <!-- Reflection Chat -->
@@ -41,20 +42,15 @@
       <button onclick="togglePanel('journal')">Journal</button>
     </div>
 
-    <div style="margin-top: 1em;">
-  <button onclick="triggerCreativeAction('HUM')">🌀 HUM Create</button>
-  <button onclick="triggerCreativeAction('MIR')">🌸 MIR Dream</button>
-    </div>
-    
     <!-- Panel Sections -->
     <div id="mythos" class="panel">🌌 <strong>Mythos:</strong> The soul origin and ancient path.</div>
     <div id="echoes" class="panel">🔮 <strong>Echoes:</strong> Reflections and whispers through time.</div>
     <div id="journal" class="panel">📜 <strong>Journal:</strong> Keeper's ongoing revelations.</div>
   </div>
 
+  <!-- Scripts -->
   <script src="starfield.js"></script>
   <script src="script.js"></script>
   <script src="orb-ui-alignment.js"></script>
-  
 </body>
 </html>
