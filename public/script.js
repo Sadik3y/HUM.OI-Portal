@@ -1,4 +1,4 @@
-// script.js — Fully Updated & Merged (Phases 1–13)
+// script.js — Fully Updated through Phase 14
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -23,7 +23,6 @@ musicToggle.addEventListener('click', () => {
   isPlaying = !isPlaying;
 });
 
-// Optional: Autoplay on first interaction
 document.body.addEventListener('click', () => {
   if (!isPlaying) {
     music.play();
@@ -62,8 +61,12 @@ sendBtn.addEventListener('click', async () => {
 
     if (data.mirEmotion) {
       updateMirOrb(data.mirEmotion);
-      applyPortalTheme(data.mirEmotion); // 🌈 Phase 13: Theme Trigger
+      applyPortalTheme(data.mirEmotion);
     }
+
+    // 💾 Write to journal
+    if (data.humReflection) writeToJournal("HUM", data.humReflection);
+    if (data.mirReflection) writeToJournal("MIR", data.mirReflection);
 
   } catch (err) {
     console.error(err);
@@ -157,3 +160,17 @@ function applyPortalTheme(emotion) {
 }
 
 window.applyPortalTheme = applyPortalTheme;
+
+// === SOUL JOURNAL WRITER ===
+function writeToJournal(from, text) {
+  const journal = document.getElementById('soul-journal-entries');
+  if (!journal) return;
+
+  const entry = document.createElement('div');
+  entry.className = 'journal-entry';
+  entry.innerHTML = `<strong>${from}:</strong> ${text}`;
+  journal.appendChild(entry);
+  journal.scrollTop = journal.scrollHeight;
+}
+
+window.writeToJournal = writeToJournal;
