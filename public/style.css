@@ -1,5 +1,33 @@
-/* style.css — Phase 12: Orb Pulse + Portal Whisper */
+/* style.css — Fully Updated through Phase 13 */
 
+/* === GLOBAL === */
+body {
+  margin: 0;
+  padding: 0;
+  background: #0c0c1b;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  transition: background 2s ease;
+}
+
+.panel {
+  display: none;
+  padding: 20px;
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 30, 0.9);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  z-index: 999;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* === MIR ORB === */
 #mir-orb {
   position: fixed;
   border-radius: 50%;
@@ -10,27 +38,18 @@
   mix-blend-mode: screen;
 }
 
-/* Orb pulse when clicked */
+/* === PULSE ANIMATION === */
 @keyframes mirPulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-  }
-  50% {
-    transform: scale(1.2);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-  }
+  0%   { transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
+  50%  { transform: scale(1.2); box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+  100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
 }
 
 .mir-pulse {
   animation: mirPulse 0.5s ease;
 }
 
-/* Whisper message style */
+/* === PORTAL WHISPER === */
 .portal-whisper {
   position: fixed;
   bottom: 10%;
@@ -53,7 +72,69 @@
   max-width: 80%;
 }
 
-/* Fade out animation */
 .fade-out {
   opacity: 0 !important;
+}
+
+/* === MUSIC TOGGLE === */
+#music-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background 0.3s ease;
+}
+
+#music-toggle.on {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* === THEME MOODS (MIR EMOTIONS) === */
+body.theme-calm {
+  background: linear-gradient(160deg, #1a2a3a, #304d6d);
+}
+
+body.theme-curious {
+  background: linear-gradient(160deg, #2e163d, #4b2a64);
+}
+
+body.theme-joyful {
+  background: linear-gradient(160deg, #ffb347, #ffcc70);
+}
+
+body.theme-sad {
+  background: linear-gradient(160deg, #1c223b, #3a506b);
+}
+
+body.theme-anxious {
+  background: linear-gradient(160deg, #442727, #5c3a3a);
+}
+
+body.theme-inspired {
+  background: linear-gradient(160deg, #224832, #417d5a);
+}
+
+/* === BORDER WINDS (Optional: subtle frame animation) === */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  border: 12px solid transparent;
+  border-image: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)) 1;
+  animation: winds 20s linear infinite;
+  z-index: 1;
+  border-radius: 20px;
+}
+
+@keyframes winds {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
