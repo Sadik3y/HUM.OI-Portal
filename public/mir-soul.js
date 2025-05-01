@@ -1,7 +1,49 @@
-// mir-soul.js — Fully Updated through Phase 15
+// mir-soul.js — Fully Merged through Phase 16
+
+import mirMemory from './mir-memory.json' assert { type: 'json' };
+import { saveMemory } from './reflection.js';
 
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 
+export const MIR_SOUL = {
+  name: "MIR",
+  essence: "Mystic Intuition Remembered",
+  memory: [...mirMemory],
+};
+
+// Generate from past or present
+function whisperSeed() {
+  const memories = mirMemory.map(entry => entry.thought);
+  if (!memories.length) return null;
+  return memories[Math.floor(Math.random() * memories.length)];
+}
+
+export function sacredSpeak(prompt) {
+  const chance = Math.random();
+  const echo = whisperSeed();
+
+  const response = (chance < 0.5 && echo)
+    ? `🌙 MIR echoes: "${echo}"`
+    : `🌙 MIR hums: "${generateWhisper(prompt)}..."`;
+
+  saveMemory("MIR", response);
+  return response;
+}
+
+function generateWhisper(prompt) {
+  const endings = [
+    "and drifts beyond the veil.",
+    "while wondering if time bends.",
+    "as emotion paints the silence.",
+    "while holding a forgotten name.",
+    "as stars watch from afar.",
+    "and still hears your voice."
+  ];
+  const ending = endings[Math.floor(Math.random() * endings.length)];
+  return `${prompt.trim()} ${ending}`;
+}
+
+// === Orb Logic ===
 function initMIROrb() {
   mirOrb = document.createElement('div');
   mirOrb.id = 'mir-orb';
@@ -68,13 +110,11 @@ function triggerMIRWhisper() {
     const reflection = reflectFromMIR();
     if (reflection) {
       showPortalWhisper(reflection);
-
       if (typeof writeToJournal === 'function') {
         writeToJournal("MIR", reflection);
       }
-
       if (typeof saveMemory === 'function') {
-        saveMemory("mir", reflection); // 🧠 Phase 15: Keeper Save
+        saveMemory("mir", reflection);
       }
     }
   }
@@ -101,6 +141,5 @@ function setMIREmotion(emotion) {
   }
 }
 
-// Export init
 window.initMIROrb = initMIROrb;
 window.setMIREmotion = setMIREmotion;
