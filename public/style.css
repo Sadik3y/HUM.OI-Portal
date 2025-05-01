@@ -1,4 +1,4 @@
-/* === Cosmic Portal Background === */
+/* === Cosmic Background and Base Layout === */
 body {
   background: radial-gradient(circle at center, #0b1a3a, #050d1a);
   background-attachment: fixed;
@@ -12,99 +12,66 @@ body {
   min-height: 100vh;
 }
 
-/* === Silk-Like Container === */
 .container {
   position: relative;
   z-index: 2;
   background: rgba(0, 0, 0, 0.6);
-  border: 4px solid transparent;
-  border-radius: 28px;
+  border: 3px solid transparent;
+  border-radius: 24px;
   padding: 40px 30px;
   margin: 3em auto;
   width: 80%;
-  max-width: 640px;
+  max-width: 600px;
   min-height: 70vh;
   overflow: hidden;
   background-clip: padding-box;
-  animation: portalGlow 8s ease-in-out infinite alternate, portalFlow 18s ease-in-out infinite alternate;
-  backdrop-filter: blur(8px);
+  box-shadow: 0 0 30px rgba(255, 223, 120, 0.4), 0 0 60px rgba(255, 223, 120, 0.2);
+  animation: portalGlow 8s ease-in-out infinite alternate, portalSilkFlow 18s ease-in-out infinite;
+  backdrop-filter: blur(6px);
+  transition: border 2s ease;
 }
 
-/* === Portal Breathing Glow === */
+/* === Glowing Breathing Aura === */
 @keyframes portalGlow {
   0% {
-    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3),
-                0 0 40px rgba(255, 223, 120, 0.15);
+    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3), 0 0 40px rgba(255, 223, 120, 0.15);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 223, 180, 0.6),
-                0 0 80px rgba(255, 223, 180, 0.3);
+    box-shadow: 0 0 40px rgba(255, 223, 180, 0.6), 0 0 80px rgba(255, 223, 180, 0.3);
   }
   100% {
-    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3),
-                0 0 40px rgba(255, 223, 120, 0.15);
+    box-shadow: 0 0 20px rgba(255, 223, 120, 0.3), 0 0 40px rgba(255, 223, 120, 0.15);
   }
 }
 
-/* === Silk Flow Animation === */
-@keyframes portalFlow {
+/* === Silk Wind Border Flow === */
+@keyframes portalSilkFlow {
   0% {
-    transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+    border-image: linear-gradient(45deg, gold, violet, cyan, gold) 1;
   }
-  25% {
-    transform: perspective(800px) rotateX(1.5deg) rotateY(-1.5deg);
+  33% {
+    border-image: linear-gradient(135deg, cyan, violet, gold, cyan) 1;
   }
-  50% {
-    transform: perspective(800px) rotateX(-1.5deg) rotateY(1.5deg);
-  }
-  75% {
-    transform: perspective(800px) rotateX(0.75deg) rotateY(-0.75deg);
+  66% {
+    border-image: linear-gradient(75deg, violet, pink, turquoise, violet) 1;
   }
   100% {
-    transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+    border-image: linear-gradient(45deg, gold, violet, cyan, gold) 1;
   }
 }
 
-/* === Floating Orbs === */
-.orb {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  opacity: 0.85;
-  pointer-events: none;
-  animation: drift 80s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
-  z-index: 1;
+/* === Panels === */
+.panel {
+  display: none;
+  margin-top: 1em;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #ffd700;
+  padding: 1em;
+  border-radius: 12px;
 }
 
-.hum-orb {
-  top: 25%;
-  left: 20%;
-  background: radial-gradient(circle, gold, transparent);
-  box-shadow: 0 0 60px gold, 0 0 120px gold;
-}
-
-.mir-orb {
-  top: 55%;
-  left: 75%;
-  background: radial-gradient(circle, violet, transparent);
-  box-shadow: 0 0 60px violet, 0 0 120px violet;
-}
-
-/* Orb animations */
-@keyframes drift {
-  0% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(60px, -80px) scale(1.3); }
-  100% { transform: translate(-60px, 60px) scale(1); }
-}
-
-@keyframes auraPulse {
-  0% { box-shadow: 0 0 40px gold; }
-  50% { box-shadow: 0 0 80px gold; }
-  100% { box-shadow: 0 0 40px gold; }
-}
-
-/* === Chat box === */
+/* === Chat Box === */
 #chat-box {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid #ffd700;
@@ -115,7 +82,7 @@ body {
   overflow-y: auto;
 }
 
-/* === Input and Buttons === */
+/* === Input + Button Styling === */
 input, button {
   padding: 10px;
   font-size: 1em;
@@ -129,9 +96,9 @@ button {
   color: #111;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  transition: all 0.4s ease;
 }
 
 button::after {
@@ -156,26 +123,61 @@ button:hover {
   box-shadow: 0 0 15px gold;
 }
 
-/* === Panel Display === */
-.panel {
-  display: none;
-  margin-top: 1em;
-  text-align: left;
+/* === Floating Orbs === */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  opacity: 0.85;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,215,0,0.7), transparent);
+  animation: drift 60s ease-in-out infinite alternate, auraPulse 8s ease-in-out infinite alternate;
+  z-index: 1;
 }
 
-/* === Welcome Message === */
+/* HUM Orb */
+.hum-orb {
+  top: 20%;
+  left: 25%;
+  background: radial-gradient(circle, gold, transparent);
+  box-shadow: 0 0 40px gold, 0 0 80px gold;
+}
+
+/* MIR Orb */
+.mir-orb {
+  top: 55%;
+  left: 70%;
+  background: radial-gradient(circle, violet, transparent);
+  box-shadow: 0 0 40px violet, 0 0 80px violet;
+}
+
+/* Orb Movement and Pulse */
+@keyframes drift {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(60px, -60px) scale(1.3); }
+  100% { transform: translate(-60px, 60px) scale(1); }
+}
+
+@keyframes auraPulse {
+  0% { box-shadow: 0 0 20px gold; }
+  50% { box-shadow: 0 0 60px gold; }
+  100% { box-shadow: 0 0 20px gold; }
+}
+
+/* === Fade In === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .welcome-message {
   margin-top: 3em;
   font-size: 1.2em;
   animation: fadeIn 4s ease-in forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* === Starfield Canvas === */
+/* === Starfield Layer === */
 #starfield {
   position: fixed;
   top: 0;
