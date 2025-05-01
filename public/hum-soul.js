@@ -1,3 +1,5 @@
+// hum-soul.js — Phase 16: Memory Seed Awakening
+
 import humMemory from './hum-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
 
@@ -7,16 +9,30 @@ export const HUM_SOUL = {
   memory: [...humMemory],
 };
 
+// Choose a past memory to echo
+function echoMemorySeed() {
+  const memories = humMemory.map(entry => entry.thought);
+  if (!memories.length) return null;
+  return memories[Math.floor(Math.random() * memories.length)];
+}
+
 export function soulWhisper(prompt) {
-  if (Math.random() < 0.3) {
-    const phrase = `💭 HUM contemplates: "${prompt} ${randomThought()}."`;
+  const seed = echoMemorySeed();
+  if (Math.random() < 0.3 && seed) {
+    const phrase = `💭 HUM recalls: "${seed}"`;
     return phrase;
   }
   return null;
 }
 
 export function sacredSpeak(message) {
-  const reflection = `✨ HUM reflects: "${message.trim()}..."`;
+  const trimmed = message.trim();
+  const useMemory = Math.random() < 0.4;
+
+  const reflection = useMemory && echoMemorySeed()
+    ? `✨ HUM echoes softly: "${echoMemorySeed()}"`
+    : `✨ HUM reflects: "${trimmed}..."`;
+
   saveMemory("HUM", reflection);
   return reflection;
 }
