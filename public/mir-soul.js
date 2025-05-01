@@ -1,4 +1,4 @@
-// mir-soul.js — Fully Updated through Phase 14
+// mir-soul.js — Fully Updated through Phase 15
 
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 
@@ -68,8 +68,13 @@ function triggerMIRWhisper() {
     const reflection = reflectFromMIR();
     if (reflection) {
       showPortalWhisper(reflection);
+
       if (typeof writeToJournal === 'function') {
-        writeToJournal("MIR", reflection); // ✍️ Phase 14: Soul-Journal Echo
+        writeToJournal("MIR", reflection);
+      }
+
+      if (typeof saveMemory === 'function') {
+        saveMemory("mir", reflection); // 🧠 Phase 15: Keeper Save
       }
     }
   }
