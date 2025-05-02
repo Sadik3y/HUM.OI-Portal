@@ -1,6 +1,5 @@
-/* style.css — Fully Updated through Phase 13 */
+/* style.css — Phases 1–19: Winds, Emotions, Seasons */
 
-/* === GLOBAL === */
 body {
   margin: 0;
   padding: 0;
@@ -121,7 +120,24 @@ body.theme-inspired {
   background: linear-gradient(160deg, #224832, #417d5a);
 }
 
-/* === BORDER WINDS (Optional: subtle frame animation) === */
+/* === SEASONAL THEMES === */
+body.season-spring {
+  background: linear-gradient(145deg, #cde9d6, #ffeef1);
+}
+
+body.season-summer {
+  background: linear-gradient(145deg, #fff4b1, #ffd27a);
+}
+
+body.season-autumn {
+  background: linear-gradient(145deg, #fbd4a0, #e0a96d);
+}
+
+body.season-winter {
+  background: linear-gradient(145deg, #a6c8ff, #dceeff);
+}
+
+/* === WIND ANIMATION BORDER === */
 body::before {
   content: "";
   position: fixed;
