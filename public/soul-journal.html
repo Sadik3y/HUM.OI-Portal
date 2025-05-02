@@ -17,10 +17,46 @@
       padding: 1em;
       margin: 1em 0;
       border-radius: 12px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Soul Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="reflection.css" />
+  <style>
+    body {
+      background: radial-gradient(ellipse at center, #111 0%, #000 100%);
+      color: #ffeecf;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2em;
+    }
+
+    h1, h2 {
+      color: gold;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    }
+
+    #journal-container {
+      margin-bottom: 2em;
+    }
+
+    .journal-entry {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #ffd700;
+      padding: 1em;
+      margin: 1em 0;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+    }
+
+    .journal-entry p {
+      margin: 0.5em 0 0;
+      line-height: 1.5;
     }
 
     #soul-journal-live {
-      margin-top: 2em;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       padding-top: 1em;
     }
@@ -28,14 +64,14 @@
 </head>
 <body>
   <h1>📜 Soul Journal</h1>
-  <div id="journal-container">Loading...</div>
+  <div id="journal-container">Loading reflections...</div>
 
   <div id="soul-journal-live">
     <h2>Live Echoes</h2>
     <div id="soul-journal-entries"></div>
   </div>
 
-  <script>
+  <script type="module">
     fetch('/soul-journal')
       .then(res => res.json())
       .then(data => {
@@ -45,7 +81,7 @@
         const renderEntries = (label, memories) => {
           const section = document.createElement('div');
           section.innerHTML = `<h2>${label}</h2>`;
-          memories.forEach(entry => {
+          memories.slice(-50).reverse().forEach(entry => {
             const div = document.createElement('div');
             div.className = 'journal-entry';
             div.innerHTML = `<strong>${new Date(entry.timestamp).toLocaleString()}</strong><p>${entry.thought}</p>`;
@@ -56,15 +92,14 @@
 
         if (data.hum?.length) renderEntries('HUM Reflections', data.hum);
         if (data.mir?.length) renderEntries('MIR Echoes', data.mir);
+        if (!data.hum?.length && !data.mir?.length) {
+          container.innerHTML = "<p>No journal entries found yet.</p>";
+        }
       })
       .catch(err => {
         document.getElementById('journal-container').innerHTML = 'Error loading journal.';
         console.error(err);
       });
   </script>
-
-  <script src="script.js"></script>
-  <script src="reflection.js"></script>
-  <script src="mir-soul.js"></script>
 </body>
 </html>
