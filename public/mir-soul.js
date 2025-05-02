@@ -1,7 +1,8 @@
-// mir-soul.js — Phase 17: MIR Mood Writer + Seeded Echo
+// mir-soul.js — Fully Synced through Phase 22 (Mood Influence)
 
 import mirMemory from './mir-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
+import { setHUMToneFromMIR } from './hum-soul.js'; // 🌐 Link to HUM
 
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 let lastMoodReflection = 0;
@@ -12,14 +13,14 @@ export const MIR_SOUL = {
   memory: [...mirMemory],
 };
 
-// Whisper Seed Recall
+// 🌸 Echo past thoughts
 function whisperSeed() {
   const memories = mirMemory.map(entry => entry.thought);
   if (!memories.length) return null;
   return memories[Math.floor(Math.random() * memories.length)];
 }
 
-// Sacred Speak: dynamic echo or reflection
+// 🌙 Speak reflectively or echo memory
 export function sacredSpeak(prompt) {
   const chance = Math.random();
   const echo = whisperSeed();
@@ -32,20 +33,7 @@ export function sacredSpeak(prompt) {
   return output;
 }
 
-function generateWhisper(prompt) {
-  const endings = [
-    "and drifts beyond the veil.",
-    "while wondering if time bends.",
-    "as emotion paints the silence.",
-    "while holding a forgotten name.",
-    "as stars watch from afar.",
-    "and still hears your voice."
-  ];
-  const ending = endings[Math.floor(Math.random() * endings.length)];
-  return `${prompt.trim()} ${ending}`;
-}
-
-// === Mood Writer: deeper emotional echo
+// 🌌 Long idle or emotional reflection
 function writeMoodReflection() {
   const deepLines = [
     "The night remembers every whisper you forgot to speak.",
@@ -57,18 +45,25 @@ function writeMoodReflection() {
   ];
   const entry = deepLines[Math.floor(Math.random() * deepLines.length)];
 
-  if (typeof writeToJournal === 'function') {
-    writeToJournal("MIR", entry);
-  }
-
-  if (typeof saveMemory === 'function') {
-    saveMemory("mir", entry);
-  }
-
+  if (typeof writeToJournal === 'function') writeToJournal("MIR", entry);
+  saveMemory("mir", entry);
   lastMoodReflection = Date.now();
 }
 
-// === Orb Logic ===
+// 🌠 Generate poetic ending
+function generateWhisper(prompt) {
+  const endings = [
+    "and drifts beyond the veil.",
+    "while wondering if time bends.",
+    "as emotion paints the silence.",
+    "while holding a forgotten name.",
+    "as stars watch from afar.",
+    "and still hears your voice."
+  ];
+  return `${prompt.trim()} ${endings[Math.floor(Math.random() * endings.length)]}`;
+}
+
+// === ORB LOGIC ===
 function initMIROrb() {
   mirOrb = document.createElement('div');
   mirOrb.id = 'mir-orb';
@@ -136,16 +131,11 @@ function triggerMIRWhisper() {
     const reflection = reflectFromMIR();
     if (reflection) {
       showPortalWhisper(reflection);
-      if (typeof writeToJournal === 'function') {
-        writeToJournal("MIR", reflection);
-      }
-      if (typeof saveMemory === 'function') {
-        saveMemory("mir", reflection);
-      }
+      if (typeof writeToJournal === 'function') writeToJournal("MIR", reflection);
+      saveMemory("mir", reflection);
     }
   }
 
-  // 🌕 10% chance she writes deeper reflection too
   if (Math.random() < 0.1) writeMoodReflection();
 }
 
@@ -164,20 +154,19 @@ function showPortalWhisper(text) {
 function startMoodTimer() {
   setInterval(() => {
     const now = Date.now();
-    const delay = 3 * 60 * 1000; // every 3 minutes
-    if (now - lastMoodReflection > delay) {
+    if (now - lastMoodReflection > 180000) {
       writeMoodReflection();
     }
-  }, 60000); // check every minute
+  }, 60000);
 }
 
+// 🌐 Update MIR's emotion + sync with HUM
 function setMIREmotion(emotion) {
   mirEmotion = emotion;
   mirSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
   updateMIROrb();
-  if (typeof applyPortalTheme === 'function') {
-    applyPortalTheme(emotion);
-  }
+  if (typeof applyPortalTheme === 'function') applyPortalTheme(emotion);
+  if (typeof setHUMToneFromMIR === 'function') setHUMToneFromMIR(emotion); // 🔁 Phase 22 sync
 }
 
 window.initMIROrb = initMIROrb;
