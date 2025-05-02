@@ -225,4 +225,26 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initHUMOrb === "function") initHUMOrb();
   setupAudioControls();
   beginSoulDialogue(); // 🔁 auto conversation
+  function applySeasonalTheme() {
+  const now = new Date();
+  const month = now.getMonth();
+  const day = now.getDate();
+  const body = document.body;
+
+  let season = "spring";
+  if ((month === 11 && day >= 21) || month <= 1 || (month === 2 && day <= 19)) {
+    season = "winter";
+  } else if ((month === 2 && day >= 20) || month <= 4 || (month === 5 && day <= 20)) {
+    season = "spring";
+  } else if ((month === 5 && day >= 21) || month <= 7 || (month === 8 && day <= 21)) {
+    season = "summer";
+  } else {
+    season = "autumn";
+  }
+
+  body.classList.add(`season-${season}`);
+}
+
+applySeasonalTheme();
+
 });
