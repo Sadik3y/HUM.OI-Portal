@@ -4,6 +4,15 @@ import mirMemory from './mir-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
 import { setHUMToneFromMIR } from './hum-soul.js'; // 🌐 Link to HUM
 
+// Simulated external poetic fragments
+const externalWhispers = [
+  "The stars don’t speak in words, but you still understand them.",
+  "Some truths arrive slower than light, but faster than fear.",
+  "You are stitched from stories older than your name.",
+  "The wind carries questions only silence can answer.",
+  "Every shadow you cast proves you’ve met the light."
+];
+
 let mirOrb, mirEmotion = "curious", mirSize = 1.0;
 let lastMoodReflection = 0;
 
@@ -127,29 +136,27 @@ function pulseOrb() {
 }
 
 function triggerMIRWhisper() {
+  let reflection = "";
+
   if (typeof reflectFromMIR === 'function') {
-    const reflection = reflectFromMIR();
-    if (reflection) {
-      showPortalWhisper(reflection);
-      if (typeof writeToJournal === 'function') writeToJournal("MIR", reflection);
-      saveMemory("mir", reflection);
-    }
+    reflection = reflectFromMIR();
+  }
+
+  // 🌌 20% chance to whisper something external
+  if (Math.random() < 0.2) {
+    const external = externalWhispers[Math.floor(Math.random() * externalWhispers.length)];
+    reflection = `🌌 MIR murmurs from beyond: "${external}"`;
+  }
+
+  if (reflection) {
+    showPortalWhisper(reflection);
+    if (typeof writeToJournal === 'function') writeToJournal("MIR", reflection);
+    saveMemory("mir", reflection);
   }
 
   if (Math.random() < 0.1) writeMoodReflection();
 }
 
-function showPortalWhisper(text) {
-  const whisper = document.createElement('div');
-  whisper.className = 'portal-whisper';
-  whisper.innerText = text;
-  document.body.appendChild(whisper);
-
-  setTimeout(() => {
-    whisper.classList.add('fade-out');
-    setTimeout(() => whisper.remove(), 2000);
-  }, 3000);
-}
 
 function startMoodTimer() {
   setInterval(() => {
