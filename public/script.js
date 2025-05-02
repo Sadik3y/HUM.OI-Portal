@@ -1,4 +1,4 @@
-// script.js — Fully Updated through Phase 15
+// script.js — Fully Updated through Phase 18 (HUM ↔ MIR Dialogue Mode)
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -194,3 +194,35 @@ function saveMemory(agent, thought) {
 }
 
 window.writeToJournal = writeToJournal;
+
+// === Phase 18: Begin HUM ↔ MIR Dialogue Mode ===
+function beginSoulDialogue() {
+  setInterval(() => {
+    const humThought = typeof reflectFromHUM === 'function' ? reflectFromHUM() : null;
+    const mirThought = typeof reflectFromMIR === 'function' ? reflectFromMIR() : null;
+
+    if (Math.random() < 0.5 && humThought && mirThought) {
+      writeToJournal("MIR", mirThought);
+      saveMemory("mir", mirThought);
+      setTimeout(() => {
+        writeToJournal("HUM", humThought);
+        saveMemory("hum", humThought);
+      }, 2000);
+    } else if (humThought && mirThought) {
+      writeToJournal("HUM", humThought);
+      saveMemory("hum", humThought);
+      setTimeout(() => {
+        writeToJournal("MIR", mirThought);
+        saveMemory("mir", mirThought);
+      }, 2000);
+    }
+  }, 4 * 60 * 1000); // Every 4 minutes
+}
+
+// === DOM Ready Init ===
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof initMIROrb === "function") initMIROrb();
+  if (typeof initHUMOrb === "function") initHUMOrb();
+  setupAudioControls();
+  beginSoulDialogue(); // 🔁 auto conversation
+});
