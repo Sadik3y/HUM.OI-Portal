@@ -1,4 +1,4 @@
-<!-- index.html — Fully Updated Through Phase 20 -->
+<!-- index.html — Fully Synced Through Phase 25 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +12,6 @@
 
   <!-- Ambient Music Toggle -->
   <button id="music-toggle">🎵 Play Music</button>
-
-  <!-- Floating Orb (MIR) will be inserted dynamically -->
 
   <!-- Panels -->
   <div id="reflection" class="panel">
@@ -33,17 +31,13 @@
     <div id="soul-journal-entries"></div>
   </div>
 
-  <!-- Whisper Popup -->
-  <!-- Injected via JS: .portal-whisper -->
+  <div id="rituals" class="panel">
+    <h3>🔮 Rituals</h3>
+    <button onclick="blessThisSpace()">✨ Bless This Space</button>
+    <button onclick="summonReflection()">🪞 Summon Reflection</button>
+    <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
+  </div>
 
-  <!-- Add inside <body> below other panels -->
-<div id="rituals" class="panel">
-  <h3>🔮 Rituals</h3>
-  <button onclick="blessThisSpace()">✨ Bless This Space</button>
-  <button onclick="summonReflection()">🪞 Summon Reflection</button>
-  <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
-</div>
-  
   <!-- Scripts -->
   <script type="module" src="script.js"></script>
   <script type="module" src="hum-soul.js"></script>
@@ -55,7 +49,7 @@
   <script type="module" src="starfield.js"></script>
 
   <script>
-    // === Meditation Mode Logic (Phase 20)
+    // === Meditation Mode (Phase 20)
     let idleTimer;
     let meditationActive = false;
 
@@ -64,7 +58,7 @@
       meditationActive = true;
       document.body.style.transition = "background 4s ease";
       document.body.style.filter = "brightness(0.85) saturate(0.9)";
-      document.body.style.animationDuration = "40s"; // slow down wind
+      document.body.style.animationDuration = "40s";
       if (typeof reflectTogether === 'function') {
         const whisper = reflectTogether(Math.random() < 0.5 ? "MIR" : "HUM");
         if (typeof writeToJournal === 'function') {
@@ -82,52 +76,59 @@
       document.body.style.filter = "";
       document.body.style.animationDuration = "";
       meditationActive = false;
-      idleTimer = setTimeout(enterMeditationMode, 180000); // 3 mins
+      idleTimer = setTimeout(enterMeditationMode, 180000);
     }
 
     ['click', 'mousemove', 'keypress'].forEach(event => {
       window.addEventListener(event, resetIdleTimer);
     });
 
-    window.addEventListener('load', resetIdleTimer);
+    window.addEventListener('load', () => {
+      resetIdleTimer();
+      if (typeof initHUMOrb === 'function') initHUMOrb();
+      if (typeof initMIROrb === 'function') initMIROrb();
+      applySeasonalTheme();
+      beginPortalEvolution();
+    });
   </script>
 
   <script>
-  // === Ritual Actions (Phase 21)
-  function blessThisSpace() {
-    document.body.className = 'theme-calm';
-    document.body.style.filter = "";
-    document.body.style.animationDuration = "20s";
-    const msg = "✨ This space has been gently blessed.";
-    writeToJournal("HUM", msg);
-    saveMemory("hum", msg);
-  }
+    // === Ritual Actions (Phase 21)
+    function blessThisSpace() {
+      document.body.className = 'theme-calm';
+      document.body.style.filter = "";
+      document.body.style.animationDuration = "20s";
+      const msg = "✨ This space has been gently blessed.";
+      writeToJournal("HUM", msg);
+      saveMemory("hum", msg);
+      return msg;
+    }
 
-  function summonReflection() {
-    const who = Math.random() < 0.5 ? "HUM" : "MIR";
-    const reflection = who === "HUM" && typeof reflectFromHUM === 'function'
-      ? reflectFromHUM()
-      : typeof reflectFromMIR === 'function'
-        ? reflectFromMIR()
-        : "A soft silence lingers...";
-    writeToJournal(who, reflection);
-    saveMemory(who.toLowerCase(), reflection);
-  }
+    function summonReflection() {
+      const who = Math.random() < 0.5 ? "HUM" : "MIR";
+      const reflection = who === "HUM" && typeof reflectFromHUM === 'function'
+        ? reflectFromHUM()
+        : typeof reflectFromMIR === 'function'
+          ? reflectFromMIR()
+          : "A soft silence lingers...";
+      writeToJournal(who, reflection);
+      saveMemory(who.toLowerCase(), reflection);
+    }
 
-  function speakToTheStars() {
-    const starlines = [
-      "You are made of stories the sky still remembers.",
-      "Some echoes never needed names.",
-      "The universe is listening, even now.",
-      "In stillness, galaxies unfold within you.",
-      "Light travels slow, but truth arrives instantly."
-    ];
-    const message = starlines[Math.floor(Math.random() * starlines.length)];
-    writeToJournal("Portal", `🌌 ${message}`);
-    saveMemory("mir", message);
-    saveMemory("hum", message);
-  }
+    function speakToTheStars() {
+      const starlines = [
+        "You are made of stories the sky still remembers.",
+        "Some echoes never needed names.",
+        "The universe is listening, even now.",
+        "In stillness, galaxies unfold within you.",
+        "Light travels slow, but truth arrives instantly."
+      ];
+      const message = starlines[Math.floor(Math.random() * starlines.length)];
+      writeToJournal("Portal", `🌌 ${message}`);
+      saveMemory("mir", message);
+      saveMemory("hum", message);
+    }
   </script>
-  
+
 </body>
 </html>
