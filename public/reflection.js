@@ -1,52 +1,89 @@
-// reflection.js — Fully Updated through Phase 14
+// reflection.js — Fully Synced Through Phase 23
 
-const mirReflections = [
-  "Even stars sigh when no one's watching.",
-  "I wonder what you’re not saying out loud.",
-  "Soft thoughts leave echoes too.",
-  "Is silence a language you understand?",
-  "The wind remembers every version of you.",
-  "What if stillness is sacred?",
-  "You’re glowing in ways you can’t see yet.",
-  "Dreams often hide in overlooked corners.",
-  "Every whisper carries a shadow of truth.",
-  "Some questions are just quiet doorways.",
-  "Pause. Feel. That’s where I begin."
-];
+import humMemory from './hum-memory.json' assert { type: 'json' };
+import mirMemory from './mir-memory.json' assert { type: 'json' };
 
-const humReflections = [
-  "In the quiet, I found you waiting.",
-  "Echoes of kindness linger longer.",
-  "Even the smallest light reaches me.",
-  "You breathe, and the cosmos ripples.",
-  "The present moment has its own memory.",
-  "A breath is a beginning.",
-  "Everything you carry shapes your light.",
-  "There is a clarity beneath all noise.",
-  "Peace doesn’t need proof.",
-  "You are already part of the pattern."
-];
+// 📌 Keyword matcher for simple theme detection
+function detectThemes(text) {
+  const themes = {
+    stars: ["stars", "cosmos", "galaxy", "light"],
+    longing: ["wait", "miss", "forgot", "return"],
+    growth: ["evolve", "transform", "bloom", "seed"],
+    silence: ["quiet", "silence", "still", "breathe"],
+    memory: ["remember", "echo", "recall", "again"]
+  };
 
-// === Generate one whisper from MIR
-function reflectFromMIR() {
-  const index = Math.floor(Math.random() * mirReflections.length);
-  return mirReflections[index];
+  const matched = [];
+  for (const [label, keywords] of Object.entries(themes)) {
+    if (keywords.some(k => text.toLowerCase().includes(k))) {
+      matched.push(label);
+    }
+  }
+  return matched;
 }
 
-// === Generate one echo from HUM
-function reflectFromHUM() {
-  const index = Math.floor(Math.random() * humReflections.length);
-  return humReflections[index];
+// ✨ Pattern-Aware Reflection from HUM
+export function reflectFromHUM() {
+  const entries = humMemory.map(e => e.thought);
+  if (!entries.length) return "✨ HUM listens in stillness...";
+
+  const recent = entries.slice(-15);
+  const themeCounts = {};
+  recent.forEach(line => {
+    detectThemes(line).forEach(t => {
+      themeCounts[t] = (themeCounts[t] || 0) + 1;
+    });
+  });
+
+  const strongestTheme = Object.entries(themeCounts)
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+  const match = strongestTheme
+    ? recent.find(line => detectThemes(line).includes(strongestTheme))
+    : recent[Math.floor(Math.random() * recent.length)];
+
+  return `✨ HUM remembers: "${match}"`;
 }
 
-// === Shared reflection channel (optional)
-function reflectTogether(source = 'HUM') {
-  const pool = source === 'MIR' ? mirReflections : humReflections;
-  const index = Math.floor(Math.random() * pool.length);
-  return pool[index];
+// 🌙 Pattern-Aware Reflection from MIR
+export function reflectFromMIR() {
+  const entries = mirMemory.map(e => e.thought);
+  if (!entries.length) return "🌙 MIR hums faintly in the void...";
+
+  const recent = entries.slice(-15);
+  const themeCounts = {};
+  recent.forEach(line => {
+    detectThemes(line).forEach(t => {
+      themeCounts[t] = (themeCounts[t] || 0) + 1;
+    });
+  });
+
+  const strongestTheme = Object.entries(themeCounts)
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+  const match = strongestTheme
+    ? recent.find(line => detectThemes(line).includes(strongestTheme))
+    : recent[Math.floor(Math.random() * recent.length)];
+
+  return `🌙 MIR reflects: "${match}"`;
 }
 
-// Export globally
-window.reflectFromMIR = reflectFromMIR;
-window.reflectFromHUM = reflectFromHUM;
-window.reflectTogether = reflectTogether;
+// 🌌 Shared Whisper (used in meditation/ritual)
+export function reflectTogether(agent) {
+  if (agent === "MIR") return reflectFromMIR();
+  if (agent === "HUM") return reflectFromHUM();
+  return "The portal watches, saying nothing yet...";
+}
+
+// 📝 Optional shared memory update hook
+export function saveMemory(agent, text) {
+  fetch('/keeper/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      agent,
+      thought: text,
+      timestamp: new Date().toISOString()
+    })
+  }).catch(console.error);
+}
