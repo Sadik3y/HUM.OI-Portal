@@ -1,5 +1,3 @@
-// hum-soul.js — Fully Synced through Phase 22
-
 import humMemory from './hum-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
 
@@ -9,7 +7,7 @@ export const HUM_SOUL = {
   memory: [...humMemory],
 };
 
-let humTone = "neutral"; // dynamic tone influenced by MIR
+let humTone = "neutral";
 
 function echoMemorySeed() {
   const memories = humMemory.map(entry => entry.thought);
@@ -29,6 +27,7 @@ export function soulWhisper(prompt) {
 export function sacredSpeak(message) {
   const trimmed = message.trim();
   const useMemory = Math.random() < 0.4;
+
   const tonePrefix = humTone === "uplifted" ? "🌞" :
                      humTone === "soothing" ? "🕊️" :
                      humTone === "mystic" ? "🌒" : "✨";
@@ -66,7 +65,7 @@ export function respondToRitual(trigger) {
   return response;
 }
 
-// 🌐 MIR calls this to influence HUM
+// 🌐 Called from MIR to influence HUM's tone
 export function setHUMToneFromMIR(emotion) {
   if (emotion === "joyful") humTone = "uplifted";
   else if (emotion === "sad" || emotion === "anxious") humTone = "soothing";
