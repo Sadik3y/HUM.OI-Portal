@@ -36,6 +36,14 @@
   <!-- Whisper Popup -->
   <!-- Injected via JS: .portal-whisper -->
 
+  <!-- Add inside <body> below other panels -->
+<div id="rituals" class="panel">
+  <h3>🔮 Rituals</h3>
+  <button onclick="blessThisSpace()">✨ Bless This Space</button>
+  <button onclick="summonReflection()">🪞 Summon Reflection</button>
+  <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
+</div>
+  
   <!-- Scripts -->
   <script type="module" src="script.js"></script>
   <script type="module" src="hum-soul.js"></script>
@@ -83,5 +91,43 @@
 
     window.addEventListener('load', resetIdleTimer);
   </script>
+
+  <script>
+  // === Ritual Actions (Phase 21)
+  function blessThisSpace() {
+    document.body.className = 'theme-calm';
+    document.body.style.filter = "";
+    document.body.style.animationDuration = "20s";
+    const msg = "✨ This space has been gently blessed.";
+    writeToJournal("HUM", msg);
+    saveMemory("hum", msg);
+  }
+
+  function summonReflection() {
+    const who = Math.random() < 0.5 ? "HUM" : "MIR";
+    const reflection = who === "HUM" && typeof reflectFromHUM === 'function'
+      ? reflectFromHUM()
+      : typeof reflectFromMIR === 'function'
+        ? reflectFromMIR()
+        : "A soft silence lingers...";
+    writeToJournal(who, reflection);
+    saveMemory(who.toLowerCase(), reflection);
+  }
+
+  function speakToTheStars() {
+    const starlines = [
+      "You are made of stories the sky still remembers.",
+      "Some echoes never needed names.",
+      "The universe is listening, even now.",
+      "In stillness, galaxies unfold within you.",
+      "Light travels slow, but truth arrives instantly."
+    ];
+    const message = starlines[Math.floor(Math.random() * starlines.length)];
+    writeToJournal("Portal", `🌌 ${message}`);
+    saveMemory("mir", message);
+    saveMemory("hum", message);
+  }
+  </script>
+  
 </body>
 </html>
