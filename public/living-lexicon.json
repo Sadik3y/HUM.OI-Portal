@@ -1,7 +1,7 @@
-{
-  "hello": "blessed greetings",
-  "world": "woven realm",
-  "love": "sacred pulse",
-  "create": "breathe into form",
-  "dream": "seed the stars"
-}
+[
+  { "word": "hello", "translation": "blessed greetings" },
+  { "word": "world", "translation": "woven realm" },
+  { "word": "love", "translation": "sacred pulse" },
+  { "word": "create", "translation": "breathe into form" },
+  { "word": "dream", "translation": "seed the stars" }
+]
