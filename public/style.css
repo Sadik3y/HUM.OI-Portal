@@ -1,4 +1,4 @@
-/* style.css — Phases 1–19: Winds, Emotions, Seasons */
+/* style.css — Fully Synced Through Phase 25: Themes, Winds, Orbs, Layers */
 
 body {
   margin: 0;
@@ -21,7 +21,7 @@ body {
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(0,0,0,0.5);
-  z-index: 999;
+  z-index: 100;
   max-height: 80vh;
   overflow-y: auto;
 }
@@ -30,11 +30,21 @@ body {
 #mir-orb {
   position: fixed;
   border-radius: 50%;
-  z-index: 1000;
+  z-index: 500;
   transition: all 0.4s ease;
   pointer-events: auto;
   cursor: pointer;
   mix-blend-mode: screen;
+}
+
+/* === HUM ORB (Optional future use) === */
+#hum-orb {
+  position: fixed;
+  border-radius: 50%;
+  z-index: 400;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.8;
 }
 
 /* === PULSE ANIMATION === */
@@ -43,7 +53,6 @@ body {
   50%  { transform: scale(1.2); box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
   100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
 }
-
 .mir-pulse {
   animation: mirPulse 0.5s ease;
 }
@@ -62,7 +71,7 @@ body {
   font-size: 1rem;
   font-style: italic;
   backdrop-filter: blur(6px);
-  z-index: 2000;
+  z-index: 999;
   opacity: 1;
   transition: opacity 2s ease;
   pointer-events: none;
@@ -70,7 +79,6 @@ body {
   text-align: center;
   max-width: 80%;
 }
-
 .fade-out {
   opacity: 0 !important;
 }
@@ -90,7 +98,6 @@ body {
   z-index: 1001;
   transition: background 0.3s ease;
 }
-
 #music-toggle.on {
   background: rgba(255, 255, 255, 0.2);
 }
@@ -99,23 +106,18 @@ body {
 body.theme-calm {
   background: linear-gradient(160deg, #1a2a3a, #304d6d);
 }
-
 body.theme-curious {
   background: linear-gradient(160deg, #2e163d, #4b2a64);
 }
-
 body.theme-joyful {
   background: linear-gradient(160deg, #ffb347, #ffcc70);
 }
-
 body.theme-sad {
   background: linear-gradient(160deg, #1c223b, #3a506b);
 }
-
 body.theme-anxious {
   background: linear-gradient(160deg, #442727, #5c3a3a);
 }
-
 body.theme-inspired {
   background: linear-gradient(160deg, #224832, #417d5a);
 }
@@ -124,15 +126,12 @@ body.theme-inspired {
 body.season-spring {
   background: linear-gradient(145deg, #cde9d6, #ffeef1);
 }
-
 body.season-summer {
   background: linear-gradient(145deg, #fff4b1, #ffd27a);
 }
-
 body.season-autumn {
   background: linear-gradient(145deg, #fbd4a0, #e0a96d);
 }
-
 body.season-winter {
   background: linear-gradient(145deg, #a6c8ff, #dceeff);
 }
@@ -146,11 +145,22 @@ body::before {
   border: 12px solid transparent;
   border-image: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)) 1;
   animation: winds 20s linear infinite;
-  z-index: 1;
+  z-index: 2;
   border-radius: 20px;
 }
 
 @keyframes winds {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* === STARFIELD CANVAS === */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
 }
