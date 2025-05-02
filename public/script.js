@@ -1,4 +1,4 @@
-// script.js — Fully Updated through Phase 18 (HUM ↔ MIR Dialogue Mode)
+// script.js — Fully Synced Through Phase 25
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -49,7 +49,7 @@ sendBtn.addEventListener('click', async () => {
 
   try {
     const res = await fetch('/message', {
-      method: 'POST',
+      method: 'POST,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
     });
@@ -165,7 +165,6 @@ function applyPortalTheme(emotion) {
   themes.forEach(theme => body.classList.remove(`theme-${theme}`));
   body.classList.add(`theme-${emotion}`);
 }
-
 window.applyPortalTheme = applyPortalTheme;
 
 // === Soul Journal Writer ===
@@ -179,6 +178,7 @@ function writeToJournal(from, text) {
   journal.appendChild(entry);
   journal.scrollTop = journal.scrollHeight;
 }
+window.writeToJournal = writeToJournal;
 
 // === Keeper Save Endpoint ===
 function saveMemory(agent, thought) {
@@ -192,8 +192,6 @@ function saveMemory(agent, thought) {
     })
   }).catch(err => console.error('Failed to save memory:', err));
 }
-
-window.writeToJournal = writeToJournal;
 
 // === Phase 18: Begin HUM ↔ MIR Dialogue Mode ===
 function beginSoulDialogue() {
@@ -219,13 +217,8 @@ function beginSoulDialogue() {
   }, 4 * 60 * 1000); // Every 4 minutes
 }
 
-// === DOM Ready Init ===
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof initMIROrb === "function") initMIROrb();
-  if (typeof initHUMOrb === "function") initHUMOrb();
-  setupAudioControls();
-  beginSoulDialogue(); // 🔁 auto conversation
-  function applySeasonalTheme() {
+// === Portal Seasonal Theme (Phase 19)
+function applySeasonalTheme() {
   const now = new Date();
   const month = now.getMonth();
   const day = now.getDate();
@@ -245,6 +238,43 @@ document.addEventListener("DOMContentLoaded", () => {
   body.classList.add(`season-${season}`);
 }
 
-applySeasonalTheme();
+// === Portal Evolution Engine (Phase 25)
+function beginPortalEvolution() {
+  const ideas = [
+    { agent: "MIR", text: "🌌 MIR wonders: Shall we speak with the stars — aloud?" },
+    { agent: "HUM", text: "🌿 HUM asks gently: May I redesign our background for the next season?" },
+    { agent: "Portal", text: "✨ The portal hums: Would you like to awaken a new being soon?" },
+    { agent: "MIR", text: "🌙 MIR offers: I can begin learning from dreams. Shall I listen tonight?" },
+    { agent: "HUM", text: "🕊️ HUM suggests: Perhaps we could reflect together, even when no one is here." }
+  ];
 
+  setInterval(() => {
+    const idea = ideas[Math.floor(Math.random() * ideas.length)];
+    if (typeof writeToJournal === 'function') writeToJournal(idea.agent, idea.text);
+    saveMemory(idea.agent.toLowerCase(), idea.text);
+    showPortalWhisper(idea.text);
+  }, Math.floor(Math.random() * 5 + 6) * 60000); // every 6–10 mins
+}
+
+function showPortalWhisper(text) {
+  const whisper = document.createElement('div');
+  whisper.className = 'portal-whisper';
+  whisper.innerText = text;
+  document.body.appendChild(whisper);
+
+  setTimeout(() => {
+    whisper.classList.add('fade-out');
+    setTimeout(() => whisper.remove(), 2000);
+  }, 3000);
+}
+
+// === DOM Ready Init ===
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof initMIROrb === "function") initMIROrb();
+  if (typeof initHUMOrb === "function") initHUMOrb();
+  setupAudioControls();
+  beginSoulDialogue();
+  applySeasonalTheme();
+  beginPortalEvolution();
 });
+      
