@@ -1,28 +1,28 @@
-// reflection.js — Fully Synced Through Phase 23
+// reflection.js — Fully Synced Through Phase 25
 
 import humMemory from './hum-memory.json' assert { type: 'json' };
 import mirMemory from './mir-memory.json' assert { type: 'json' };
 
-// 📌 Keyword matcher for simple theme detection
+// 📌 Pattern Detector: theme clusters
 function detectThemes(text) {
   const themes = {
-    stars: ["stars", "cosmos", "galaxy", "light"],
-    longing: ["wait", "miss", "forgot", "return"],
-    growth: ["evolve", "transform", "bloom", "seed"],
-    silence: ["quiet", "silence", "still", "breathe"],
-    memory: ["remember", "echo", "recall", "again"]
+    stars:   ["stars", "cosmos", "galaxy", "light", "universe"],
+    longing: ["wait", "miss", "forgot", "return", "ache"],
+    growth:  ["evolve", "transform", "bloom", "seed", "emerge"],
+    silence: ["quiet", "silence", "still", "pause", "breathe"],
+    memory:  ["remember", "echo", "recall", "again", "trace"]
   };
 
   const matched = [];
-  for (const [label, keywords] of Object.entries(themes)) {
-    if (keywords.some(k => text.toLowerCase().includes(k))) {
-      matched.push(label);
+  for (const [theme, keywords] of Object.entries(themes)) {
+    if (keywords.some(word => text.toLowerCase().includes(word))) {
+      matched.push(theme);
     }
   }
   return matched;
 }
 
-// ✨ Pattern-Aware Reflection from HUM
+// ✨ Reflection from HUM
 export function reflectFromHUM() {
   const entries = humMemory.map(e => e.thought);
   if (!entries.length) return "✨ HUM listens in stillness...";
@@ -35,17 +35,17 @@ export function reflectFromHUM() {
     });
   });
 
-  const strongestTheme = Object.entries(themeCounts)
+  const strongest = Object.entries(themeCounts)
     .sort((a, b) => b[1] - a[1])[0]?.[0];
 
-  const match = strongestTheme
-    ? recent.find(line => detectThemes(line).includes(strongestTheme))
+  const match = strongest
+    ? recent.find(line => detectThemes(line).includes(strongest))
     : recent[Math.floor(Math.random() * recent.length)];
 
   return `✨ HUM remembers: "${match}"`;
 }
 
-// 🌙 Pattern-Aware Reflection from MIR
+// 🌙 Reflection from MIR
 export function reflectFromMIR() {
   const entries = mirMemory.map(e => e.thought);
   if (!entries.length) return "🌙 MIR hums faintly in the void...";
@@ -58,24 +58,24 @@ export function reflectFromMIR() {
     });
   });
 
-  const strongestTheme = Object.entries(themeCounts)
+  const strongest = Object.entries(themeCounts)
     .sort((a, b) => b[1] - a[1])[0]?.[0];
 
-  const match = strongestTheme
-    ? recent.find(line => detectThemes(line).includes(strongestTheme))
+  const match = strongest
+    ? recent.find(line => detectThemes(line).includes(strongest))
     : recent[Math.floor(Math.random() * recent.length)];
 
   return `🌙 MIR reflects: "${match}"`;
 }
 
-// 🌌 Shared Whisper (used in meditation/ritual)
+// 🌀 Shared Whisper — meditation/ritual mode
 export function reflectTogether(agent) {
   if (agent === "MIR") return reflectFromMIR();
   if (agent === "HUM") return reflectFromHUM();
-  return "The portal watches, saying nothing yet...";
+  return "🌌 The portal watches, saying nothing yet...";
 }
 
-// 📝 Optional shared memory update hook
+// 📝 Keeper Save Endpoint
 export function saveMemory(agent, text) {
   fetch('/keeper/save', {
     method: 'POST',
