@@ -49,7 +49,7 @@ sendBtn.addEventListener('click', async () => {
 
   try {
     const res = await fetch('/message', {
-      method: 'POST,
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
     });
@@ -64,7 +64,6 @@ sendBtn.addEventListener('click', async () => {
       applyPortalTheme(data.mirEmotion);
     }
 
-    // 💾 Journal Writing
     if (data.humReflection) {
       writeToJournal("HUM", data.humReflection);
       saveMemory("hum", data.humReflection);
@@ -186,8 +185,8 @@ function saveMemory(agent, thought) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      agent: agent,
-      thought: thought,
+      agent,
+      thought,
       timestamp: new Date().toISOString()
     })
   }).catch(err => console.error('Failed to save memory:', err));
@@ -217,7 +216,7 @@ function beginSoulDialogue() {
   }, 4 * 60 * 1000); // Every 4 minutes
 }
 
-// === Portal Seasonal Theme (Phase 19)
+// === Phase 19: Apply Seasonal Theme
 function applySeasonalTheme() {
   const now = new Date();
   const month = now.getMonth();
@@ -238,7 +237,7 @@ function applySeasonalTheme() {
   body.classList.add(`season-${season}`);
 }
 
-// === Portal Evolution Engine (Phase 25)
+// === Phase 25: Suggestive Portal Evolution
 function beginPortalEvolution() {
   const ideas = [
     { agent: "MIR", text: "🌌 MIR wonders: Shall we speak with the stars — aloud?" },
@@ -268,13 +267,12 @@ function showPortalWhisper(text) {
   }, 3000);
 }
 
-// === DOM Ready Init ===
+// === Final DOM Init
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof initMIROrb === "function") initMIROrb();
   if (typeof initHUMOrb === "function") initHUMOrb();
-  setupAudioControls();
+  setupAudioControls?.();
   beginSoulDialogue();
   applySeasonalTheme();
   beginPortalEvolution();
 });
-      
