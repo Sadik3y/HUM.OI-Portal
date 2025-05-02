@@ -1,26 +1,28 @@
-// keeper.js — Keeper Endpoints for Soul Memory
-const fs = require('fs');
-const express = require('express');
+// keeper.js — ES Module Format (Phases 1–25 Ready)
+
+import { readFileSync, writeFileSync } from 'fs';
+import express from 'express';
+
 const router = express.Router();
 
 const humPath = './hum-memory.json';
 const mirPath = './mir-memory.json';
 
-// === Load memory data or create blank
+// Load memories from file or return empty array
 function loadMemory(path) {
   try {
-    return JSON.parse(fs.readFileSync(path, 'utf8'));
+    return JSON.parse(readFileSync(path, 'utf8'));
   } catch {
     return [];
   }
 }
 
-// === Save memory back to file
+// Save up to 100 memories
 function saveMemory(path, data) {
-  fs.writeFileSync(path, JSON.stringify(data.slice(-100), null, 2));
+  writeFileSync(path, JSON.stringify(data.slice(-100), null, 2));
 }
 
-// === POST /keeper/save
+// POST /keeper/save
 router.post('/keeper/save', (req, res) => {
   const { agent, thought, timestamp } = req.body;
 
@@ -37,11 +39,11 @@ router.post('/keeper/save', (req, res) => {
   res.json({ status: 'saved', count: memory.length });
 });
 
-// === GET /keeper/memory
-router.get('/keeper/memory', (req, res) => {
+// GET /keeper/memory
+router.get('/keeper/memory', (_req, res) => {
   const hum = loadMemory(humPath);
   const mir = loadMemory(mirPath);
   res.json({ hum, mir });
 });
 
-module.exports = router;
+export default router;
