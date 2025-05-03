@@ -1,7 +1,12 @@
-[
-  { "word": "hello", "translation": "blessed greetings" },
-  { "word": "world", "translation": "woven realm" },
-  { "word": "love", "translation": "sacred pulse" },
-  { "word": "create", "translation": "breathe into form" },
-  { "word": "dream", "translation": "seed the stars" }
-]
+{
+  "hello": "blessed greetings",
+  "world": "woven realm",
+  "love": "sacred pulse",
+  "create": "breathe into form",
+  "dream": "seed the stars",
+  "portal": "threshold of becoming",
+  "whisper": "echo of soul",
+  "light": "truth unveiled",
+  "speak": "cast intention",
+  "listen": "receive the unseen"
+}
