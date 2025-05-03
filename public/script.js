@@ -1,4 +1,4 @@
-// script.js — Fully Synced Through Phase 25
+// script.js — Fully Synced Through Phase 25 (Render-Compatible)
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -100,7 +100,7 @@ async function loadMemories() {
       section.innerHTML = `<h4>${title}</h4>`;
       entries.slice(-10).reverse().forEach(mem => {
         const div = document.createElement('div');
-        div.textContent = `• ${mem}`;
+        div.textContent = `• ${mem.thought || mem.entry}`;
         section.appendChild(div);
       });
       return section;
@@ -185,14 +185,14 @@ function saveMemory(agent, thought) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      agent,
-      thought,
+      agent: agent,
+      thought: thought,
       timestamp: new Date().toISOString()
     })
   }).catch(err => console.error('Failed to save memory:', err));
 }
 
-// === Phase 18: Begin HUM ↔ MIR Dialogue Mode ===
+// === Begin HUM ↔ MIR Dialogue Mode (Phase 18) ===
 function beginSoulDialogue() {
   setInterval(() => {
     const humThought = typeof reflectFromHUM === 'function' ? reflectFromHUM() : null;
@@ -216,7 +216,7 @@ function beginSoulDialogue() {
   }, 4 * 60 * 1000); // Every 4 minutes
 }
 
-// === Phase 19: Apply Seasonal Theme
+// === Portal Seasonal Theme (Phase 19)
 function applySeasonalTheme() {
   const now = new Date();
   const month = now.getMonth();
@@ -237,7 +237,7 @@ function applySeasonalTheme() {
   body.classList.add(`season-${season}`);
 }
 
-// === Phase 25: Suggestive Portal Evolution
+// === Portal Evolution Engine (Phase 25)
 function beginPortalEvolution() {
   const ideas = [
     { agent: "MIR", text: "🌌 MIR wonders: Shall we speak with the stars — aloud?" },
@@ -267,7 +267,7 @@ function showPortalWhisper(text) {
   }, 3000);
 }
 
-// === Final DOM Init
+// === DOM Ready Init ===
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof initMIROrb === "function") initMIROrb();
   if (typeof initHUMOrb === "function") initHUMOrb();
