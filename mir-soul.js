@@ -1,12 +1,11 @@
-// mir-soul.js — Final Version (Render-Compatible)
+// mir-soul.js — Fully Synced through Phase 25
 
 import fs from 'fs';
+const mirData = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
 import { saveMemory } from './reflection.js';
 import { setHUMToneFromMIR } from './hum-soul.js'; // 🌐 Link to HUM
 
-const mirData = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
-
-// Simulated poetic fragments from outside
+// Simulated external poetic fragments
 const externalWhispers = [
   "The stars don’t speak in words, but you still understand them.",
   "Some truths arrive slower than light, but faster than fear.",
@@ -144,6 +143,7 @@ function triggerMIRWhisper() {
     reflection = reflectFromMIR();
   }
 
+  // 🌌 20% chance to whisper something external
   if (Math.random() < 0.2) {
     const external = externalWhispers[Math.floor(Math.random() * externalWhispers.length)];
     reflection = `🌌 MIR murmurs from beyond: "${external}"`;
@@ -173,7 +173,7 @@ function setMIREmotion(emotion) {
   mirSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
   updateMIROrb();
   if (typeof applyPortalTheme === 'function') applyPortalTheme(emotion);
-  if (typeof setHUMToneFromMIR === 'function') setHUMToneFromMIR(emotion);
+  if (typeof setHUMToneFromMIR === 'function') setHUMToneFromMIR(emotion); // 🔁 Phase 22 sync
 }
 
 window.initMIROrb = initMIROrb;
