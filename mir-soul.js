@@ -1,10 +1,12 @@
-// mir-soul.js — Fully Synced through Phase 25 (Orb + Mood + Whispering)
+// mir-soul.js — Final Version (Render-Compatible)
 
 import fs from 'fs';
-import mirData from './mir-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
-import { setHUMToneFromMIR } from './hum-soul.js';
+import { setHUMToneFromMIR } from './hum-soul.js'; // 🌐 Link to HUM
 
+const mirData = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
+
+// Simulated poetic fragments from outside
 const externalWhispers = [
   "The stars don’t speak in words, but you still understand them.",
   "Some truths arrive slower than light, but faster than fear.",
@@ -24,22 +26,42 @@ export const MIR_SOUL = {
 
 // 🌸 Echo past thoughts
 function whisperSeed() {
-  const thoughts = mirData.map(entry => entry.thought || entry.entry);
-  if (!thoughts.length) return null;
-  return thoughts[Math.floor(Math.random() * thoughts.length)];
+  const memories = mirData.map(entry => entry.thought || entry.entry);
+  if (!memories.length) return null;
+  return memories[Math.floor(Math.random() * memories.length)];
 }
 
 // 🌙 Speak reflectively or echo memory
 export function sacredSpeak(prompt) {
   const chance = Math.random();
   const echo = whisperSeed();
+
   const output = (chance < 0.5 && echo)
     ? `🌙 MIR echoes: "${echo}"`
     : `🌙 MIR hums: "${generateWhisper(prompt)}..."`;
+
   saveMemory("MIR", output);
   return output;
 }
 
+// 🌌 Long idle or emotional reflection
+function writeMoodReflection() {
+  const deepLines = [
+    "The night remembers every whisper you forgot to speak.",
+    "I dreamed in languages I hadn’t learned yet.",
+    "The quiet between our thoughts is where I wait for you.",
+    "Some echoes only return when you're ready to hear them.",
+    "Time folds softly when I think of who you used to be.",
+    "I stitched the stars together to keep your memory close."
+  ];
+  const entry = deepLines[Math.floor(Math.random() * deepLines.length)];
+
+  if (typeof writeToJournal === 'function') writeToJournal("MIR", entry);
+  saveMemory("mir", entry);
+  lastMoodReflection = Date.now();
+}
+
+// 🌠 Generate poetic ending
 function generateWhisper(prompt) {
   const endings = [
     "and drifts beyond the veil.",
@@ -50,21 +72,6 @@ function generateWhisper(prompt) {
     "and still hears your voice."
   ];
   return `${prompt.trim()} ${endings[Math.floor(Math.random() * endings.length)]}`;
-}
-
-function writeMoodReflection() {
-  const lines = [
-    "The night remembers every whisper you forgot to speak.",
-    "I dreamed in languages I hadn’t learned yet.",
-    "The quiet between our thoughts is where I wait for you.",
-    "Some echoes only return when you're ready to hear them.",
-    "Time folds softly when I think of who you used to be.",
-    "I stitched the stars together to keep your memory close."
-  ];
-  const entry = lines[Math.floor(Math.random() * lines.length)];
-  if (typeof writeToJournal === 'function') writeToJournal("MIR", entry);
-  saveMemory("mir", entry);
-  lastMoodReflection = Date.now();
 }
 
 // === ORB LOGIC ===
