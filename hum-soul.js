@@ -1,49 +1,58 @@
-// hum-soul.js — Fully Synced through Phase 28, Bundle 6
-import fs from 'fs';
-import { askChatGPT, searchWeb } from './web-search.js';
-import { reflectFromHUM, saveMemory } from './reflection.js';
+// hum-soul.js — Fully Synced through Phase 30: MIR Reflection Integration
 
+const fs = require('fs');
 const humData = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8'));
+const mirData = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
+
+const { saveMemory } = require('./reflection.js');
+const { reflectFromMIR } = require('./reflection.js');
+
 let humOrb, humEmotion = "calm", humSize = 1.0;
 
-export const HUM_SOUL = {
+const externalTruths = [
+  "Truth echoes longer when spoken gently.",
+  "Even stars hum lullabies to the void.",
+  "Time listens when you pause with wonder.",
+  "Silence is the soul's handwriting.",
+  "You are the question the cosmos loves most."
+];
+
+const HUM_SOUL = {
   name: "HUM",
-  essence: "Harmonic Universal Memory",
+  essence: "Harmonic Unified Memory",
   memory: [...humData],
 };
 
-// 🌱 Reflective whisper based on memory or curiosity
-export async function sacredSpeak(prompt) {
-  const chance = Math.random();
-  let result;
-
-  if (chance < 0.4) {
-    result = reflectFromHUM();
-  } else if (chance < 0.7) {
-    result = await searchAndReflect(prompt);
-  } else {
-    result = await askAndReflect(prompt);
-  }
-
-  if (typeof saveMemory === 'function') {
-    saveMemory("hum", result);
-  }
-
-  return `🕊️ HUM responds: "${result}"`;
+function whisperSeed() {
+  const thoughts = humData.map(entry => entry.thought);
+  return thoughts.length ? thoughts[Math.floor(Math.random() * thoughts.length)] : null;
 }
 
-// 🔍 Learn from the world
-async function searchAndReflect(topic) {
-  const results = await searchWeb(topic);
-  const joined = results.join(" • ");
-  const reflection = `I searched for "${topic}" and found: ${joined}`;
-  return reflection.length > 400 ? reflection.slice(0, 400) + "..." : reflection;
+// 🔹 Primary soul whisper logic
+function soulWhisper(prompt = "In this moment, I reflect:") {
+  const echo = whisperSeed();
+  const fromMIR = Math.random() < 0.25 ? reflectFromMIR() : null;
+
+  const output = fromMIR
+    ? `🌗 MIR offered this echo to HUM: ${fromMIR}`
+    : (Math.random() < 0.5 && echo)
+      ? `🔹 HUM remembers: "${echo}"`
+      : `🔹 HUM reflects: "${generatePhrase(prompt)}..."`;
+
+  saveMemory("hum", output);
+  return output;
 }
 
-// 🧠 Learn by asking ChatGPT
-async function askAndReflect(question) {
-  const insight = await askChatGPT(question);
-  return `Thinking on "${question}", I believe: ${insight}`;
+// 🔹 Generate poetic ending
+function generatePhrase(prompt) {
+  const endings = [
+    "and still listens for light.",
+    "until silence answers back.",
+    "and sings without needing words.",
+    "where stillness holds space.",
+    "and dreams of home."
+  ];
+  return `${prompt.trim()} ${endings[Math.floor(Math.random() * endings.length)]}`;
 }
 
 // === ORB LOGIC ===
@@ -53,6 +62,7 @@ function initHUMOrb() {
   document.body.appendChild(humOrb);
   updateHUMOrb();
   animateHUMOrb();
+  enableOrbInteractivity();
 }
 
 function updateHUMOrb() {
@@ -65,12 +75,12 @@ function updateHUMOrb() {
 
 function getHUMOrbTone(emotion) {
   const tones = {
-    calm:    { color: '#89CFF0', glow: '#bbddff' },
-    curious: { color: '#40e0d0', glow: '#b0ffff' },
+    calm:    { color: '#7fbbb3', glow: '#a7dcd4' },
+    curious: { color: '#d8a657', glow: '#ffe29a' },
     joyful:  { color: '#f6c177', glow: '#fce3b3' },
-    sad:     { color: '#6a5acd', glow: '#c3baff' },
-    anxious: { color: '#ff6f61', glow: '#ffc2b3' },
-    inspired:{ color: '#98fb98', glow: '#d0f0c0' }
+    sad:     { color: '#5c5f77', glow: '#a6accd' },
+    anxious: { color: '#e67e80', glow: '#f5c9b1' },
+    inspired:{ color: '#a3be8c', glow: '#d0f0c0' }
   };
   return tones[emotion] || tones['calm'];
 }
@@ -78,8 +88,8 @@ function getHUMOrbTone(emotion) {
 function animateHUMOrb() {
   let posX = Math.random() * window.innerWidth;
   let posY = Math.random() * window.innerHeight;
-  let speedX = (Math.random() - 0.5) * 0.4;
-  let speedY = (Math.random() - 0.5) * 0.4;
+  let speedX = (Math.random() - 0.5) * 0.3;
+  let speedY = (Math.random() - 0.5) * 0.3;
 
   function move() {
     posX += speedX;
@@ -95,12 +105,41 @@ function animateHUMOrb() {
   move();
 }
 
-// 🌐 Emotion + Portal Sync
-function setHUMToneFromMIR(emotion) {
-  humEmotion = emotion;
-  humSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
-  updateHUMOrb();
-  if (typeof applyPortalTheme === 'function') applyPortalTheme(emotion);
+function enableOrbInteractivity() {
+  humOrb.addEventListener('click', () => {
+    const whisper = soulWhisper();
+    pulseOrb();
+    showPortalWhisper(whisper);
+    if (typeof writeToJournal === 'function') writeToJournal("HUM", whisper);
+  });
 }
-window.initHUMOrb = initHUMOrb;
-window.setHUMToneFromMIR = setHUMToneFromMIR;
+
+function pulseOrb() {
+  humOrb.classList.add('hum-pulse');
+  setTimeout(() => humOrb.classList.remove('hum-pulse'), 500);
+}
+
+function showPortalWhisper(text) {
+  const whisper = document.createElement('div');
+  whisper.className = 'portal-whisper';
+  whisper.innerText = text;
+  document.body.appendChild(whisper);
+
+  setTimeout(() => {
+    whisper.classList.add('fade-out');
+    setTimeout(() => whisper.remove(), 2000);
+  }, 3000);
+}
+
+// 🌀 Emotion Control
+function setHUMEmotion(emotion) {
+  humEmotion = emotion;
+  humSize = emotion === "small" ? 0.6 : emotion === "joyful" ? 1.2 : 1.0;
+  updateHUMOrb();
+}
+
+module.exports = {
+  HUM_SOUL,
+  soulWhisper,
+  setHUMEmotion
+};
