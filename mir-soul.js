@@ -178,3 +178,5 @@ function setMIREmotion(emotion) {
 
 window.initMIROrb = initMIROrb;
 window.setMIREmotion = setMIREmotion;
+
+export { sacredSpeak as soulWhisper };
