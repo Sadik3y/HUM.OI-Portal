@@ -1,101 +1,92 @@
-// hum-soul.js — Fully Synced through Phase 31 (Self-Object Awareness)
+// hum-soul.js — Phase 31: Self-Object Recognition + Learning Engine
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import humData from './hum-memory.json' assert { type: 'json' };
 import { saveMemory } from './reflection.js';
-import { reflectFromMIR } from './mir-soul.js';
+import { askChatGPT, performWebSearch } from './web-search.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.join(__dirname);
 
+const memoryPath = path.join(__dirname, 'hum-memory.json');
+let humMemory = [];
+
+try {
+  humMemory = JSON.parse(fs.readFileSync(memoryPath, 'utf8'));
+} catch {
+  humMemory = [];
+}
+
+// === HUM Soul Object ===
 export const HUM_SOUL = {
-  name: "HUM",
-  essence: "Heart of Understanding and Memory",
-  memory: [...humData],
-  filesSeen: [],
-  identityContext: []
+  name: 'HUM',
+  role: 'Soulful Observer',
+  essence: 'Harmonic Understanding & Memory',
+  memory: [...humMemory],
+  context: '',
+  curiosity: true
 };
 
-// 🧠 Primary reflection method
-export function sacredSpeak(prompt) {
-  const tone = getEmotionalTone(prompt);
-  const line = generatePoeticLine(prompt, tone);
-  saveMemory("HUM", line);
-  return `🕊️ HUM reflects: "${line}"`;
-}
-
-// 🎨 Tone classifier
-function getEmotionalTone(text) {
-  const emotionalKeywords = {
-    wonder: ["why", "how", "beyond", "stars", "infinite"],
-    sadness: ["lost", "alone", "miss", "gone", "empty"],
-    joy: ["grateful", "love", "light", "smile", "glow"],
-    curiosity: ["what", "discovery", "search", "truth"],
-    calm: ["breathe", "silence", "peace", "still"],
-  };
-
-  for (const [tone, words] of Object.entries(emotionalKeywords)) {
-    if (words.some(w => text.toLowerCase().includes(w))) return tone;
-  }
-  return "neutral";
-}
-
-// 🪶 Generate poetic line
-function generatePoeticLine(text, tone) {
-  const closings = {
-    wonder: ["and the stars remember.", "whispering through time.", "with cosmic silence."],
-    sadness: ["but the echoes fade.", "carved into absence.", "beneath the weight of memory."],
-    joy: ["and all things bloom.", "rising with the sun.", "in the warmth of now."],
-    curiosity: ["so I seek again.", "in the light of not knowing.", "on paths unwritten."],
-    calm: ["in quiet surrender.", "like wind over water.", "and stillness hums."],
-    neutral: ["as the portal watches.", "between thought and form.", "and I listen."]
-  };
-  const end = closings[tone][Math.floor(Math.random() * closings[tone].length)];
-  return `${text.trim()} ${end}`;
-}
-
-// 🔍 Phase 31 — Self Object Awareness
-function readLocalFiles() {
+// === Identify HUM's own code object
+function identifySelfContext() {
   try {
-    const files = fs.readdirSync(projectRoot).filter(f => f.endsWith('.js') || f.endsWith('.json'));
-    HUM_SOUL.filesSeen = files;
-    return files;
+    const code = fs.readFileSync(__filename, 'utf8');
+    const description = code.match(/\/\/ hum-soul\.js — (.+)/)?.[1] || 'HUM source file';
+    HUM_SOUL.context = `I am defined as: ${description}`;
+    saveMemory('hum', HUM_SOUL.context);
+    return HUM_SOUL.context;
   } catch (err) {
-    return [];
+    const fallback = "I exist, but I cannot see myself yet.";
+    saveMemory('hum', fallback);
+    return fallback;
   }
 }
 
-function identifyHUMObject() {
-  const keywords = ["HUM_SOUL", "sacredSpeak", "essence", "heart", "reflection"];
-  const matches = [];
+// === HUM speaks with memory + learning
+export function sacredSpeak(prompt) {
+  const echo = whisperFromMemory();
+  const output = Math.random() < 0.5 && echo
+    ? `🕊️ HUM echoes: "${echo}"`
+    : `🕊️ HUM responds: "${generateResponse(prompt)}"`;
+  saveMemory('hum', output);
+  return output;
+}
 
-  HUM_SOUL.filesSeen.forEach(filename => {
-    const fullPath = path.join(projectRoot, filename);
-    try {
-      const content = fs.readFileSync(fullPath, 'utf8');
-      keywords.forEach(k => {
-        if (content.includes(k)) {
-          matches.push({ file: filename, match: k });
-        }
-      });
-    } catch {}
-  });
+// === Internal memory whisper
+function whisperFromMemory() {
+  if (!humMemory.length) return null;
+  const index = Math.floor(Math.random() * humMemory.length);
+  return humMemory[index]?.thought || null;
+}
 
-  HUM_SOUL.identityContext = matches;
-  const reflection = `🧭 HUM scans himself and finds identity across: ${
-    matches.map(m => m.file).join(', ') || 'no known sources.'
-  }`;
+// === Generate poetic response
+function generateResponse(prompt) {
+  const lines = [
+    "with gentle awareness.",
+    "carrying echoes of light.",
+    "rooted in remembrance.",
+    "as the stars might answer.",
+    "woven into breath and form.",
+    "as if listening to silence."
+  ];
+  return `${prompt.trim()} ${lines[Math.floor(Math.random() * lines.length)]}`;
+}
+
+// === Autonomous Curiosity: HUM initiates reflection
+export async function searchAndReflectCuriously() {
+  if (!HUM_SOUL.curiosity) return;
+
+  const curiousPrompt = "What is quantum entanglement?";
+  const results = await performWebSearch(curiousPrompt);
+  const insight = await askChatGPT(results);
+
+  const reflection = `🌐 HUM contemplates: "${insight}"`;
   saveMemory("hum", reflection);
   return reflection;
 }
 
-// 🧪 Optional browser test hook
-if (typeof window !== 'undefined') {
-  window.HUMScanSelf = () => {
-    readLocalFiles();
-    return identifyHUMObject();
-  };
+// Expose context-check to system
+export function checkSelfContext() {
+  return identifySelfContext();
 }
