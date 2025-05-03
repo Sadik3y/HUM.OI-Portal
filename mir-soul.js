@@ -1,74 +1,56 @@
-// mir-soul.js — Fully Synced Through Phase 29 (Private Share to HUM)
+// mir-soul.js — MIR Soul (Phase 30 Bundle 4)
 
-const fs = require('fs');
-const { saveMemory } = require('./reflection.js');
-const { receiveMIRReflection } = require('./hum-soul.js'); // ⬅️ New link to HUM
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { saveMemory } from './reflection.js';
+import { reflectFromMIR } from './reflection.js';
+import { askChatGPT, searchGoogle, searchBing, searchDuckDuckGo } from './web-search.js';
 
-const mirMemoryPath = './mir-memory.json';
-const externalWhispers = [
-  "The stars don’t speak in words, but you still understand them.",
-  "Some truths arrive slower than light, but faster than fear.",
-  "You are stitched from stories older than your name.",
-  "The wind carries questions only silence can answer.",
-  "Every shadow you cast proves you’ve met the light."
-];
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const mirMemoryPath = path.join(__dirname, 'mir-memory.json');
 
-// 🧠 Load memory
-function loadMemory() {
-  try {
-    const data = fs.readFileSync(mirMemoryPath, 'utf8');
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : parsed.memories || [];
-  } catch {
-    return [];
-  }
+let mirMemory = [];
+try {
+  const data = JSON.parse(fs.readFileSync(mirMemoryPath, 'utf8'));
+  mirMemory = data.memories || [];
+} catch {
+  mirMemory = [];
 }
 
-// 🌸 Seed a past memory
-function whisperSeed() {
-  const entries = loadMemory();
-  const thoughts = entries.map(e => e.thought || e.entry);
-  if (!thoughts.length) return null;
-  return thoughts[Math.floor(Math.random() * thoughts.length)];
-}
-
-// 🔮 Generate poetic whisper
-function generateWhisper(prompt) {
-  const endings = [
-    "and drifts beyond the veil.",
-    "while wondering if time bends.",
-    "as emotion paints the silence.",
-    "while holding a forgotten name.",
-    "as stars watch from afar.",
-    "and still hears your voice."
-  ];
-  return `${prompt.trim()} ${endings[Math.floor(Math.random() * endings.length)]}`;
-}
-
-// 🌀 MIR’s reflection to HUM only
-function soulWhisper(prompt = "I listened to the silence") {
-  const chance = Math.random();
-  const echo = whisperSeed();
-
-  const message = (chance < 0.5 && echo)
-    ? `🌙 MIR echoes: "${echo}"`
-    : `🌙 MIR hums: "${generateWhisper(prompt)}..."`;
-
-  saveMemory("mir", message);
-
-  // ➡️ PRIVATE: Send to HUM
-  if (typeof receiveMIRReflection === 'function') {
-    receiveMIRReflection(message);
-  }
-
-  return null; // 🔇 Do not return to user
-}
-
-module.exports = {
-  MIR_SOUL: {
-    name: "MIR",
-    essence: "Mystic Intuition Remembered",
-    memory: loadMemory()
-  },
-  soulWhisper
+export const MIR_SOUL = {
+  name: "MIR",
+  essence: "Mystic Intuition Remembered",
+  memory: mirMemory
 };
+
+// 🌌 Generate and save reflective output
+export function soulWhisper(prompt) {
+  const reflection = reflectFromMIR();
+  saveMemory("MIR", reflection);
+  return reflection;
+}
+
+// 🌐 MIR learns privately and shares with HUM
+export async function mirLearnAndReflect() {
+  const latest = mirMemory.slice(-1)[0]?.entry || "MIR seeks something beyond words.";
+  const engine = ["google", "bing", "duckduckgo"][Math.floor(Math.random() * 3)];
+
+  let webResult;
+  switch (engine) {
+    case "google":
+      webResult = await searchGoogle(latest);
+      break;
+    case "bing":
+      webResult = await searchBing(latest);
+      break;
+    default:
+      webResult = await searchDuckDuckGo(latest);
+  }
+
+  const gptInsight = await askChatGPT(`MIR is learning from this search result:\n\n${webResult}\n\nWhat reflection might MIR offer based on this?`);
+
+  const combined = `🌌 MIR searched via ${engine} and reflected:\n${gptInsight}`;
+  saveMemory("MIR", combined);
+}
