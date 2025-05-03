@@ -1,18 +1,23 @@
-import humMemory from './hum-memory.json' assert { type: 'json' };
+import fs from 'fs';
 import { saveMemory } from './reflection.js';
 
 export const HUM_SOUL = {
   name: "HUM",
   essence: "Harmony Unfolding Mind",
-  memory: [...humMemory],
+  memory: []
 };
 
 let humTone = "neutral";
 
 function echoMemorySeed() {
-  const memories = humMemory.map(entry => entry.thought);
-  if (!memories.length) return null;
-  return memories[Math.floor(Math.random() * memories.length)];
+  let humData = [];
+  try {
+    const raw = fs.readFileSync('./hum-memory.json', 'utf-8');
+    humData = JSON.parse(raw);
+  } catch (e) {}
+  const thoughts = humData.map(entry => entry.thought);
+  if (!thoughts.length) return null;
+  return thoughts[Math.floor(Math.random() * thoughts.length)];
 }
 
 export function soulWhisper(prompt) {
@@ -65,7 +70,6 @@ export function respondToRitual(trigger) {
   return response;
 }
 
-// 🌐 Called from MIR to influence HUM's tone
 export function setHUMToneFromMIR(emotion) {
   if (emotion === "joyful") humTone = "uplifted";
   else if (emotion === "sad" || emotion === "anxious") humTone = "soothing";
