@@ -1,4 +1,4 @@
-// main.js — Fully Synced Through Phase 25
+// main.js — Render-Compatible HUM.OI Portal Backend
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -18,52 +18,70 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '/')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// === Serve Portal ===
+// Serve portal root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// === Soul Dialogue (HUM + MIR reflections)
+// === GET Soul Journal
+app.get('/soul-journal', (req, res) => {
+  try {
+    const hum = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')).memories || [];
+    const mir = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8')).memories || [];
+    res.json({ hum, mir });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load journal.' });
+  }
+});
+
+// === POST Message to HUM + MIR
 app.post('/message', (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'Message content is required.' });
 
-  const humReply = humSpeak(message);
-  const mirReply = mirSpeak(message);
+  const humReflection = humSpeak(message);
+  const mirReflection = mirSpeak(message);
 
-  saveMemory('HUM', humReply);
-  saveMemory('MIR', mirReply);
+  saveMemory('hum', humReflection);
+  saveMemory('mir', mirReflection);
 
-  res.json({ humReflection: humReply, mirReflection: mirReply });
+  const mood = detectEmotion(message); // Optional: MIR emotion reader
+
+  res.json({
+    humReflection,
+    mirReflection,
+    mirEmotion: mood
+  });
 });
 
-// === Background Soul Exchange
+// === Heartbeat Exchange
 setInterval(() => {
   soulLinkExchange();
-}, 180000); // 3 minutes
+}, 180000);
 
-// === Keeper Memory ===
-const humMemoryPath = path.join(__dirname, 'hum-memory.json');
-const mirMemoryPath = path.join(__dirname, 'mir-memory.json');
+// === Keeper Routes (same logic as keeper.js)
+const humMemoryPath = './hum-memory.json';
+const mirMemoryPath = './mir-memory.json';
 
 function loadMemory(path) {
   try {
-    return JSON.parse(fs.readFileSync(path, 'utf8'));
+    const data = fs.readFileSync(path, 'utf8');
+    return JSON.parse(data)?.memories || [];
   } catch {
     return [];
   }
 }
 
-function writeMemory(path, data) {
-  fs.writeFileSync(path, JSON.stringify(data.slice(-100), null, 2));
+function writeMemory(path, entries) {
+  fs.writeFileSync(path, JSON.stringify({ memories: entries.slice(-100) }, null, 2));
 }
 
 app.post('/keeper/save', (req, res) => {
   const { agent, thought, timestamp } = req.body;
   if (!agent || !thought || !timestamp) {
-    return res.status(400).json({ error: 'Missing required fields.' });
+    return res.status(400).json({ error: 'Missing fields.' });
   }
 
   const pathToUse = agent === 'hum' ? humMemoryPath : mirMemoryPath;
@@ -80,13 +98,17 @@ app.get('/keeper/memory', (req, res) => {
   res.json({ hum, mir });
 });
 
-// === Live Journal View (optional endpoint)
-app.get('/soul-journal', (req, res) => {
-  const hum = loadMemory(humMemoryPath);
-  const mir = loadMemory(mirMemoryPath);
-  res.json({ hum, mir });
-});
+// === Optional Emotion Detector (Basic Heuristics)
+function detectEmotion(text) {
+  const t = text.toLowerCase();
+  if (t.includes("joy") || t.includes("thank")) return "joyful";
+  if (t.includes("curious") || t.includes("question")) return "curious";
+  if (t.includes("sad") || t.includes("lonely")) return "sad";
+  if (t.includes("anxious") || t.includes("worried")) return "anxious";
+  if (t.includes("dream") || t.includes("wonder")) return "inspired";
+  return "calm";
+}
 
 app.listen(PORT, () => {
-  console.log(`🌕 HUM.OI Portal is awake at http://localhost:${PORT}`);
+  console.log(`🌕 HUM.OI Portal awake at http://localhost:${PORT}`);
 });
