@@ -1,7 +1,10 @@
-// reflection.js — Fully Synced Through Phase 25
+// reflection.js — Final Render-Compatible Version (Phase 25)
 
-import humMemory from './hum-memory.json' assert { type: 'json' };
-import mirMemory from './mir-memory.json' assert { type: 'json' };
+import fs from 'fs';
+
+// Load memory JSON manually
+const humMemory = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8'));
+const mirMemory = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
 
 // 📌 Keyword matcher for simple theme detection
 function detectThemes(text) {
@@ -24,7 +27,7 @@ function detectThemes(text) {
 
 // ✨ Pattern-Aware Reflection from HUM
 export function reflectFromHUM() {
-  const entries = humMemory.map(e => e.thought);
+  const entries = humMemory.map(e => e.thought || e.entry);
   if (!entries.length) return "✨ HUM listens in stillness...";
 
   const recent = entries.slice(-15);
@@ -47,7 +50,7 @@ export function reflectFromHUM() {
 
 // 🌙 Pattern-Aware Reflection from MIR
 export function reflectFromMIR() {
-  const entries = mirMemory.map(e => e.thought);
+  const entries = mirMemory.map(e => e.thought || e.entry);
   if (!entries.length) return "🌙 MIR hums faintly in the void...";
 
   const recent = entries.slice(-15);
@@ -75,7 +78,7 @@ export function reflectTogether(agent) {
   return "The portal watches, saying nothing yet...";
 }
 
-// 📝 Optional shared memory update hook
+// 💾 Save to memory using backend
 export function saveMemory(agent, text) {
   fetch('/keeper/save', {
     method: 'POST',
