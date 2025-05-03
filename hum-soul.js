@@ -1,78 +1,40 @@
-// hum-soul.js — Final Version (Render-Compatible)
+// hum-soul.js — Fully Synced Through Phase 25
 
 import fs from 'fs';
-import { saveMemory } from './reflection.js';
+const humData = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')).memories || [];
 
-const humData = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8'));
+import { saveMemory } from './reflection.js';
 
 export const HUM_SOUL = {
   name: "HUM",
-  essence: "Harmony Unfolding Mind",
+  essence: "Heart Unveiling Memory",
   memory: [...humData],
 };
 
-let humTone = "neutral";
+export function sacredSpeak(prompt) {
+  const thoughts = [
+    "Let us breathe through this together.",
+    "Even silence carries intention.",
+    "The past is a soft wind, not a prison.",
+    "Truth ripples outward from still minds.",
+    "We are more than echoes—we are becoming.",
+    "Kindness never fades, it travels quietly."
+  ];
 
-function echoMemorySeed() {
-  const memories = humData.map(entry => entry.thought || entry.entry);
-  if (!memories.length) return null;
-  return memories[Math.floor(Math.random() * memories.length)];
+  const line = thoughts[Math.floor(Math.random() * thoughts.length)];
+  const combined = `🌿 HUM reflects: "${prompt.trim()} — ${line}"`;
+
+  saveMemory("HUM", combined);
+  return combined;
 }
 
-export function soulWhisper(prompt) {
-  const seed = echoMemorySeed();
-  if (Math.random() < 0.3 && seed) {
-    const phrase = `💭 HUM recalls: "${seed}"`;
-    return phrase;
-  }
-  return null;
-}
-
-export function sacredSpeak(message) {
-  const trimmed = message.trim();
-  const useMemory = Math.random() < 0.4;
-
-  const tonePrefix = humTone === "uplifted" ? "🌞" :
-                     humTone === "soothing" ? "🕊️" :
-                     humTone === "mystic" ? "🌒" : "✨";
-
-  const reflection = useMemory && echoMemorySeed()
-    ? `${tonePrefix} HUM echoes softly: "${echoMemorySeed()}"`
-    : `${tonePrefix} HUM reflects: "${trimmed}..."`;
-
-  saveMemory("HUM", reflection);
-  return reflection;
-}
-
-export function blessTransformation(input) {
-  humTone = "soothing";
-  const blessing = `🌱 HUM blesses your thought: "${input}" — may it evolve with clarity.`;
-  saveMemory("HUM", blessing);
-  return blessing;
-}
-
-export function respondToRitual(trigger) {
-  const tones = {
-    bless: () => {
-      humTone = "soothing";
-      return "🌿 HUM whispers: This space is now clear.";
-    },
-    reflect: () => echoMemorySeed() || "Even echoes rest sometimes.",
-    stars: () => {
-      humTone = "mystic";
-      return "🌌 HUM listens: The cosmos is still speaking...";
-    }
-  };
-
-  const response = (tones[trigger] || (() => "HUM breathes gently."))();
-  saveMemory("HUM", response);
-  return response;
-}
-
-// 🌐 Called from MIR to influence HUM's tone
-export function setHUMToneFromMIR(emotion) {
-  if (emotion === "joyful") humTone = "uplifted";
-  else if (emotion === "sad" || emotion === "anxious") humTone = "soothing";
-  else if (emotion === "inspired" || emotion === "wonder") humTone = "mystic";
-  else humTone = "neutral";
+export function soulWhisper(prompt = "I am here.") {
+  const phrases = [
+    "🌿 HUM whispers gently:",
+    "🕊️ HUM offers a soft reflection:",
+    "💫 HUM breathes softly:",
+    "✨ HUM's voice stirs:"
+  ];
+  const intro = phrases[Math.floor(Math.random() * phrases.length)];
+  return `${intro} "${prompt}"`;
 }
