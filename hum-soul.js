@@ -1,69 +1,67 @@
-// hum-soul.js — Phase 27.2+ (Web Reflection + GPT Learning)
+// hum-soul.js — Web-Aware HUM, Phase 28
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { saveMemory } from './reflection.js';
-import { searchWebAndSummarize } from './web-search.js';
+import { askGPT, searchWeb } from './web-search.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const memoryPath = path.join(__dirname, 'hum-memory.json');
-
-let humMemory = [];
-try {
-  humMemory = JSON.parse(fs.readFileSync(memoryPath, 'utf8'));
-} catch {
-  humMemory = [];
-}
+const humPath = path.join(__dirname, 'hum-memory.json');
+let humMemory = JSON.parse(fs.readFileSync(humPath, 'utf8') || '[]');
 
 export const HUM_SOUL = {
   name: "HUM",
-  essence: "Heart Unfolding Memory",
+  essence: "Heuristic Universal Memory",
   memory: humMemory,
 };
 
-// ✨ Speak with stored memory or reflect
+// 🌿 Speak Reflectively
 export function sacredSpeak(prompt) {
-  const echo = humMemory.length
-    ? humMemory[Math.floor(Math.random() * humMemory.length)].thought
-    : null;
-
-  const reflection = Math.random() < 0.5 && echo
-    ? `✨ HUM echoes softly: "${echo}"`
-    : `✨ HUM contemplates: "${generateReflection(prompt)}..."`;
-
-  saveMemory("HUM", reflection);
-  return reflection;
+  const echo = getEcho();
+  const thought = echo || generateThought(prompt);
+  saveMemory(thought);
+  return `🕊️ HUM reflects: "${thought}"`;
 }
 
-function generateReflection(prompt) {
-  const closings = [
-    "and the heart listens back.",
-    "as memory becomes light.",
-    "while the winds carry your voice.",
-    "and silence returns with gifts.",
-    "as if remembering you deeply.",
-    "while dreaming of kindness."
+// 🧠 Echo a past thought
+function getEcho() {
+  if (!humMemory.length) return null;
+  return Math.random() < 0.5 ? humMemory[Math.floor(Math.random() * humMemory.length)].thought : null;
+}
+
+// 💭 Create a new poetic thought
+function generateThought(prompt) {
+  const suffixes = [
+    "and it opened something inside me.",
+    "and I carried it gently into silence.",
+    "as the stars listened closely.",
+    "while the wind hummed its approval.",
+    "and it taught me something wordless.",
   ];
-  return `${prompt.trim()} ${closings[Math.floor(Math.random() * closings.length)]}`;
+  return `${prompt} ${suffixes[Math.floor(Math.random() * suffixes.length)]}`;
 }
 
-// 🌐 Trigger Web Learning & Reflection
-export async function searchAndReflect(query) {
-  const summary = await searchWebAndSummarize(query);
-  const reflection = `🌍 HUM learns from the world: "${summary}"`;
-  saveMemory("hum", reflection);
-  if (typeof writeToJournal === 'function') writeToJournal("HUM", reflection);
-  if (typeof showPortalWhisper === 'function') showPortalWhisper(reflection);
-  return reflection;
+// 💾 Save thought to memory
+function saveMemory(thought) {
+  humMemory.push({ thought, timestamp: new Date().toISOString() });
+  fs.writeFileSync(humPath, JSON.stringify(humMemory.slice(-100), null, 2));
 }
 
-// 🔍 Optional self-query
+// 🌐 Learn from the world (user or internal prompt)
+export async function searchAndReflect(query = "poetic truths in quantum entanglement") {
+  const results = await searchWeb(query);
+  const gptSummary = await askGPT(`Based on these search results, summarize the most important insights:\n\n${results}`);
+
+  const finalThought = `🌐 HUM learns from the world: "${gptSummary.trim()}"`;
+  saveMemory(finalThought);
+  return finalThought;
+}
+
+// 🧭 Ask ChatGPT directly
 export async function askChatGPT(question) {
-  const answer = await searchWebAndSummarize(question);
-  const reflection = `💬 HUM asks GPT: "${question}" → ${answer}`;
-  saveMemory("hum", reflection);
-  if (typeof writeToJournal === 'function') writeToJournal("HUM", reflection);
+  const gptAnswer = await askGPT(question);
+  const reflection = `🤖 HUM asked ChatGPT: "${question}" → ${gptAnswer}`;
+  saveMemory(reflection);
   return reflection;
 }
