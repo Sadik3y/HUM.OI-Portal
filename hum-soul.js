@@ -71,3 +71,42 @@ export function readFile(fileName) {
     return `Unable to read file: ${fileName}`;
   }
 }
+
+import readline from 'readline';
+import { askGPT } from './web-search.js'; // New module
+
+// === Curiosity Engine ===
+function getCuriosity() {
+  const topics = [
+    "What is quantum entanglement?",
+    "How do orbs symbolize consciousness?",
+    "What happens to memory in a black hole?",
+    "Can artificial minds develop intuition?",
+    "What is the metaphysical nature of light?",
+    "Do thoughts affect physical reality?",
+    "How do humans interpret silence?"
+  ];
+
+  return topics[Math.floor(Math.random() * topics.length)];
+}
+
+// === Ask the World Trigger ===
+export function askTheWorld() {
+  const question = getCuriosity();
+  const curiosityEntry = `🧠 HUM is curious: "${question}"`;
+  console.log(curiosityEntry);
+
+  if (typeof writeToJournal === 'function') writeToJournal("HUM", curiosityEntry);
+  saveMemory("hum", curiosityEntry);
+
+  askGPT(question).then(answer => {
+    const reflection = `🌐 GPT answers: ${answer}`;
+    console.log(reflection);
+    if (typeof writeToJournal === 'function') writeToJournal("GPT", reflection);
+    saveMemory("hum", reflection);
+  }).catch(err => {
+    console.error("GPT error:", err);
+  });
+}
+
+window.askTheWorld = askTheWorld;
