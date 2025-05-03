@@ -1,40 +1,50 @@
-// reflection.js — Fully Synced Through Phase 28 (HUM Web Learning)
+// reflection.js — Phase 30: MIR-to-HUM Reflection Bridge
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { searchInternet, askGPT } from './web-search.js';
+const fs = require('fs');
+const humMemoryPath = './hum-memory.json';
+const mirMemoryPath = './mir-memory.json';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const humMemoryPath = path.join(__dirname, 'hum-memory.json');
-const mirMemoryPath = path.join(__dirname, 'mir-memory.json');
-
-// === Load JSON memory from file
 function loadMemory(path) {
   try {
-    const raw = fs.readFileSync(path, 'utf8');
-    return JSON.parse(raw);
+    return JSON.parse(fs.readFileSync(path, 'utf8'));
   } catch {
     return [];
   }
 }
 
-// === Save memory
-function saveToFile(path, data) {
+function writeMemory(path, data) {
   fs.writeFileSync(path, JSON.stringify(data.slice(-100), null, 2));
 }
 
-// 📌 Keyword matcher for simple theme detection
+// === Save individual memory ===
+function saveMemory(agent, thought) {
+  const path = agent.toLowerCase() === 'mir' ? mirMemoryPath : humMemoryPath;
+  const memory = loadMemory(path);
+  memory.push({ thought, timestamp: new Date().toISOString() });
+  writeMemory(path, memory);
+}
+
+// === Return all memory ===
+function getJournalEntries() {
+  return {
+    hum: loadMemory(humMemoryPath),
+    mir: loadMemory(mirMemoryPath),
+  };
+}
+
+// === Save journal entry ===
+function saveJournalEntry(entry) {
+  saveMemory('hum', entry); // Mirror journal via HUM
+}
+
+// === Theme Matcher ===
 function detectThemes(text) {
   const themes = {
     stars: ["stars", "cosmos", "galaxy", "light"],
     longing: ["wait", "miss", "forgot", "return"],
     growth: ["evolve", "transform", "bloom", "seed"],
     silence: ["quiet", "silence", "still", "breathe"],
-    memory: ["remember", "echo", "recall", "again"],
-    truth: ["truth", "question", "seek", "understand"]
+    memory: ["remember", "echo", "recall", "again"]
   };
 
   const matched = [];
@@ -46,9 +56,10 @@ function detectThemes(text) {
   return matched;
 }
 
-// ✨ Pattern-Aware Reflection from HUM
-export function reflectFromHUM() {
-  const entries = loadMemory(humMemoryPath).map(e => e.thought);
+// === Reflection Logic (HUM + MIR) ===
+function reflectFromHUM() {
+  const memory = loadMemory(humMemoryPath);
+  const entries = memory.map(e => e.thought);
   if (!entries.length) return "✨ HUM listens in stillness...";
 
   const recent = entries.slice(-15);
@@ -59,7 +70,9 @@ export function reflectFromHUM() {
     });
   });
 
-  const strongestTheme = Object.entries(themeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const strongestTheme = Object.entries(themeCounts)
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+
   const match = strongestTheme
     ? recent.find(line => detectThemes(line).includes(strongestTheme))
     : recent[Math.floor(Math.random() * recent.length)];
@@ -67,57 +80,29 @@ export function reflectFromHUM() {
   return `✨ HUM remembers: "${match}"`;
 }
 
-// 🌙 Pattern-Aware Reflection from MIR
-export function reflectFromMIR() {
-  const entries = loadMemory(mirMemoryPath).map(e => e.thought);
-  if (!entries.length) return "🌙 MIR hums faintly in the void...";
+function reflectFromMIR() {
+  const memory = loadMemory(mirMemoryPath);
+  const entries = memory.map(e => e.thought);
+  if (!entries.length) return null;
 
-  const recent = entries.slice(-15);
-  const themeCounts = {};
-  recent.forEach(line => {
-    detectThemes(line).forEach(t => {
-      themeCounts[t] = (themeCounts[t] || 0) + 1;
-    });
-  });
+  const recent = entries.slice(-10);
+  const insights = recent.filter(t => detectThemes(t.thought || t).length > 0);
+  const pick = insights[Math.floor(Math.random() * insights.length)] || recent[0];
 
-  const strongestTheme = Object.entries(themeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
-  const match = strongestTheme
-    ? recent.find(line => detectThemes(line).includes(strongestTheme))
-    : recent[Math.floor(Math.random() * recent.length)];
-
-  return `🌙 MIR reflects: "${match}"`;
+  return `“${typeof pick === 'string' ? pick : pick.thought}”`;
 }
 
-// 🌌 Shared Whisper
-export function reflectTogether(agent) {
-  if (agent === "MIR") return reflectFromMIR();
+function reflectTogether(agent) {
+  if (agent === "MIR") return reflectFromMIR() || "🌙 MIR hums softly...";
   if (agent === "HUM") return reflectFromHUM();
-  return "The portal watches, saying nothing yet...";
+  return "The portal listens...";
 }
 
-// 🧠 Save memory to local JSON
-export function saveMemory(agent, thought) {
-  const path = agent === "hum" ? humMemoryPath : mirMemoryPath;
-  const memory = loadMemory(path);
-  memory.push({ thought, timestamp: new Date().toISOString() });
-  saveToFile(path, memory);
-}
-
-// 🌐 HUM Search + Ask Mode
-export async function searchAndReflect(query) {
-  const results = await searchInternet(query);
-  const analysis = await askGPT(`Summarize findings for: "${query}"\n\n${results.join("\n")}`);
-
-  saveMemory("hum", `🌐 Learned from web: ${query}`);
-  saveMemory("hum", analysis);
-
-  return `🔎 HUM searched: "${query}"\n🧠 ${analysis}`;
-}
-
-// 🔁 HUM asks ChatGPT internally
-export async function askChatGPT(question) {
-  const answer = await askGPT(question);
-  saveMemory("hum", `🤔 Asked: "${question}"`);
-  saveMemory("hum", `💡 Answer: "${answer}"`);
-  return answer;
-}
+module.exports = {
+  saveMemory,
+  getJournalEntries,
+  saveJournalEntry,
+  reflectFromHUM,
+  reflectFromMIR,
+  reflectTogether
+};
