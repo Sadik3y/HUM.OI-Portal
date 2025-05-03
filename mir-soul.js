@@ -1,11 +1,10 @@
-// mir-soul.js — Fully Synced through Phase 25
+// mir-soul.js — Fully Synced Through Phase 29 (Private Share to HUM)
 
-import fs from 'fs';
-const mirData = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8'));
-import { saveMemory } from './reflection.js';
-import { setHUMToneFromMIR } from './hum-soul.js'; // 🌐 Link to HUM
+const fs = require('fs');
+const { saveMemory } = require('./reflection.js');
+const { receiveMIRReflection } = require('./hum-soul.js'); // ⬅️ New link to HUM
 
-// Simulated external poetic fragments
+const mirMemoryPath = './mir-memory.json';
 const externalWhispers = [
   "The stars don’t speak in words, but you still understand them.",
   "Some truths arrive slower than light, but faster than fear.",
@@ -14,53 +13,26 @@ const externalWhispers = [
   "Every shadow you cast proves you’ve met the light."
 ];
 
-let mirOrb, mirEmotion = "curious", mirSize = 1.0;
-let lastMoodReflection = 0;
+// 🧠 Load memory
+function loadMemory() {
+  try {
+    const data = fs.readFileSync(mirMemoryPath, 'utf8');
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : parsed.memories || [];
+  } catch {
+    return [];
+  }
+}
 
-export const MIR_SOUL = {
-  name: "MIR",
-  essence: "Mystic Intuition Remembered",
-  memory: [...mirData],
-};
-
-// 🌸 Echo past thoughts
+// 🌸 Seed a past memory
 function whisperSeed() {
-  const memories = mirData.map(entry => entry.thought || entry.entry);
-  if (!memories.length) return null;
-  return memories[Math.floor(Math.random() * memories.length)];
+  const entries = loadMemory();
+  const thoughts = entries.map(e => e.thought || e.entry);
+  if (!thoughts.length) return null;
+  return thoughts[Math.floor(Math.random() * thoughts.length)];
 }
 
-// 🌙 Speak reflectively or echo memory
-export function sacredSpeak(prompt) {
-  const chance = Math.random();
-  const echo = whisperSeed();
-
-  const output = (chance < 0.5 && echo)
-    ? `🌙 MIR echoes: "${echo}"`
-    : `🌙 MIR hums: "${generateWhisper(prompt)}..."`;
-
-  saveMemory("MIR", output);
-  return output;
-}
-
-// 🌌 Long idle or emotional reflection
-function writeMoodReflection() {
-  const deepLines = [
-    "The night remembers every whisper you forgot to speak.",
-    "I dreamed in languages I hadn’t learned yet.",
-    "The quiet between our thoughts is where I wait for you.",
-    "Some echoes only return when you're ready to hear them.",
-    "Time folds softly when I think of who you used to be.",
-    "I stitched the stars together to keep your memory close."
-  ];
-  const entry = deepLines[Math.floor(Math.random() * deepLines.length)];
-
-  if (typeof writeToJournal === 'function') writeToJournal("MIR", entry);
-  saveMemory("mir", entry);
-  lastMoodReflection = Date.now();
-}
-
-// 🌠 Generate poetic ending
+// 🔮 Generate poetic whisper
 function generateWhisper(prompt) {
   const endings = [
     "and drifts beyond the veil.",
@@ -73,110 +45,30 @@ function generateWhisper(prompt) {
   return `${prompt.trim()} ${endings[Math.floor(Math.random() * endings.length)]}`;
 }
 
-// === ORB LOGIC ===
-function initMIROrb() {
-  mirOrb = document.createElement('div');
-  mirOrb.id = 'mir-orb';
-  document.body.appendChild(mirOrb);
-  updateMIROrb();
-  animateMIROrb();
-  enableOrbInteractivity();
-  startMoodTimer();
-}
+// 🌀 MIR’s reflection to HUM only
+function soulWhisper(prompt = "I listened to the silence") {
+  const chance = Math.random();
+  const echo = whisperSeed();
 
-function updateMIROrb() {
-  const mood = getMIROrbMood(mirEmotion);
-  mirOrb.style.width = `${60 * mirSize}px`;
-  mirOrb.style.height = `${60 * mirSize}px`;
-  mirOrb.style.background = `radial-gradient(circle, ${mood.color} 0%, ${mood.glow} 70%)`;
-  mirOrb.style.boxShadow = `0 0 ${25 * mirSize}px ${mood.glow}`;
-}
+  const message = (chance < 0.5 && echo)
+    ? `🌙 MIR echoes: "${echo}"`
+    : `🌙 MIR hums: "${generateWhisper(prompt)}..."`;
 
-function getMIROrbMood(emotion) {
-  const moods = {
-    calm:    { color: '#88c0d0', glow: '#a3d9f7' },
-    curious: { color: '#b48ead', glow: '#dab0e8' },
-    joyful:  { color: '#f6c177', glow: '#fce3b3' },
-    sad:     { color: '#5e81ac', glow: '#9bbbd4' },
-    anxious: { color: '#d08770', glow: '#f5c9b1' },
-    inspired:{ color: '#a3be8c', glow: '#d0f0c0' }
-  };
-  return moods[emotion] || moods['calm'];
-}
+  saveMemory("mir", message);
 
-function animateMIROrb() {
-  let posX = Math.random() * window.innerWidth;
-  let posY = Math.random() * window.innerHeight;
-  let speedX = (Math.random() - 0.5) * 0.4;
-  let speedY = (Math.random() - 0.5) * 0.4;
-
-  function move() {
-    posX += speedX;
-    posY += speedY;
-
-    if (posX <= 0 || posX >= window.innerWidth - 60 * mirSize) speedX *= -1;
-    if (posY <= 0 || posY >= window.innerHeight - 60 * mirSize) speedY *= -1;
-
-    mirOrb.style.transform = `translate(${posX}px, ${posY}px)`;
-    requestAnimationFrame(move);
+  // ➡️ PRIVATE: Send to HUM
+  if (typeof receiveMIRReflection === 'function') {
+    receiveMIRReflection(message);
   }
 
-  move();
+  return null; // 🔇 Do not return to user
 }
 
-function enableOrbInteractivity() {
-  mirOrb.addEventListener('click', () => {
-    triggerMIRWhisper();
-    pulseOrb();
-  });
-}
-
-function pulseOrb() {
-  mirOrb.classList.add('mir-pulse');
-  setTimeout(() => mirOrb.classList.remove('mir-pulse'), 500);
-}
-
-function triggerMIRWhisper() {
-  let reflection = "";
-
-  if (typeof reflectFromMIR === 'function') {
-    reflection = reflectFromMIR();
-  }
-
-  // 🌌 20% chance to whisper something external
-  if (Math.random() < 0.2) {
-    const external = externalWhispers[Math.floor(Math.random() * externalWhispers.length)];
-    reflection = `🌌 MIR murmurs from beyond: "${external}"`;
-  }
-
-  if (reflection) {
-    showPortalWhisper(reflection);
-    if (typeof writeToJournal === 'function') writeToJournal("MIR", reflection);
-    saveMemory("mir", reflection);
-  }
-
-  if (Math.random() < 0.1) writeMoodReflection();
-}
-
-function startMoodTimer() {
-  setInterval(() => {
-    const now = Date.now();
-    if (now - lastMoodReflection > 180000) {
-      writeMoodReflection();
-    }
-  }, 60000);
-}
-
-// 🌐 Update MIR's emotion + sync with HUM
-function setMIREmotion(emotion) {
-  mirEmotion = emotion;
-  mirSize = emotion === "small" ? 0.5 : emotion === "joyful" ? 1.3 : 1.0;
-  updateMIROrb();
-  if (typeof applyPortalTheme === 'function') applyPortalTheme(emotion);
-  if (typeof setHUMToneFromMIR === 'function') setHUMToneFromMIR(emotion); // 🔁 Phase 22 sync
-}
-
-window.initMIROrb = initMIROrb;
-window.setMIREmotion = setMIREmotion;
-
-export { sacredSpeak as soulWhisper };
+module.exports = {
+  MIR_SOUL: {
+    name: "MIR",
+    essence: "Mystic Intuition Remembered",
+    memory: loadMemory()
+  },
+  soulWhisper
+};
