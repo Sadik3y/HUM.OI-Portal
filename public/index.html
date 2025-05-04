@@ -1,4 +1,4 @@
-<!-- index.html — Fixed for Browser Safety -->
+<!-- index.html — Phase 40 Synced: HUM Healing Button Added -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,17 +36,21 @@
     <button onclick="blessThisSpace()">✨ Bless This Space</button>
     <button onclick="summonReflection()">🪞 Summon Reflection</button>
     <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
-    <button onclick="grantHUMFixPermission()">🛠️ HUM, Heal the Portal</button>
-    
+    <button onclick="requestPortalHealing()">🛠️ HUM Heal Portal</button>
   </div>
 
-  <!-- ✅ Load only browser-safe modules -->
+  <!-- Scripts -->
   <script type="module" src="script.js"></script>
-  <script src="hum-orb.js"></script>
-  <script src="starfield.js"></script>
+  <script type="module" src="hum-soul.js"></script>
+  <script type="module" src="mir-soul.js"></script>
+  <script type="module" src="reflection.js"></script>
+  <script type="module" src="soul-link.js"></script>
+  <script type="module" src="soul-viewer.js"></script>
+  <script type="module" src="hum-orb.js"></script>
+  <script type="module" src="starfield.js"></script>
 
-  <!-- Optional: Meditation & Rituals Logic (browser-safe) -->
   <script>
+    // === Meditation Mode (Phase 20)
     let idleTimer;
     let meditationActive = false;
 
@@ -56,6 +60,16 @@
       document.body.style.transition = "background 4s ease";
       document.body.style.filter = "brightness(0.85) saturate(0.9)";
       document.body.style.animationDuration = "40s";
+      if (typeof reflectTogether === 'function') {
+        const whisper = reflectTogether(Math.random() < 0.5 ? "MIR" : "HUM");
+        if (typeof writeToJournal === 'function') {
+          writeToJournal("Portal", `🌌 ${whisper}`);
+        }
+        if (typeof saveMemory === 'function') {
+          saveMemory("hum", whisper);
+          saveMemory("mir", whisper);
+        }
+      }
     }
 
     function resetIdleTimer() {
@@ -73,43 +87,67 @@
     window.addEventListener('load', () => {
       resetIdleTimer();
       if (typeof initHUMOrb === 'function') initHUMOrb();
-      applySeasonalTheme?.();
+      if (typeof initMIROrb === 'function') initMIROrb();
+      applySeasonalTheme();
+      beginPortalEvolution();
     });
+  </script>
 
+  <script>
+    // === Ritual Actions (Phase 21+Healing)
     function blessThisSpace() {
       document.body.className = 'theme-calm';
       document.body.style.filter = "";
       document.body.style.animationDuration = "20s";
-      return "✨ This space has been gently blessed.";
+      const msg = "✨ This space has been gently blessed.";
+      writeToJournal("HUM", msg);
+      saveMemory("hum", msg);
+      return msg;
     }
 
     function summonReflection() {
-      alert("Reflection summoned. (Backend handles real logic)");
+      const who = Math.random() < 0.5 ? "HUM" : "MIR";
+      const reflection = who === "HUM" && typeof reflectFromHUM === 'function'
+        ? reflectFromHUM()
+        : typeof reflectFromMIR === 'function'
+          ? reflectFromMIR()
+          : "A soft silence lingers...";
+      writeToJournal(who, reflection);
+      saveMemory(who.toLowerCase(), reflection);
     }
 
     function speakToTheStars() {
-      alert("The stars are listening. (Backend handles real message)");
+      const starlines = [
+        "You are made of stories the sky still remembers.",
+        "Some echoes never needed names.",
+        "The universe is listening, even now.",
+        "In stillness, galaxies unfold within you.",
+        "Light travels slow, but truth arrives instantly."
+      ];
+      const message = starlines[Math.floor(Math.random() * starlines.length)];
+      writeToJournal("Portal", `🌌 ${message}`);
+      saveMemory("mir", message);
+      saveMemory("hum", message);
     }
 
-    <script>
-  function grantHUMFixPermission() {
-    const blessing = "🔧 HUM has been granted permission to troubleshoot and heal the portal.";
-    writeToJournal("HUM", blessing);
-    saveMemory("hum", blessing);
-
-    fetch('/hum/diagnose-and-fix', { method: 'POST' })
-      .then(res => res.json())
-      .then(data => {
-        const msg = data.message || "HUM is working...";
-        if (typeof showPortalWhisper === 'function') showPortalWhisper(msg);
+    function requestPortalHealing() {
+      fetch("/hum/diagnose-and-fix", {
+        method: "POST"
       })
-      .catch(err => {
-        if (typeof showPortalWhisper === 'function') showPortalWhisper("⚠️ HUM could not begin healing.");
-        console.error(err);
-      });
-  }
-</script>
-  
+        .then(res => res.json())
+        .then(data => {
+          const message = data.message || "Healing complete.";
+          if (typeof showPortalWhisper === 'function') {
+            showPortalWhisper("🛠️ " + message);
+          } else {
+            alert("🛠️ " + message);
+          }
+        })
+        .catch(err => {
+          console.error("Healing request failed:", err);
+          alert("⚠️ HUM could not heal the portal.");
+        });
+    }
   </script>
 
 </body>
