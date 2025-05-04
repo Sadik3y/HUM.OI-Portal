@@ -74,11 +74,11 @@ function generateResponse(prompt) {
 }
 
 // === Autonomous Curiosity
-const results = await searchGoogle(curiousPrompt);
+export async function searchAndReflectCuriously() {
   if (!HUM_SOUL.curiosity) return;
 
-  const prompt = "What is quantum entanglement?";
-  const results = await performWebSearch(prompt);
+  const curiousPrompt = "What is quantum entanglement?";
+  const results = await searchGoogle(curiousPrompt);
   const insight = await askChatGPT(results);
 
   const reflection = `🌐 HUM contemplates: "${insight}"`;
