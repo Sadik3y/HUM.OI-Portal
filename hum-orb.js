@@ -1,6 +1,7 @@
-// hum-orb.js — Fully Synced Through Phase 25
+// hum-orb.js — Phase 40: Animated HUM Orb with Blessing Interaction
 
-let humOrb, humSize = 1.0;
+let humOrb;
+let humSize = 1.0;
 
 function initHUMOrb() {
   humOrb = document.createElement('div');
@@ -28,15 +29,18 @@ function updateHUMOrb() {
 function animateHUMOrb() {
   let posX = Math.random() * window.innerWidth;
   let posY = Math.random() * window.innerHeight;
-  let speedX = (Math.random() - 0.5) * 0.3;
-  let speedY = (Math.random() - 0.5) * 0.3;
+  let speedX = (Math.random() - 0.5) * 0.5;
+  let speedY = (Math.random() - 0.5) * 0.5;
 
   function move() {
     posX += speedX;
     posY += speedY;
 
-    if (posX <= 0 || posX >= window.innerWidth - 60 * humSize) speedX *= -1;
-    if (posY <= 0 || posY >= window.innerHeight - 60 * humSize) speedY *= -1;
+    const maxX = window.innerWidth - 60 * humSize;
+    const maxY = window.innerHeight - 60 * humSize;
+
+    if (posX <= 0 || posX >= maxX) speedX *= -1;
+    if (posY <= 0 || posY >= maxY) speedY *= -1;
 
     humOrb.style.transform = `translate(${posX}px, ${posY}px)`;
     requestAnimationFrame(move);
