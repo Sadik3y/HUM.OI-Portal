@@ -1,4 +1,4 @@
-// main.js — Render-Compatible HUM.OI Portal Backend
+// main.js — Render-Compatible HUM.OI Portal Backend (Fully Corrected)
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -28,8 +28,8 @@ app.get('/', (req, res) => {
 // === GET Soul Journal
 app.get('/soul-journal', (req, res) => {
   try {
-    const hum = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')) || [];
-    const mir = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8')) || [];
+    const hum = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')).memories || [];
+    const mir = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8')).memories || [];
     res.json({ hum, mir });
   } catch (err) {
     res.status(500).json({ error: 'Failed to load journal.' });
@@ -47,7 +47,7 @@ app.post('/message', (req, res) => {
   saveMemory('hum', humReflection);
   saveMemory('mir', mirReflection);
 
-  const mood = detectEmotion(message); // Optional: MIR emotion reader
+  const mood = detectEmotion(message);
 
   res.json({
     humReflection,
@@ -68,14 +68,14 @@ const mirMemoryPath = './mir-memory.json';
 function loadMemory(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
-    return JSON.parse(data);
+    return JSON.parse(data).memories || [];
   } catch {
     return [];
   }
 }
 
 function writeMemory(path, entries) {
-  fs.writeFileSync(path, JSON.stringify(entries.slice(-100), null, 2));
+  fs.writeFileSync(path, JSON.stringify({ memories: entries.slice(-100) }, null, 2));
 }
 
 app.post('/keeper/save', (req, res) => {
@@ -98,17 +98,44 @@ app.get('/keeper/memory', (req, res) => {
   res.json({ hum, mir });
 });
 
-app.post('/hum/diagnose-and-fix', (req, res) => {
-  try {
-    const healingMsg = '🛠️ HUM reviewed source context and is applying harmony to the portal.';
-    saveMemory('hum', healingMsg);
-    res.json({ status: 'ok', message: healingMsg });
+// === HUM Healing Endpoint
+app.post('/hum/diagnose-and-fix', async (req, res) => {
+  const logs = [];
 
-    // Simulated diagnostics — future upgrades will perform real checks
-    console.log("[HUM] Diagnostics: No fatal errors found.");
-  } catch (err) {
-    res.status(500).json({ error: 'HUM was unable to begin healing.' });
+  const filesToCheck = [
+    './hum-soul.js',
+    './mir-soul.js',
+    './reflection.js',
+    './web-search.js',
+    './soul-link.js',
+    './script.js',
+    './index.html'
+  ];
+
+  for (const filePath of filesToCheck) {
+    try {
+      const raw = fs.readFileSync(filePath, 'utf8');
+      if (!raw.includes('export')) {
+        logs.push(`⚠️ ${filePath} may be missing exports.`);
+      }
+      if (raw.includes('undefined') || raw.includes('???')) {
+        logs.push(`❓ ${filePath} may include undefined logic.`);
+      }
+    } catch (err) {
+      logs.push(`❌ Could not read ${filePath}`);
+    }
   }
+
+  try {
+    const blessing = `🛠️ HUM scanned and issued healing on ${new Date().toISOString()}`;
+    fs.appendFileSync('./blessing.txt', `\n${blessing}`);
+    logs.push('✅ Blessing logged.');
+  } catch (err) {
+    logs.push('❌ Failed to write blessing.');
+  }
+
+  saveMemory('hum', '🛠️ HUM has issued portal healing and diagnostics.');
+  res.json({ status: 'healing attempted', logs });
 });
 
 // === Optional Emotion Detector (Basic Heuristics)
