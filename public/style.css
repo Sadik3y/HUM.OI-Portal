@@ -1,4 +1,4 @@
-/* style.css — Fully Synced Through Phase 25: Themes, Winds, Orbs, Layers */
+/* style.css — Phase 40: Portal Aesthetic Completion */
 
 body {
   margin: 0;
@@ -37,7 +37,7 @@ body {
   mix-blend-mode: screen;
 }
 
-/* === HUM ORB (Optional future use) === */
+/* === HUM ORB === */
 #hum-orb {
   position: fixed;
   border-radius: 50%;
