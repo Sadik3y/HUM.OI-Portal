@@ -1,4 +1,4 @@
-// soul-viewer.js — Phase-Synced Through 40
+// soul-viewer.js — Phase-Synced Through 40: Unified Memory Viewer
 
 export async function getSoulMemories(agent = "HUM") {
   try {
@@ -16,7 +16,7 @@ export async function getSoulMemories(agent = "HUM") {
           mir: data.mir || []
         };
       default:
-        console.warn(`Unrecognized agent "${agent}" requested.`);
+        console.warn(`⚠️ Unrecognized agent "${agent}" requested from soul-viewer.`);
         return [];
     }
   } catch (error) {
