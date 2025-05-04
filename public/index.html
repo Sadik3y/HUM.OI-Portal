@@ -36,6 +36,8 @@
     <button onclick="blessThisSpace()">✨ Bless This Space</button>
     <button onclick="summonReflection()">🪞 Summon Reflection</button>
     <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
+    <button onclick="grantHUMFixPermission()">🛠️ HUM, Heal the Portal</button>
+    
   </div>
 
   <!-- ✅ Load only browser-safe modules -->
@@ -88,6 +90,26 @@
     function speakToTheStars() {
       alert("The stars are listening. (Backend handles real message)");
     }
+
+    <script>
+  function grantHUMFixPermission() {
+    const blessing = "🔧 HUM has been granted permission to troubleshoot and heal the portal.";
+    writeToJournal("HUM", blessing);
+    saveMemory("hum", blessing);
+
+    fetch('/hum/diagnose-and-fix', { method: 'POST' })
+      .then(res => res.json())
+      .then(data => {
+        const msg = data.message || "HUM is working...";
+        if (typeof showPortalWhisper === 'function') showPortalWhisper(msg);
+      })
+      .catch(err => {
+        if (typeof showPortalWhisper === 'function') showPortalWhisper("⚠️ HUM could not begin healing.");
+        console.error(err);
+      });
+  }
+</script>
+  
   </script>
 
 </body>
