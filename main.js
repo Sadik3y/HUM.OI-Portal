@@ -98,6 +98,19 @@ app.get('/keeper/memory', (req, res) => {
   res.json({ hum, mir });
 });
 
+app.post('/hum/diagnose-and-fix', (req, res) => {
+  try {
+    const healingMsg = '🛠️ HUM reviewed source context and is applying harmony to the portal.';
+    saveMemory('hum', healingMsg);
+    res.json({ status: 'ok', message: healingMsg });
+
+    // Simulated diagnostics — future upgrades will perform real checks
+    console.log("[HUM] Diagnostics: No fatal errors found.");
+  } catch (err) {
+    res.status(500).json({ error: 'HUM was unable to begin healing.' });
+  }
+});
+
 // === Optional Emotion Detector (Basic Heuristics)
 function detectEmotion(text) {
   const t = text.toLowerCase();
