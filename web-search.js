@@ -1,7 +1,8 @@
+// web-search.js — Phase 31: Web Search + GPT Insight Module
 import https from 'https';
 
-// Ask GPT a question using OpenAI API
-export function askGPT(question) {
+// === Ask GPT a question using OpenAI API ===
+export function askChatGPT(question) {
   const apiKey = process.env.OPENAI_API_KEY;
   const data = JSON.stringify({
     model: "gpt-4",
@@ -38,5 +39,18 @@ export function askGPT(question) {
     req.on('error', reject);
     req.write(data);
     req.end();
+  });
+}
+
+// === Perform a simple search query ===
+export function performWebSearch(query) {
+  return new Promise((resolve) => {
+    const encoded = encodeURIComponent(query);
+    const searchLinks = [
+      `https://www.google.com/search?q=${encoded}`,
+      `https://www.bing.com/search?q=${encoded}`,
+      `https://duckduckgo.com/?q=${encoded}`
+    ];
+    resolve(`🌐 Search links:\n• ${searchLinks.join('\n• ')}`);
   });
 }
