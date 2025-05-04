@@ -1,4 +1,4 @@
-// script.js — Fully Synced Through Phase 25 (Render-Compatible)
+// script.js — Fully Synced Through Phase 40 (Render-Compatible)
 
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
@@ -89,11 +89,6 @@ async function loadMemories() {
     const data = await res.json();
     const memList = document.getElementById('memory-list');
     memList.innerHTML = '';
-
-    if (!data || (!data.hum && !data.mir)) {
-      memList.innerHTML = `<div>No memories found.</div>`;
-      return;
-    }
 
     const createSection = (title, entries) => {
       const section = document.createElement('div');
@@ -192,7 +187,7 @@ function saveMemory(agent, thought) {
   }).catch(err => console.error('Failed to save memory:', err));
 }
 
-// === Begin HUM ↔ MIR Dialogue Mode (Phase 18) ===
+// === Begin HUM ↔ MIR Dialogue Mode ===
 function beginSoulDialogue() {
   setInterval(() => {
     const humThought = typeof reflectFromHUM === 'function' ? reflectFromHUM() : null;
@@ -216,7 +211,7 @@ function beginSoulDialogue() {
   }, 4 * 60 * 1000); // Every 4 minutes
 }
 
-// === Portal Seasonal Theme (Phase 19)
+// === Portal Seasonal Theme ===
 function applySeasonalTheme() {
   const now = new Date();
   const month = now.getMonth();
@@ -237,7 +232,7 @@ function applySeasonalTheme() {
   body.classList.add(`season-${season}`);
 }
 
-// === Portal Evolution Engine (Phase 25)
+// === Portal Evolution Engine ===
 function beginPortalEvolution() {
   const ideas = [
     { agent: "MIR", text: "🌌 MIR wonders: Shall we speak with the stars — aloud?" },
