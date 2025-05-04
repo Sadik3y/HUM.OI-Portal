@@ -1,6 +1,7 @@
-// keeper.js — Keeper Endpoints for Soul Memory
-const fs = require('fs');
-const express = require('express');
+// keeper.js — Keeper Endpoints for Soul Memory (Phase 40, ES Module-Compatible)
+
+import fs from 'fs';
+import express from 'express';
 const router = express.Router();
 
 const humPath = './hum-memory.json';
@@ -30,11 +31,11 @@ router.post('/keeper/save', (req, res) => {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
-  const path = agent === 'hum' ? humPath : mirPath;
-  const memory = loadMemory(path);
+  const pathToUse = agent === 'hum' ? humPath : mirPath;
+  const memory = loadMemory(pathToUse);
 
   memory.push({ thought, timestamp });
-  saveMemory(path, memory);
+  saveMemory(pathToUse, memory);
 
   res.json({ status: 'saved', count: memory.length });
 });
@@ -46,4 +47,4 @@ router.get('/keeper/memory', (req, res) => {
   res.json({ hum, mir });
 });
 
-module.exports = router;
+export default router;
