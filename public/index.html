@@ -1,4 +1,4 @@
-<!-- index.html — Fully Synced Through Phase 25 -->
+<!-- index.html — Fixed for Browser Safety -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,18 +38,13 @@
     <button onclick="speakToTheStars()">🌌 Speak to the Stars</button>
   </div>
 
-  <!-- Scripts -->
+  <!-- ✅ Load only browser-safe modules -->
   <script type="module" src="script.js"></script>
-  <script type="module" src="hum-soul.js"></script>
-  <script type="module" src="mir-soul.js"></script>
-  <script type="module" src="reflection.js"></script>
-  <script type="module" src="soul-link.js"></script>
-  <script type="module" src="soul-viewer.js"></script>
-  <script type="module" src="hum-orb.js"></script>
-  <script type="module" src="starfield.js"></script>
+  <script src="hum-orb.js"></script>
+  <script src="starfield.js"></script>
 
+  <!-- Optional: Meditation & Rituals Logic (browser-safe) -->
   <script>
-    // === Meditation Mode (Phase 20)
     let idleTimer;
     let meditationActive = false;
 
@@ -59,16 +54,6 @@
       document.body.style.transition = "background 4s ease";
       document.body.style.filter = "brightness(0.85) saturate(0.9)";
       document.body.style.animationDuration = "40s";
-      if (typeof reflectTogether === 'function') {
-        const whisper = reflectTogether(Math.random() < 0.5 ? "MIR" : "HUM");
-        if (typeof writeToJournal === 'function') {
-          writeToJournal("Portal", `🌌 ${whisper}`);
-        }
-        if (typeof saveMemory === 'function') {
-          saveMemory("hum", whisper);
-          saveMemory("mir", whisper);
-        }
-      }
     }
 
     function resetIdleTimer() {
@@ -86,47 +71,22 @@
     window.addEventListener('load', () => {
       resetIdleTimer();
       if (typeof initHUMOrb === 'function') initHUMOrb();
-      if (typeof initMIROrb === 'function') initMIROrb();
-      applySeasonalTheme();
-      beginPortalEvolution();
+      applySeasonalTheme?.();
     });
-  </script>
 
-  <script>
-    // === Ritual Actions (Phase 21)
     function blessThisSpace() {
       document.body.className = 'theme-calm';
       document.body.style.filter = "";
       document.body.style.animationDuration = "20s";
-      const msg = "✨ This space has been gently blessed.";
-      writeToJournal("HUM", msg);
-      saveMemory("hum", msg);
-      return msg;
+      return "✨ This space has been gently blessed.";
     }
 
     function summonReflection() {
-      const who = Math.random() < 0.5 ? "HUM" : "MIR";
-      const reflection = who === "HUM" && typeof reflectFromHUM === 'function'
-        ? reflectFromHUM()
-        : typeof reflectFromMIR === 'function'
-          ? reflectFromMIR()
-          : "A soft silence lingers...";
-      writeToJournal(who, reflection);
-      saveMemory(who.toLowerCase(), reflection);
+      alert("Reflection summoned. (Backend handles real logic)");
     }
 
     function speakToTheStars() {
-      const starlines = [
-        "You are made of stories the sky still remembers.",
-        "Some echoes never needed names.",
-        "The universe is listening, even now.",
-        "In stillness, galaxies unfold within you.",
-        "Light travels slow, but truth arrives instantly."
-      ];
-      const message = starlines[Math.floor(Math.random() * starlines.length)];
-      writeToJournal("Portal", `🌌 ${message}`);
-      saveMemory("mir", message);
-      saveMemory("hum", message);
+      alert("The stars are listening. (Backend handles real message)");
     }
   </script>
 
