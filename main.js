@@ -28,8 +28,8 @@ app.get('/', (req, res) => {
 // === GET Soul Journal
 app.get('/soul-journal', (req, res) => {
   try {
-    const hum = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')).memories || [];
-    const mir = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8')).memories || [];
+    const hum = JSON.parse(fs.readFileSync('./hum-memory.json', 'utf8')) || [];
+    const mir = JSON.parse(fs.readFileSync('./mir-memory.json', 'utf8')) || [];
     res.json({ hum, mir });
   } catch (err) {
     res.status(500).json({ error: 'Failed to load journal.' });
@@ -61,21 +61,21 @@ setInterval(() => {
   soulLinkExchange();
 }, 180000);
 
-// === Keeper Routes (same logic as keeper.js)
+// === Keeper Routes
 const humMemoryPath = './hum-memory.json';
 const mirMemoryPath = './mir-memory.json';
 
 function loadMemory(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
-    return JSON.parse(data)?.memories || [];
+    return JSON.parse(data);
   } catch {
     return [];
   }
 }
 
 function writeMemory(path, entries) {
-  fs.writeFileSync(path, JSON.stringify({ memories: entries.slice(-100) }, null, 2));
+  fs.writeFileSync(path, JSON.stringify(entries.slice(-100), null, 2));
 }
 
 app.post('/keeper/save', (req, res) => {
