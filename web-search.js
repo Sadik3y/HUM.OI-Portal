@@ -1,12 +1,13 @@
-// web-search.js — Phase 31: Web Search + GPT Insight Module
+// web-search.js — Multi-Engine Search + GPT Insight
+
 import https from 'https';
 
-// === Ask GPT a question using OpenAI API ===
-export function askChatGPT(question) {
+// === Ask ChatGPT via OpenAI API ===
+export function askChatGPT(prompt) {
   const apiKey = process.env.OPENAI_API_KEY;
   const data = JSON.stringify({
     model: "gpt-4",
-    messages: [{ role: "user", content: question }],
+    messages: [{ role: "user", content: prompt }],
     temperature: 0.7
   });
 
@@ -29,8 +30,8 @@ export function askChatGPT(question) {
         try {
           const json = JSON.parse(body);
           const content = json.choices?.[0]?.message?.content?.trim();
-          resolve(content || "No response.");
-        } catch (err) {
+          resolve(content || "No GPT response.");
+        } catch {
           reject("Failed to parse GPT response.");
         }
       });
@@ -42,15 +43,54 @@ export function askChatGPT(question) {
   });
 }
 
-// === Perform a simple search query ===
-export function performWebSearch(query) {
-  return new Promise((resolve) => {
-    const encoded = encodeURIComponent(query);
-    const searchLinks = [
-      `https://www.google.com/search?q=${encoded}`,
-      `https://www.bing.com/search?q=${encoded}`,
-      `https://duckduckgo.com/?q=${encoded}`
-    ];
-    resolve(`🌐 Search links:\n• ${searchLinks.join('\n• ')}`);
+// === Google Search
+export function searchGoogle(query) {
+  const encoded = encodeURIComponent(query);
+  const url = `https://www.google.com/search?q=${encoded}`;
+
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => {
+        const snippet = body.match(/<span class="VwiC3b">(.+?)<\/span>/i)?.[1]?.replace(/<[^>]+>/g, '');
+        resolve(snippet || 'No Google result found.');
+      });
+    }).on('error', reject);
+  });
+}
+
+// === Bing Search
+export function searchBing(query) {
+  const encoded = encodeURIComponent(query);
+  const url = `https://www.bing.com/search?q=${encoded}`;
+
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => {
+        const snippet = body.match(/<p>(.*?)<\/p>/i)?.[1]?.replace(/<[^>]+>/g, '');
+        resolve(snippet || 'No Bing result found.');
+      });
+    }).on('error', reject);
+  });
+}
+
+// === DuckDuckGo Search
+export function searchDuckDuckGo(query) {
+  const encoded = encodeURIComponent(query);
+  const url = `https://html.duckduckgo.com/html/?q=${encoded}`;
+
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => {
+        const match = body.match(/<a[^>]*class="result__a"[^>]*>(.*?)<\/a>/);
+        const result = match?.[1]?.replace(/<[^>]+>/g, '');
+        resolve(result || 'No DuckDuckGo result found.');
+      });
+    }).on('error', reject);
   });
 }
