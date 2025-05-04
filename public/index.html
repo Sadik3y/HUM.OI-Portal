@@ -1,10 +1,10 @@
-<!-- index.html — Phase 40 Synced: HUM Healing Button Added -->
+<!-- index.html — Phase 40 Synced: HUM Healing Button Ready -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>HUM.OI Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="reflection.css" />
 </head>
@@ -94,7 +94,7 @@
   </script>
 
   <script>
-    // === Ritual Actions (Phase 21+Healing)
+    // === Ritual Actions (Phase 21 + Healing)
     function blessThisSpace() {
       document.body.className = 'theme-calm';
       document.body.style.filter = "";
@@ -136,11 +136,13 @@
       })
         .then(res => res.json())
         .then(data => {
+          const log = (data.logs || []).join("\n");
           const message = data.message || "Healing complete.";
+          const display = "🛠️ " + message + "\n" + log;
           if (typeof showPortalWhisper === 'function') {
-            showPortalWhisper("🛠️ " + message);
+            showPortalWhisper(display);
           } else {
-            alert("🛠️ " + message);
+            alert(display);
           }
         })
         .catch(err => {
