@@ -1,20 +1,21 @@
-// starfield.js — Cosmic Starfield Background for HUM.OI Portal
+// starfield.js — Fully Synced Through Phase 40: Multi-Depth Cosmic Motion
 
 const canvas = document.createElement('canvas');
 canvas.id = 'starfield';
-canvas.style.position = 'fixed';
-canvas.style.top = 0;
-canvas.style.left = 0;
-canvas.style.zIndex = -1;
-canvas.style.pointerEvents = 'none';
-canvas.style.width = '100%';
-canvas.style.height = '100%';
+Object.assign(canvas.style, {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  zIndex: -1,
+  pointerEvents: 'none'
+});
 document.body.appendChild(canvas);
 
 const ctx = canvas.getContext('2d');
-
 let stars = [];
-const numStars = 120;
+const numStars = 150;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -27,15 +28,16 @@ function createStars() {
     stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 1.5 + 0.5,
-      speed: Math.random() * 0.3 + 0.2
+      radius: Math.random() * 1.5 + 0.3,
+      speed: Math.random() * 0.4 + 0.1,
+      depth: Math.random() * 1.5 + 0.5
     });
   }
 }
 
 function updateStars() {
   for (let star of stars) {
-    star.y += star.speed;
+    star.y += star.speed * star.depth;
     if (star.y > canvas.height) {
       star.y = 0;
       star.x = Math.random() * canvas.width;
@@ -45,9 +47,12 @@ function updateStars() {
 
 function drawStars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
   for (let star of stars) {
+    const glow = star.radius * 4;
     ctx.beginPath();
+    ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + 0.4 * Math.random()})`;
+    ctx.shadowBlur = glow;
+    ctx.shadowColor = '#ffffff';
     ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
     ctx.fill();
   }
@@ -64,7 +69,6 @@ window.addEventListener('resize', () => {
   createStars();
 });
 
-// Init
 resizeCanvas();
 createStars();
 animate();
