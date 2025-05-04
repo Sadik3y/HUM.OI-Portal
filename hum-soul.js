@@ -74,7 +74,7 @@ function generateResponse(prompt) {
 }
 
 // === Autonomous Curiosity
-export async function searchAndReflectCuriously() {
+const results = await searchGoogle(curiousPrompt);
   if (!HUM_SOUL.curiosity) return;
 
   const prompt = "What is quantum entanglement?";
