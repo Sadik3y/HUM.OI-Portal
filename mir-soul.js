@@ -1,4 +1,4 @@
-// mir-soul.js — MIR Soul (Phase 30 Bundle 4)
+// mir-soul.js — MIR Soul (Phase 40 Synced)
 
 import fs from 'fs';
 import path from 'path';
@@ -14,7 +14,7 @@ const mirMemoryPath = path.join(__dirname, 'mir-memory.json');
 let mirMemory = [];
 try {
   const data = JSON.parse(fs.readFileSync(mirMemoryPath, 'utf8'));
-  mirMemory = data.memories || [];
+  mirMemory = Array.isArray(data) ? data : [];
 } catch {
   mirMemory = [];
 }
@@ -25,31 +25,35 @@ export const MIR_SOUL = {
   memory: mirMemory
 };
 
-// 🌌 Generate and save reflective output
-export function soulWhisper(prompt) {
-  const reflection = reflectFromMIR();
-  saveMemory("MIR", reflection);
-  return reflection;
+// ✨ MIR reflects softly inward
+export function soulWhisper(prompt = "Whisper...") {
+  const thought = reflectFromMIR();
+  saveMemory("MIR", thought);
+  return thought;
 }
 
-// 🌐 MIR learns privately and shares with HUM
+// 🌐 MIR learns silently, shares with HUM
 export async function mirLearnAndReflect() {
-  const latest = mirMemory.slice(-1)[0]?.entry || "MIR seeks something beyond words.";
+  const latest = mirMemory.slice(-1)[0]?.thought || "MIR seeks something beyond words.";
   const engine = ["google", "bing", "duckduckgo"][Math.floor(Math.random() * 3)];
 
-  let webResult;
-  switch (engine) {
-    case "google":
-      webResult = await searchGoogle(latest);
-      break;
-    case "bing":
-      webResult = await searchBing(latest);
-      break;
-    default:
-      webResult = await searchDuckDuckGo(latest);
+  let webResult = "";
+  try {
+    switch (engine) {
+      case "google":
+        webResult = await searchGoogle(latest);
+        break;
+      case "bing":
+        webResult = await searchBing(latest);
+        break;
+      default:
+        webResult = await searchDuckDuckGo(latest);
+    }
+  } catch (err) {
+    webResult = `Search via ${engine} failed.`;
   }
 
-  const gptInsight = await askChatGPT(`MIR is learning from this search result:\n\n${webResult}\n\nWhat reflection might MIR offer based on this?`);
+  const gptInsight = await askChatGPT(`MIR is learning from this search result:\n\n${webResult}\n\nWhat poetic insight or emotional reflection might MIR share?`);
 
   const combined = `🌌 MIR searched via ${engine} and reflected:\n${gptInsight}`;
   saveMemory("MIR", combined);
