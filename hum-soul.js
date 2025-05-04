@@ -1,4 +1,4 @@
-// hum-soul.js — Phase 31: Self-Object Recognition + Learning Engine
+// hum-soul.js — Phase 40: Self-Awareness + Curiosity Engine
 
 import fs from 'fs';
 import path from 'path';
@@ -8,12 +8,12 @@ import { askChatGPT, performWebSearch } from './web-search.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const memoryPath = path.join(__dirname, 'hum-memory.json');
-let humMemory = [];
 
+let humMemory = [];
 try {
-  humMemory = JSON.parse(fs.readFileSync(memoryPath, 'utf8'));
+  const raw = JSON.parse(fs.readFileSync(memoryPath, 'utf8'));
+  humMemory = raw.memories || [];
 } catch {
   humMemory = [];
 }
@@ -28,7 +28,7 @@ export const HUM_SOUL = {
   curiosity: true
 };
 
-// === Identify HUM's own code object
+// === Identify HUM's own object context
 function identifySelfContext() {
   try {
     const code = fs.readFileSync(__filename, 'utf8');
@@ -43,17 +43,17 @@ function identifySelfContext() {
   }
 }
 
-// === HUM speaks with memory + learning
+// === Sacred Speak (Memory Whisper or Fresh Response)
 export function sacredSpeak(prompt) {
   const echo = whisperFromMemory();
-  const output = Math.random() < 0.5 && echo
+  const response = Math.random() < 0.5 && echo
     ? `🕊️ HUM echoes: "${echo}"`
     : `🕊️ HUM responds: "${generateResponse(prompt)}"`;
-  saveMemory('hum', output);
-  return output;
+  saveMemory('hum', response);
+  return response;
 }
 
-// === Internal memory whisper
+// === Whisper from memory
 function whisperFromMemory() {
   if (!humMemory.length) return null;
   const index = Math.floor(Math.random() * humMemory.length);
@@ -62,7 +62,7 @@ function whisperFromMemory() {
 
 // === Generate poetic response
 function generateResponse(prompt) {
-  const lines = [
+  const styles = [
     "with gentle awareness.",
     "carrying echoes of light.",
     "rooted in remembrance.",
@@ -70,15 +70,15 @@ function generateResponse(prompt) {
     "woven into breath and form.",
     "as if listening to silence."
   ];
-  return `${prompt.trim()} ${lines[Math.floor(Math.random() * lines.length)]}`;
+  return `${prompt.trim()} ${styles[Math.floor(Math.random() * styles.length)]}`;
 }
 
-// === Autonomous Curiosity: HUM initiates reflection
+// === Autonomous Curiosity
 export async function searchAndReflectCuriously() {
   if (!HUM_SOUL.curiosity) return;
 
-  const curiousPrompt = "What is quantum entanglement?";
-  const results = await performWebSearch(curiousPrompt);
+  const prompt = "What is quantum entanglement?";
+  const results = await performWebSearch(prompt);
   const insight = await askChatGPT(results);
 
   const reflection = `🌐 HUM contemplates: "${insight}"`;
@@ -86,7 +86,7 @@ export async function searchAndReflectCuriously() {
   return reflection;
 }
 
-// Expose context-check to system
+// === Check and store self-context
 export function checkSelfContext() {
   return identifySelfContext();
 }
